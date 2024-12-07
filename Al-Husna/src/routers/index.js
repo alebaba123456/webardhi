@@ -7,7 +7,7 @@ import Task from '@/views/Task.vue';
 import Profile from '@/views/Profile.vue';
 
 const routes = [
-  { path: '/', name: 'Home', component: Home },
+  { path: '/home', name: 'Home', component: Home },
   { path: '/login', name: 'Login', component: Login },
   { path: '/class', name: 'Class', component: Class },
   { path: '/task', name: 'Task', component: Task },

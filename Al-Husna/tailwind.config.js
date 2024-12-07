@@ -9,12 +9,15 @@ export default {
       colors: {
         'prime' : '#606c38',
         'sec' : '#283618',
+        'sec-sh': '#28361890',
         'ter' : '#fefae0',
         'normal' : '#bc6c25',
-        'shade' : '#dda15e'
+        'normal-sh' : '#bc6c2554',
+        'shade' : '#dda15e',
+        'shade-sh' : '#dda15e60',
       },
       backgroundImage: {
-        'login' : "url('@/assets/backgrounds/login-background.png')",
+        'login' : "url('@/assets/backgrounds/login-pattern.png')",
         'gradient-conic': 'conic-gradient(var(--tw-gradient-stops))',
       },
       keyframes: {
