@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-full flex flex-col justify-between bg-normal py-4 px-[0.3rem] [user-select:none]"
+    class="h-full flex flex-col justify-between bg-prime py-4 px-[0.3rem] [user-select:none]"
   >
     <div class="flex flex-col gap-3">
       <div v-for="(route, index) in routes" :key="index">
@@ -15,7 +15,7 @@
 
 <script setup>
 const routes = [
-  { path: "/", name: "Home" },
+  { path: "/home", name: "Home" },
   { path: "/class", name: "Class" },
   { path: "/task", name: "Task" },
   { path: "/profile", name: "Profile" },

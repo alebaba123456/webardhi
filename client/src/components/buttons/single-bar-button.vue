@@ -1,5 +1,5 @@
 <template>
-    <div class="flex text-[0.8rem] font-semibold text-black rounded-[0.5rem] group flex-col justify-center p-1 items-center hover:text-ter hover:bg-shade transition-all duration-300 ease-out cursor-pointer">
+    <div class="flex text-[0.8rem] font-semibold text-black rounded-[0.5rem] group flex-col justify-center p-1 items-center hover:text-ter hover:bg-sec-sh transition-all duration-300 ease-out cursor-pointer">
         <div>
             <Component :is="currentIcon" />
         </div>

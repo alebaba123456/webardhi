@@ -17,7 +17,7 @@
                     </div>
                     <div class="w-full px-2 flex flex-col gap-2">
                         <div>password</div>
-                        <input class="w-full text-prime text-px-2 py-1 rounded-lg" type="password"/>
+                        <input class="w-full text-prime px-2 py-1 rounded-lg" type="password"/>
                     </div>
                 </div>
             </div>
