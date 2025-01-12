@@ -10,22 +10,32 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       birthDate: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       religion: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       gender: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       role: {
+        allowNull: false,
         type: Sequelize.STRING
       },
-      classroomId: {
-        type: Sequelize.INTEGER
+      ClassRoomId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: "Classrooms"
+          }
+        },
       },
       createdAt: {
         allowNull: false,

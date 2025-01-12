@@ -4,21 +4,62 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Question extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Question.belongsTo(models.Examination, {foreignKey: 'ExaminationId'})
     }
   }
   Question.init({
-    examinationId: DataTypes.INTEGER,
-    question: DataTypes.STRING,
-    answer: DataTypes.STRING,
-    option: DataTypes.STRING,
-    status: DataTypes.BOOLEAN
+    question: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "QUESTION IS REQUIRED"
+        },
+        notEmpty: {
+          msg: "QUESTION IS REQUIRED"
+        }
+      }
+    },
+    answer: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "ANSWER IS REQUIRED"
+        },
+        notEmpty: {
+          msg: "ANSWER IS REQUIRED"
+        }
+      }
+    },
+    option: {
+      type: DataTypes.STRING,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "STATUS IS REQUIRED"
+        },
+        notEmpty: {
+          msg: "STATUS IS REQUIRED"
+        }
+      }
+    },
+    ExaminationId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "EXAMINATION ID IS REQUIRED"
+        },
+        notEmpty: {
+          msg: "EXAMINATION ID IS REQUIRED"
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Question',

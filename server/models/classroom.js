@@ -3,21 +3,22 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Subject extends Model {
+  class Classroom extends Model {
     static associate(models) {
-      Subject.hasMany(models.SubjectClass, {foreignKey: 'SubjectId'})
+      Classroom.hasMany(models.Profile, {foreignKey: 'ClassRoomId'})
+      Classroom.hasMany(models.SubjectClass, {foreignKey: 'ClassRoomId'})
     }
   }
-  Subject.init({
-    name: {
-      type: DataTypes.STRING,
+  Classroom.init({
+    grade: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notNull: {
-          msg: "NAME IS REQUIRED"
+          msg: "GRADE IS REQUIRED"
         },
         notEmpty: {
-          msg: "NAME IS REQUIRED"
+          msg: "GRADE IS REQUIRED"
         }
       }
     },
@@ -35,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Subject',
+    modelName: 'Classroom',
   });
-  return Subject;
+  return Classroom;
 };

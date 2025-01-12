@@ -9,14 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      subjectName: {
+      name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
-      teacherId: {
-        type: Sequelize.INTEGER
-      },
-      classroomId: {
-        type: Sequelize.INTEGER
+      code: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

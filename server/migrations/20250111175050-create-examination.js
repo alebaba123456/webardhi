@@ -9,17 +9,24 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      subjectId: {
-        type: Sequelize.INTEGER
-      },
-      examinationType: {
+      type: {
+        allowNull: false,
         type: Sequelize.STRING
       },
-      examinationCode: {
+      code: {
+        allowNull: false,
         type: Sequelize.STRING
       },
-      score: {
-        type: Sequelize.INTEGER
+      SubjectClassId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: "SubjectClasses"
+          }
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
       },
       createdAt: {
         allowNull: false,
