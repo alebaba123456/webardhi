@@ -79,15 +79,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Profile',
-  });
-
-  Profile.beforeCreate((instance) => {
-    instance.name = textToLow(instance.name)
-    instance.birthDate = textToLow(instance.birthDate)
-    instance.religion = textToLow(instance.religion)
-    instance.gender = textToLow(instance.gender)
-    instance.role = textToLow(instance.role)
-  })
+  }); 
 
   return Profile;
 };

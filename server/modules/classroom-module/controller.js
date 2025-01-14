@@ -5,14 +5,26 @@ const validator = require('validator');
 class ClassController {
     static async getClassroom (req, res, next) {
         try {
-            const sanitizedGrade = validator.toInt(req.query.grade || '', 10)
-            if (![7, 8, 9].includes(sanitizedGrade) && sanitizedGrade.length !== 0) {
-                throw { name: 'Invalid grade value.' };
+            let sanitizedGrade;
+            const allowedFields = [
+                'grade',
+            ];
+
+            const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
+            if (extraFields.length > 0) {
+                throw { name: 'Modified payload.' };
             }
 
-            let classroom
-
             if (req.query.grade) {
+                sanitizedGrade = validator.toInt(req.query.grade || '', 10)
+                if (![7, 8, 9].includes(sanitizedGrade)) {
+                    throw { name: 'Invalid grade value.' };
+                }
+            }
+
+            let classroom;
+
+            if (sanitizedGrade) {
                 classroom = await Classroom.findAll({
                     where: {
                         grade : sanitizedGrade
@@ -42,8 +54,8 @@ class ClassController {
 
             const { grade, code } = req.body
 
-            const sanitizedGrade = validator.escape(textToLow(grade || ''))
-            if (!['7', '8', '9'].includes(sanitizedGrade)) {
+            const sanitizedGrade = validator.toInt(grade || '')
+            if (![0, 7, 8, 9].includes(sanitizedGrade)) {
                 throw { name: 'Invalid grade value.' };
             }
 

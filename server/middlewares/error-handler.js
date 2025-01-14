@@ -12,6 +12,9 @@ async function errorHandler(error, req, res, next) {
         case 'Empty input field.' :
             res.status(400).json({message: "INPUT FIELD CAN'T BE EMPTY!"})
             break
+        case 'Invalid input.' :
+            res.status(400).json({message: "INVALID INPUT NOT ALLOWED!"})
+            break
         case 'Password did not match.' :
             res.status(400).json({message: "PASSWORD DID NOT MATCH!"})
             break

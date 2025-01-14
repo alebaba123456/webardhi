@@ -6,7 +6,7 @@
     const express = require('express')
     const app = express()
     const port = process.env.PORT || 3000
-    const userRouter = require('./modules/user-module/routes')
+    const profileRouter = require('./modules/profile-module/routes')
     const classroomRouter = require('./modules/classroom-module/routes')
     const subjectRouter = require('./modules/subject-module/routes')
     const errorHandler = require('./middlewares/error-handler')
@@ -15,7 +15,7 @@
     app.use(express.json())
     app.use(express.urlencoded({extended:true}))
     
-    app.use(userRouter)
+    app.use(profileRouter)
     app.use(classroomRouter)
     app.use(subjectRouter)
     app.use(errorHandler)
