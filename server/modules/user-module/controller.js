@@ -1,7 +1,6 @@
 const { encryptWithRSA, decryptWithRSA } = require('../../helpers/crypto');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const forge = require('node-forge');
 const { User, Profile } = require('../../models');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
@@ -12,23 +11,21 @@ class UserController {
             const { email, ProfileId } = req.body;
 
             if (!email || !ProfileId) {
-                throw { name: 'InvalidInput', message: 'Email and ProfileId are required.' };
+                throw { name: 'Invalid input.' };
             }
 
             const profile = await Profile.findByPk(ProfileId);
             if (!profile) {
-                throw { name: 'DataNotFound', message: 'Profile not found.' };
+                throw { name: 'Data not found.' };
             }
 
             const username = profile.name;
             const password = crypto.randomBytes(8).toString('base64url');
 
-            const hashedPassword = await bcrypt.hash(password, 10);
-
             const newUser = await User.create({
                 email,
                 username,
-                password: hashedPassword,
+                password,
                 ProfileId,
             });
 
@@ -63,21 +60,21 @@ class UserController {
             const { UserId, oldPassword, newPassword, confirmationNewPassword } = req.body;
 
             if (!UserId || !oldPassword || !newPassword || !confirmationNewPassword) {
-                throw { name: 'InvalidInput', message: 'All fields are required.' };
+                throw { name: 'Invalid input.' };
             }
 
             const user = await User.findByPk(UserId);
             if (!user) {
-                throw { name: 'DataNotFound', message: 'User not found.' };
+                throw { name: 'Data not found.' };
             }
 
             const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
             if (!isPasswordMatch) {
-                throw { name: 'InvalidInput', message: 'Old password is incorrect.' };
+                throw { name: 'Invalid password.' };
             }
 
             if (newPassword !== confirmationNewPassword) {
-                throw { name: 'PasswordMismatch', message: 'New password and confirmation password do not match.' };
+                throw { name: 'Password did not match.' };
             }
 
             const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -96,7 +93,7 @@ class UserController {
             const { UserId } = req.body;
 
             const user = await User.findByPk(UserId);
-            if (!user) throw { name: 'DataNotFound', message: 'User not found.' };
+            if (!user) throw { name: 'Data not found.' };
 
             const tokenPayload = { UserId: user.id };
             const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: '30m', algorithm: 'HS256' });
@@ -112,7 +109,7 @@ class UserController {
                 },
             });
 
-            const resetLink = `https://yourdomain.com/user/confirm/${encodeURIComponent(encryptedToken)}`;
+            const resetLink = `${process.env.BASE_URL}/user/confirm/${encodeURIComponent(encryptedToken)}`;
             const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: user.email,
@@ -140,7 +137,7 @@ class UserController {
             const payload = jwt.verify(decryptedToken, process.env.JWT_SECRET, { algorithms: ['HS256'] });
 
             const user = await User.findByPk(payload.UserId);
-            if (!user) throw { name: 'DataNotFound', message: 'User not found.' };
+            if (!user) throw { name: 'Data not found.' };
 
             const newPassword = this.generateRandomPassword();
             const hashedPassword = await bcrypt.hash(newPassword, 10);
