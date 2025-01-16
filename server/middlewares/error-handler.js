@@ -15,6 +15,9 @@ async function errorHandler(error, req, res, next) {
         case 'Invalid input.' :
             res.status(400).json({message: "INVALID INPUT NOT ALLOWED!"})
             break
+        case 'Email already used.' :
+            res.status(400).json({message: "EMAIL ALREADY USED, PLEASE USE ANOTHER EMAIL!"})
+            break
         case 'Password did not match.' :
             res.status(400).json({message: "PASSWORD DID NOT MATCH!"})
             break
@@ -27,14 +30,17 @@ async function errorHandler(error, req, res, next) {
         case 'Modified payload.' :
             res.status(400).json({message: "PAYLOAD CONTAIN(S) MODIFIER!"})
             break
-        case 'User not registered' :
+        case 'User not registered.' :
             res.status(401).json({message: "WRONG EMAIL OR PASSWORD!"})
             break
-        case 'Forbidden':
+        case 'Authentication error.' :
+            res.status(401).json({message: "WRONG EMAIL OR PASSWORD!"})
+            break
+        case 'Forbidden.':
             res.status(403).json({message: "UNAUTHORIZED!"})
             break
         case 'JsonWebTokenError':
-        case 'Unauthenticated':
+        case 'Unauthenticated.':
             res.status(401).json({message: "AUTHENTICATION FAILED!"})
             break
         default:

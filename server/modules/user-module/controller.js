@@ -8,10 +8,26 @@ const crypto = require('crypto');
 class UserController {
     static async createUser(req, res, next) {
         try {
+            const allowedFields = ['email', 'ProfileId'];
+            const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
+            if (extraFields.length > 0) {
+                throw { name: 'Modified payload.' };
+            }
+
             const { email, ProfileId } = req.body;
 
             if (!email || !ProfileId) {
                 throw { name: 'Invalid input.' };
+            }
+
+            const existingUser = await User.findOne({ 
+                where: { 
+                    email : email.toLowerCase() 
+                } 
+            });
+            
+            if (existingUser) {
+                throw { name: 'Email already used.' };
             }
 
             const profile = await Profile.findByPk(ProfileId);
@@ -20,10 +36,10 @@ class UserController {
             }
 
             const username = profile.name;
-            const password = crypto.randomBytes(8).toString('base64url');
+            const password = crypto.randomBytes(12).toString('base64url');
 
-            const newUser = await User.create({
-                email,
+            await User.create({
+                email: email.toLowerCase(),
                 username,
                 password,
                 ProfileId,
@@ -38,17 +54,16 @@ class UserController {
             });
 
             const mailOptions = {
-                from: '"Al-Husna Admin" <no-reply@alhusna.com>',
+                from: process.env.EMAIL_USER,
                 to: email,
                 subject: 'Al-Husna - Pendaftaran User Baru',
-                text: `Dear ${username},\n\nYour user account has been successfully created.\n\nEmail: ${email}\nPassword: ${password}\n\nPlease keep this information confidential.\n\nBest regards,\nAl-Husna Team`,
+                text: `Kepada ${username},\n\nAkun anda telah berhasil dibuat.\n\nEmail: ${email}\nPassword: ${password}\n\nPesan ini bersifat rahasia, silahkan segera ganti password anda.\n\nBest regards,\nAl-Husna Team`,
             };
 
             await transporter.sendMail(mailOptions);
 
             res.status(201).json({
-                message: 'User created successfully. Login credentials sent to the provided email.',
-                data: { id: newUser.id, email: newUser.email },
+                message: 'User created successfully. Login credentials sent to the provided email.'
             });
         } catch (error) {
             next(error);

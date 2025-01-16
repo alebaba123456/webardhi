@@ -15,9 +15,12 @@ export default {
         'normal-sh' : '#bc6c2554',
         'shade' : '#dda15e',
         'shade-sh' : '#dda15e60',
+        'gr' : '#2C2C2C',
+        'shade-gr' : '#00000099',
+
       },
       backgroundImage: {
-        'login' : "url('@/assets/backgrounds/login-pattern.png')",
+        'login' : "url('@/assets/backgrounds/background.jpg')",
         'gradient-conic': 'conic-gradient(var(--tw-gradient-stops))',
       },
       keyframes: {

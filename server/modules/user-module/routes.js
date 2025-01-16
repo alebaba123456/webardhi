@@ -1,11 +1,11 @@
 const express = require('express');
-const UserController = require('../controllers/UserController');
+const UserController = require('../user-module/controller');
 
 const userRouter = express.Router();
 
-userRouter.post('/create', UserController.createUser);
-userRouter.post('/change-password', UserController.changeUserPassword);
-userRouter.post('/request-forget-password', UserController.requestForgetPassword);
-userRouter.get('/confirm/:token', UserController.confirmForgetPassword);
+userRouter.post('/user/create', UserController.createUser);
+userRouter.post('/user/change-password', UserController.changeUserPassword);
+userRouter.post('/user/request-forget-password', UserController.requestForgetPassword);
+userRouter.get('/user/confirm/:token', UserController.confirmForgetPassword);
 
 module.exports = userRouter;
