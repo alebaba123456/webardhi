@@ -9,11 +9,21 @@ const api = axios.create({
 });
 
 export const goValidate = async () => {
-  const response = await api.get(`${baseUrl}/validate`);
+  const response = await api.get(`/validate`);
   return response;
 };
 
 export const loginAPI = async (email, password) => {
-  const response = await api.post(`${baseUrl}/login`, { email, password });
+  const response = await api.post(`/login`, { email, password });
   return response;
 };
+
+export const logoutAPI = async () => {
+  const response = await api.get(`/logout`);
+  return response;
+}
+
+export const routesAPI = async () => {
+  const response = await api.get('/router/get');
+  return response
+}

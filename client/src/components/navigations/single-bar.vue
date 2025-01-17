@@ -9,11 +9,16 @@
         </RouterLink>
       </div>
     </div>
-    <SBarButton pageName="Logout" />
+    <SBarButton pageName="Logout" @click.prevent="doLogout()"/>
   </div>
 </template>
 
 <script setup>
+import { useIndexStore } from "@/stores";
+
+const useStore = useIndexStore();
+const { doLogout } = useStore;
+
 const routes = [
   { path: "/home", name: "Home" },
   { path: "/class", name: "Class" },

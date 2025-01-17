@@ -1,8 +1,6 @@
 const forge = require('node-forge');
 
-const encryptToken = (token) => {
-    console.log(token);
-    
+const encryptToken = (token) => {  
     const encryptionKey = forge.util.createBuffer(process.env.AES_SECRET_KEY, 'utf8');
     const iv = forge.util.createBuffer(process.env.AES_IV, 'utf8');
 
@@ -12,8 +10,7 @@ const encryptToken = (token) => {
     cipher.finish();
 
     const encryptedToken = forge.util.encode64(cipher.output.bytes());
-    console.log(encryptedToken);
-    
+
     return encryptedToken
 }
 

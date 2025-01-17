@@ -2,7 +2,12 @@
 import { ref } from "vue";
 
 export const state = {
-  page: ref(1), // Mengelola halaman aktif
-  active: ref(""), // Mengelola state aktif
-  loading: ref(false), // Status loading
+  page: ref(1),
+  active: ref(""),
+  loading: ref(false),
+  accessible: ref(false),
+  routes: ref([
+    { path: '/', redirect: '/login' },
+    { path: '/login', name: 'Login', component: () => import('@/views/auth/Login.vue') },
+  ]),
 };

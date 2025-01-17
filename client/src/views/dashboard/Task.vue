@@ -1,7 +1,7 @@
 <template>
     <div class="h-full flex">
         <Single />
-        <div>Task</div>
+        <div>Exam</div>
     </div>
 </template>
 

@@ -10,7 +10,7 @@ class AuthenticationController {
             const { email, password } = req.body;
             
             if (!email || !password) {
-                throw { name: 'Invalid input.' };
+                throw { name: 'Empty input field.' };
             }
 
             const sanitizedEmail = validator.normalizeEmail(email);
@@ -58,9 +58,10 @@ class AuthenticationController {
             
             const encryptedToken = encryptToken(token)
 
+            res.setHeader('Access-Control-Allow-Credentials', 'true');
             res.cookie('cookie', encryptedToken, {
                 httpOnly: true,
-                secure: true,
+                secure: process.env.NODE_ENV === 'production',
                 sameSite: 'Strict',
                 maxAge: 12 * 60 * 60 * 1000,
             });
@@ -70,6 +71,21 @@ class AuthenticationController {
             });
         } catch (error) {
             next(error);
+        }
+    }
+
+    static async logout(req, res, next) {
+        try {
+            res.clearCookie('cookie', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'Strict',
+            });
+            res.status(201).json({
+                message: 'Login successful.'
+            });
+        } catch (error) {
+            next(error)
         }
     }
 }
