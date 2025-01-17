@@ -26,19 +26,37 @@ async function isAuthenticated() {
 router.beforeEach(async (to, from, next) => {
   const { useIndexStore } = await import('@/stores');
   const { storeToRefs } = await import('pinia');
-  const { active, roaded } = storeToRefs(useIndexStore());
+  const { getMenu } = useIndexStore()
+  const { active, accessible, routes } = storeToRefs(useIndexStore());
 
   active.value = to.name;
 
-  const isAuth = await isAuthenticated();
+  const authenticated = await isAuthenticated();
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (isAuth) {
-      next();
+    if (authenticated) {
+      if (!accessible.value) {
+        try {
+          await getMenu(); // Memuat menu jika belum di-fetch
+          next();
+        } catch (error) {
+          console.error('Failed to fetch menu:', error);
+          next({ path: '/login', replace: true });
+        }
+      } else {
+        next();
+      }
     } else {
+      // Jika tidak terautentikasi
+      accessible.value = false; // Reset accessible
+      routes.value = [
+        { path: '/', redirect: '/login' },
+        { path: '/login', name: 'Login', component: () => import('@/views/auth/Login.vue') },
+      ]; // Reset routes ke nilai default
+      await doLogout(); // Hapus token dan kembalikan ke keadaan awal
       next({ path: '/login', replace: true });
     }
-  } else if (to.path === '/login' && isAuth) {
+  } else if (to.path === '/login' && authenticated) {
     next({ path: '/home', replace: true });
   } else {
     next();
