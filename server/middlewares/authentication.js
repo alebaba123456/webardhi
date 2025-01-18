@@ -7,7 +7,7 @@ dotenv.config();
 const authentication = async (req, res, next) => {
     const encryptedToken = req.cookies?.cookie;
     const jwtKey = process.env.JWT_SECRET;
-
+    
     try {
         if (!encryptedToken) {
             throw { name: 'Unauthenticated.' }
@@ -35,7 +35,6 @@ const authentication = async (req, res, next) => {
             });
         }
         req.user = decoded;
-        
         next();
     } catch (error) {
         next(error)

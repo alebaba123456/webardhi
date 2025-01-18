@@ -1,7 +1,7 @@
 // actions.js
 import router from "@/routers";
 import { state } from "@/stores/states";
-import { loginAPI, logoutAPI, routesAPI } from "@/stores/apis";
+import { loginAPI, logoutAPI, routesAPI, validateAPI } from "@/stores/apis";
 
 const { 
   page,
@@ -12,12 +12,22 @@ const {
  } = state;
 
 export const actions = {
+  async doAuthValidation () {
+    try {
+      const response = await validateAPI();
+      return response
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    }
+  },
+
   async doLogin(payload) {
     try {
       loading.value = true;
       const response = await loginAPI(payload.email, payload.password);
       if (response.status === 200) {
-        router.push("/home");
+        await this.getMenu()
+        router.push('/Profil');
       } else {
         console.error("Login gagal:", response.data.message);
       }
@@ -45,7 +55,6 @@ export const actions = {
       loading.value = true
       const response = await routesAPI();
       const { defaultRoutes, roleRoutes } = response.data;
-      console.log(response);
       routes.value = [...defaultRoutes, ...roleRoutes];
       accessible.value = true
     } catch (error) {

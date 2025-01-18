@@ -16,6 +16,7 @@ export default {
         'shade' : '#dda15e',
         'shade-sh' : '#dda15e60',
         'gr' : '#2C2C2C',
+        'shade-wh': '#FFFFFFCC',
         'shade-gr' : '#00000099',
 
       },

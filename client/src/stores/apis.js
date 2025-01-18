@@ -8,7 +8,7 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export const goValidate = async () => {
+export const validateAPI = async () => {
   const response = await api.get(`/validate`);
   return response;
 };

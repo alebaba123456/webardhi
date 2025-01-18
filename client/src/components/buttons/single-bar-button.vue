@@ -1,38 +1,41 @@
 <template>
-    <div class="flex text-[0.8rem] font-semibold text-black rounded-[0.5rem] group flex-col justify-center p-1 items-center hover:text-ter hover:bg-sec-sh transition-all duration-300 ease-out cursor-pointer">
-        <div>
-            <Component :is="currentIcon" />
-        </div>
-        <div>{{ pageName }}</div>
+  <div
+    class="flex text-[0.8rem] font-semibold text-white group flex-col justify-start p-1 items-start hover:text-gr hover:font-extrabold transition-all duration-300 ease-out cursor-pointer">
+    <div class="flex justify-center items-center gap-2">
+      <Component :is="currentIcon" />
+      <div>{{ pageName.toUpperCase() }}</div>
     </div>
+  </div>
 </template>
 
 <script setup>
 import { onMounted, shallowRef } from 'vue';
 
 const props = defineProps({
-    pageName: {
-        type: String,
-        required: true,
-    }
+  pageName: {
+    type: String,
+    required: true,
+  }
 })
 
 const iconMap = {
-    Home: shallowRef(() => import('@/assets/single-bar-icons/home-icon.vue')),
-    Class: shallowRef(() => import('@/assets/single-bar-icons/class-icon.vue')),
-    Task: shallowRef(() => import('@/assets/single-bar-icons/task-icon.vue')),
-    Profile: shallowRef(() => import('@/assets/single-bar-icons/profile-icon.vue')),
-    Logout: shallowRef(() => import('@/assets/single-bar-icons/logout-icon.vue'))
-  };
+  Kelas: shallowRef(() => import('@/assets/single-bar-icons/ikon-kelas.vue')),
+  Profil: shallowRef(() => import('@/assets/single-bar-icons/ikon-profil.vue')),
+  Guru: shallowRef(() => import('@/assets/single-bar-icons/ikon-guru.vue')),
+  Siswa: shallowRef(() => import('@/assets/single-bar-icons/ikon-siswa.vue')),
+  Ujian: shallowRef(() => import('@/assets/single-bar-icons/ikon-ujian.vue')),
+  Pelajaran: shallowRef(() => import('@/assets/single-bar-icons/ikon-pelajaran.vue')),
+  Keluar: shallowRef(() => import('@/assets/single-bar-icons/ikon-keluar.vue'))
+};
 
-  const currentIcon = shallowRef(null);
+const currentIcon = shallowRef(null);
 
-  onMounted(async () => {
-    if (iconMap[props.pageName]) {
-      const component = await iconMap[props.pageName].value();
-      currentIcon.value = component.default;
-    } else {
-      currentIcon.value = null;
-    }
-  });
+onMounted(async () => {
+  if (iconMap[props.pageName]) {
+    const component = await iconMap[props.pageName].value();
+    currentIcon.value = component.default;
+  } else {
+    currentIcon.value = null;
+  }
+});
 </script>

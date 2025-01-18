@@ -8,6 +8,6 @@ export const state = {
   accessible: ref(false),
   routes: ref([
     { path: '/', redirect: '/login' },
-    { path: '/login', name: 'Login', component: () => import('@/views/auth/Login.vue') },
+    { path: '/login', name: 'Login'},
   ]),
 };

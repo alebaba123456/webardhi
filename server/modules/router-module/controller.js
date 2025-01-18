@@ -1,45 +1,44 @@
 class RouterController {
-    static async getRouter (req, res, next) {
-        try {
-            const routesByRole = {
-                Admin: [
-                  { path: '/class', name: 'Class', component: 'dashboard/Class' },
-                  { path: '/student', name: 'Student', component: 'dashboard/Student' },
-                  { path: '/teacher', name: 'Teacher', component: 'dashboard/Teacher' },
-                  { path: '/exam', name: 'Exam', component: 'dashboard/Exam' },
-                  { path: '/subject', name: 'Subject', component: 'dashboard/Subject' },
-                ],
-                Guru: [
-                  { path: '/class', name: 'Class', component: 'dashboard/Class' },
-                  { path: '/subject', name: 'Subject', component: 'dashboard/Subject' },
-                  { path: '/student', name: 'Student', component: 'dashboard/Student' },
-                  { path: '/exam', name: 'Exam', component: 'dashboard/Exam' },
-                ],
-                Siswa: [
-                  { path: '/subject', name: 'Subject', component: 'dashboard/Subject' },
-                  { path: '/exam', name: 'Exam', component: 'dashboard/Exam' },
-                  { path: '/report', name: 'Report', component: 'dashboard/Report' },
-                ],
-              };
+  static async getRouter(req, res, next) {
+    try {
+      const routesByRole = {
+        ADMIN: [
+          { path: '/kelas', name: 'Kelas' },
+          { path: '/siswa', name: 'Siswa' },
+          { path: '/guru', name: 'Guru' },
+          { path: '/ujian', name: 'Ujian' },
+          { path: '/pelajaran', name: 'Pelajaran' },
+        ],
+        GURU: [
+          { path: '/kelas', name: 'Kelas' },
+          { path: '/pelajaran', name: 'Pelajaran' },
+          { path: '/siswa', name: 'Siswa' },
+          { path: '/ujian', name: 'Ujian' },
+        ],
+        SISWA: [
+          { path: '/pelajaran', name: 'Pelajaran' },
+          { path: '/ujian', name: 'Ujian' },
+          { path: '/hasil', name: 'Hasil' },
+        ],
+      };
 
-              const { role } = req.user;
+      const { role } = req.user;
+      if (!role || !routesByRole[role]) {
+        throw { name: 'Modified payload.' }
+      }
 
-              if (!role || !routesByRole[role]) {
-                throw { name : 'Modified payload.'}
-              }
-
-              res.status(200).json({
-                defaultRoutes: [
-                  { path: '/', redirect: '/login' },
-                  { path: '/login', name: 'Login', component: 'auth/Login' },
-                  { path: '/profile', name: 'Profile', component: 'profile/Profile' },
-                ],
-                roleRoutes: routesByRole[role],
-              });
-        } catch (error) {
-            next(error)
-        }
+      res.status(200).json({
+        defaultRoutes: [
+          { path: '/', redirect: '/login' },
+          { path: '/login', name: 'Login' },
+          { path: '/profil', name: 'Profil' },
+        ],
+        roleRoutes: routesByRole[role],
+      });
+    } catch (error) {
+      next(error)
     }
+  }
 }
 
 module.exports = RouterController

@@ -1,6 +1,6 @@
 <template>
   <svg
-    class="fill-black group-hover:fill-ter"
+    class="fill-white group-hover:fill-gr"
     width="24"
     height="24"
     viewBox="0 0 24 24"
