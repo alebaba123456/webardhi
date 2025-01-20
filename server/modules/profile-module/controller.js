@@ -16,12 +16,12 @@ class ProfileController {
 
             const { name, birthDate, religion, gender, role, ClassRoomId } = req.body;
             
-            const sanitizedName = validator.escape(name.toUpperCase() || '');
+            const sanitizedName = validator.escape(name || '');
             const sanitizedBirthDate = validator.toDate(birthDate) || null;
-            const sanitizedReligion = validator.escape(religion || '');
+            const sanitizedReligion = validator.escape(religion.toLowerCase() || '');
             const sanitizedGender = validator.escape(gender || '');
             const sanitizedRole = validator.escape(role || '');
-            let sanitizedClassRoomId = validator.toInt(ClassRoomId || 0);
+            let sanitizedClassRoomId = validator.escape(ClassRoomId || '');
 
             if (!['islam', 'kristen', 'katolik', 'hindu', 'budha', 'konghucu', 'lainnya'].includes(sanitizedReligion)) {
                 throw { name: 'Invalid input.' };
@@ -58,6 +58,8 @@ class ProfileController {
                 profile,
             });
         } catch (error) {
+            console.log(error);
+            
             next(error)
         }
     }

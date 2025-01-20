@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('Profiles', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       name: {
         allowNull: false,
@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       ClassRoomId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: {
             tableName: "Classrooms"

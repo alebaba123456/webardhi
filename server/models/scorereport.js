@@ -10,8 +10,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   ScoreReport.init({
+    id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     ProfileId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notNull: {
@@ -23,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     ExaminationId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notNull: {

@@ -25,5 +25,10 @@ export const logoutAPI = async () => {
 
 export const routesAPI = async () => {
   const response = await api.get('/router/get');
-  return response
+  return response;
+}
+
+export const classAPI = async(page, size) => {
+  const response = await api.get(`/classroom/get`)
+  return response.data;
 }

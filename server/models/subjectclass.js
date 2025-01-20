@@ -12,8 +12,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   SubjectClass.init({
+    id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     ProfileId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notNull: {
@@ -25,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     ClassRoomId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notNull: {
@@ -37,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     SubjectId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notNull: {

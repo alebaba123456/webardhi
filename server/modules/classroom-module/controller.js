@@ -1,4 +1,4 @@
-const { Classroom } = require('../../models')
+const { Classroom, Profile } = require('../../models')
 const { textToLow } = require('../../helpers/loweringText')
 const validator = require('validator');
 
@@ -22,21 +22,33 @@ class ClassController {
                 }
             }
 
-            let classroom;
-
+            let classrooms;
             if (sanitizedGrade) {
-                classroom = await Classroom.findAll({
+                classrooms = await Classroom.findAll({
                     where: {
                         grade : sanitizedGrade
-                    }
+                    }, 
                 })
             } else {
-                classroom = await Classroom.findAll()
+                classrooms = await Classroom.findAll()
             }
-            
+            const result = await Promise.all(
+                classrooms.map(async (classroom) => {
+                    const profileCount = await Profile.count({
+                        where: { ClassRoomId: classroom.id },
+                    });
+    
+                    return {
+                        id: classroom.id,
+                        grade: classroom.grade,
+                        code: classroom.code,
+                        profileCount,
+                    };
+                })
+            );
             res.status(200).json({
                 message: 'All classroom list.',
-                data: classroom
+                data: result
             })
         } catch (error) {
             next(error)
@@ -74,6 +86,8 @@ class ClassController {
                 createdClass
             });
         } catch (error) {
+            console.log(error);
+            
             next(error)
         }
     }

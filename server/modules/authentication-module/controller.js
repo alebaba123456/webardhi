@@ -12,16 +12,15 @@ class AuthenticationController {
             if (!email || !password) {
                 throw { name: 'Empty input field.' };
             }
-
-            const sanitizedEmail = validator.normalizeEmail(email);
-            if (!validator.isEmail(sanitizedEmail)) {
+            
+            if (!validator.isEmail(email)) {
                 throw { name: 'Invalid input.' };
             }
 
             const sanitizedPassword = validator.escape(password);
 
             const user = await User.findOne({ 
-                where: { email: sanitizedEmail }, 
+                where: { email: email }, 
                 include: {
                     model: Profile,
                     attributes: ['name', 'role', 'religion', 'ClassRoomId'],
@@ -56,7 +55,7 @@ class AuthenticationController {
 
             const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '12h' });
             
-            const encryptedToken = encryptToken(token)
+            const { encryptedToken, tag, iv } = encryptToken(token)
 
             res.setHeader('Access-Control-Allow-Credentials', 'true');
             res.cookie('cookie', encryptedToken, {
@@ -65,6 +64,18 @@ class AuthenticationController {
                 sameSite: 'Strict',
                 maxAge: 12 * 60 * 60 * 1000,
             });
+            res.cookie('cookie_india', iv, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'Strict',
+                maxAge: 12 * 60 * 60 * 1000,
+            })
+            res.cookie('cookie_tango', tag , {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'Strict',
+                maxAge: 12 * 60 * 60 * 1000,
+            })
 
             res.status(200).json({
                 message: 'Login successful.'

@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Classroom.init({
+    id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     grade: {
       type: DataTypes.INTEGER,
       allowNull: false,

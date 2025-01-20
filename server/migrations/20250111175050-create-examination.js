@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('Examinations', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       type: {
         allowNull: false,
@@ -19,7 +19,7 @@ module.exports = {
       },
       SubjectClassId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: {
             tableName: "SubjectClasses"

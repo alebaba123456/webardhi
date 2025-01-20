@@ -7,9 +7,6 @@
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
   >
-    <title>profile [#1335]</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
     <g
       id="Page-1"
       stroke="none"

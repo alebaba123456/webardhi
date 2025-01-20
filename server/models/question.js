@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Question.init({
+    id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     question: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -49,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     ExaminationId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notNull: {

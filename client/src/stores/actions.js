@@ -1,14 +1,18 @@
 // actions.js
 import router from "@/routers";
 import { state } from "@/stores/states";
-import { loginAPI, logoutAPI, routesAPI, validateAPI } from "@/stores/apis";
+import { loginAPI, logoutAPI, routesAPI, validateAPI, classAPI, } from "@/stores/apis";
 
 const { 
   page,
+  size,
   routes, 
   active,
   accessible, 
-  loading
+  loading,
+  fetched,
+  sortColoumn,
+  sortDirection,
  } = state;
 
 export const actions = {
@@ -62,5 +66,21 @@ export const actions = {
     } finally {
       loading.value = false
     }
-  }
+  },
+  
+  async getClass() {
+    try {
+      loading.value = true
+      const response = await classAPI(page.value, size.value);
+      fetched.value = response.data;
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false
+    }
+  },
+
+  numberingIndex(index) {
+    return (page.value - 1) * size.value + index + 1;
+  },
 };

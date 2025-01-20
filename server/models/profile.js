@@ -13,6 +13,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Profile.init({
+    id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -74,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     ClassRoomId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
     }
   }, {
     sequelize,
