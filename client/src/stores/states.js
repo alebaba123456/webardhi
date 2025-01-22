@@ -12,6 +12,8 @@ export const state = {
     { path: '/login', name: 'Login'},
   ]),
   fetched: ref(null),
-  sortColoumn: ref(""),
-  sortDirection: ref("ASC"),
+  query : ref(""),
+  keyword: ref(null),
+  category: ref(null),
+  order: ref(null),
 };

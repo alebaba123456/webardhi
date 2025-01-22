@@ -1,6 +1,6 @@
 <template>
     <div class="w-full flex gap-4 justify-between">
-        <form @submit.prevent="" class="flex gap-8 w-9/12 text-[0.85rem] bg-shade-gr shadow-md shadow-shade-gr px-2 py-1">
+        <form @submit.prevent="applyFilter()" class="flex gap-8 w-9/12 text-[0.85rem] bg-shade-gr shadow-md shadow-shade-gr px-2 py-1">
             <div class="flex gap-2 items-center">
                 <label for="keyword" class="text-white font-medium">Pencarian :</label>
                 <input id="keyword"
@@ -27,12 +27,12 @@
                     <option value="desc">Turun</option>
                 </select>
             </div>
-            <button class="bg-white rounded-lg border-shade-gr border text-shade-gr px-6 hover:font-semibold">
+            <button class="bg-white hover:bg-shade hover:font-bold hover:text-white transition-all duration-300 ease-out rounded-lg border-shade-gr border text-shade-gr px-6">
                 <div>Cari</div>
             </button>
         </form>
         <div class="flex gap-8 text-[0.85rem] w-3/12 bg-shade-gr shadow-md shadow-shade-gr px-2 py-1">
-            <button class="bg-white w-full rounded-lg border-shade-gr border text-shade-gr px-6 hover:font-semibold">
+            <button class="bg-white hover:bg-shade hover:font-bold hover:text-white transition-all duration-300 ease-out w-full rounded-lg border-shade-gr border text-shade-gr px-6">
                 <div>Buat baru</div>
             </button>
         </div>
@@ -40,9 +40,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+    import { ref } from 'vue';
+    import { useIndexStore } from "@/stores";
 
-const keyword = ref('');
-const category = ref('');
-const order = ref('');
+    const useStore = useIndexStore()
+    const { doSearch } = useStore
+
+    const order = ref(null)
+    const category = ref(null)
+    const keyword = ref(null)
+
+    async function applyFilter() {
+        const payload = {
+            order : order.value,
+            category : category.value,
+            keyword : keyword.value
+        }
+        await doSearch(payload)
+    }
 </script>

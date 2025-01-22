@@ -28,7 +28,7 @@ export const routesAPI = async () => {
   return response;
 }
 
-export const classAPI = async(page, size) => {
+export const classAPI = async(page, size, ) => {
   const response = await api.get(`/classroom/get`)
   return response.data;
 }

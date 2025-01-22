@@ -2,6 +2,7 @@
 import router from "@/routers";
 import { state } from "@/stores/states";
 import { loginAPI, logoutAPI, routesAPI, validateAPI, classAPI, } from "@/stores/apis";
+import { generateQuery } from "@/stores/utilities";
 
 const { 
   page,
@@ -11,8 +12,10 @@ const {
   accessible, 
   loading,
   fetched,
-  sortColoumn,
-  sortDirection,
+  query,
+  keyword,
+  category,
+  order,
  } = state;
 
 export const actions = {
@@ -71,7 +74,7 @@ export const actions = {
   async getClass() {
     try {
       loading.value = true
-      const response = await classAPI(page.value, size.value);
+      const response = await classAPI(page.value, size.value, query.value);
       fetched.value = response.data;
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
@@ -83,4 +86,9 @@ export const actions = {
   numberingIndex(index) {
     return (page.value - 1) * size.value + index + 1;
   },
+
+  async doSearch(e) {
+    const newQuery = await generateQuery(e)
+    query.value = newQuery
+  }
 };
