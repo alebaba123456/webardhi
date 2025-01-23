@@ -1,9 +1,23 @@
 import { useIndexStore } from "@/stores";
 
 export const generateQuery = (params) => {
-    const useStore = useIndexStore();
-    let newQuery = "";
+    const query = Object.entries(params)
+        .filter(([_, value]) => value !== undefined && value !== null)
+        .map(([key, value]) => {
+            if (Array.isArray(value)) {
+                return `${encodeURIComponent(key)}=${encodeURIComponent(value.join(','))}`;
+            } else {
+                return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+            }
+        })
+        .join('&');
 
+    const urlParam = `?${query}`;
+    return urlParam;
+};
+
+export const changeQuery = ( params ) => {
+    const useStore = useIndexStore();
     Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
             if (Array.isArray(value)) {
@@ -19,18 +33,4 @@ export const generateQuery = (params) => {
             }
         }
     });
-
-    newQuery = Object.entries(params)
-        .filter(([_, value]) => value !== undefined && value !== null)
-        .map(([key, value]) => {
-            if (Array.isArray(value)) {
-                return `${encodeURIComponent(key)}=${encodeURIComponent(value.join(','))}`;
-            } else {
-                return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-            }
-        })
-        .join('&');
-
-    const urlParam = newQuery.length === 0 ? "" : `?${newQuery}`;
-    return urlParam;
-};
+}

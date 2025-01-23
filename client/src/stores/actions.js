@@ -2,7 +2,7 @@
 import router from "@/routers";
 import { state } from "@/stores/states";
 import { loginAPI, logoutAPI, routesAPI, validateAPI, classAPI, } from "@/stores/apis";
-import { generateQuery } from "@/stores/utilities";
+import { generateQuery, changeQuery } from "@/stores/utilities";
 
 const { 
   page,
@@ -74,8 +74,10 @@ export const actions = {
   async getClass() {
     try {
       loading.value = true
-      const response = await classAPI(page.value, size.value, query.value);
+      const response = await classAPI(query.value);
       fetched.value = response.data;
+      console.log(fetched.value);
+      
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
     } finally {
@@ -88,7 +90,31 @@ export const actions = {
   },
 
   async doSearch(e) {
-    const newQuery = await generateQuery(e)
+    await changeQuery(e)
+    await this.doGeneratingQuery()
+    await this.doRefreshData()
+  },
+
+  async doGeneratingQuery()  {
+    const newQuery = generateQuery({
+      page : page.value,
+      size : size.value,
+      keyword : keyword.value,
+      category : category.value,
+      order : order.value
+    })
     query.value = newQuery
+  },
+
+  async doRefreshData() {
+    console.log(router.currentRoute.value.name);
+    
+    switch (router.currentRoute.value.name) {
+      case 'Kelas':
+        await this.getClass()
+        break;
+      default:
+        break;
+    }
   }
 };

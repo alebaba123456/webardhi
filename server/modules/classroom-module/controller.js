@@ -1,37 +1,82 @@
 const { Classroom, Profile } = require('../../models')
 const { textToLow } = require('../../helpers/loweringText')
 const validator = require('validator');
+const { Op } = require('sequelize')
 
 class ClassController {
-    static async getClassroom (req, res, next) {
+    static async getClassroom(req, res, next) {
         try {
-            let sanitizedGrade;
-            const allowedFields = [
-                'grade',
-            ];
-
+            const allowedFields = ['page', 'size', 'keyword', 'category', 'order'];
+    
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
-
-            if (req.query.grade) {
-                sanitizedGrade = validator.toInt(req.query.grade || '', 10)
-                if (![7, 8, 9].includes(sanitizedGrade)) {
-                    throw { name: 'Invalid grade value.' };
+    
+            const sanitizedPage = validator.toInt(req.query.page || 1);
+            const sanitizedSize = validator.toInt(req.query.size || 10);
+    
+            const page = sanitizedPage > 0 ? sanitizedPage : 1;
+            const size = sanitizedSize > 0 ? sanitizedSize : 10;
+    
+            const offset = (page - 1) * size;
+            const limit = size;
+    
+            let whereClause = {};
+            let orderClause = [];
+    
+            if (req.query.category) {
+                const sanitizedCategory = validator.escape(req.query.category.toLowerCase() || "");
+                if (!['grade', 'code'].includes(sanitizedCategory)) {
+                    throw { name: 'Modified payload.' };
+                }
+    
+                if (req.query.keyword) {
+                    const sanitizedKeyword = validator.escape(req.query.keyword || "");
+    
+                    const [fieldType] = await Classroom.sequelize.query(`
+                        SELECT data_type 
+                        FROM information_schema.columns 
+                        WHERE table_name = 'Classrooms' AND column_name = '${sanitizedCategory}'
+                    `);
+    
+                    if (!fieldType || !fieldType.length) {
+                        throw { name: 'Invalid category.' };
+                    }
+    
+                    const isStringField = ['character varying', 'text'].includes(fieldType[0].data_type);
+    
+                    if (isStringField) {
+                        whereClause[sanitizedCategory] = { [Op.iLike]: `%${sanitizedKeyword}%` };
+                    } else if (fieldType[0].data_type === 'integer') {
+                        const keywordAsInt = parseInt(sanitizedKeyword, 10);
+                        if (isNaN(keywordAsInt)) {
+                            throw { name: 'Invalid keyword for integer field.' };
+                        }
+                        whereClause[sanitizedCategory] = keywordAsInt;
+                    } else {
+                        throw { name: 'Unsupported field type.' };
+                    }
                 }
             }
-
-            let classrooms;
-            if (sanitizedGrade) {
-                classrooms = await Classroom.findAll({
-                    where: {
-                        grade : sanitizedGrade
-                    }, 
-                })
-            } else {
-                classrooms = await Classroom.findAll()
+    
+            if (req.query.order) {
+                const sanitizedOrder = validator.escape(req.query.order.toLowerCase() || "");
+                if (!['asc', 'desc'].includes(sanitizedOrder)) {
+                    throw { name: 'Modified payload.' };
+                }
+                orderClause.push(['id', sanitizedOrder]);
             }
+    
+            const classrooms = await Classroom.findAll({
+                where: whereClause,
+                order: orderClause,
+                offset,
+                limit,
+            });
+    
+            const totalClassrooms = await Classroom.count({ where: whereClause });
+    
             const result = await Promise.all(
                 classrooms.map(async (classroom) => {
                     const profileCount = await Profile.count({
@@ -46,12 +91,15 @@ class ClassController {
                     };
                 })
             );
+    
             res.status(200).json({
                 message: 'All classroom list.',
-                data: result
-            })
+                data: result,
+                totalData: Math.ceil(totalClassrooms / size),
+            });
         } catch (error) {
-            next(error)
+            console.error(error);
+            next(error);
         }
     }
 
@@ -68,10 +116,10 @@ class ClassController {
 
             const sanitizedGrade = validator.toInt(grade || '')
             if (![0, 7, 8, 9].includes(sanitizedGrade)) {
-                throw { name: 'Invalid grade value.' };
+                throw { name: 'Modified payload.' };
             }
 
-            const sanitizedCode = (code || '').toUpperCase();
+            const sanitizedCode = validator.escape(code.toUpperCase() || '');
             if (!/^[A-Z]*$/.test(sanitizedCode)) {
                 throw { name: 'Invalid code format.' };
             }
@@ -86,8 +134,6 @@ class ClassController {
                 createdClass
             });
         } catch (error) {
-            console.log(error);
-            
             next(error)
         }
     }

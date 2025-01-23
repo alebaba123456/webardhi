@@ -12,7 +12,7 @@ export const state = {
     { path: '/login', name: 'Login'},
   ]),
   fetched: ref(null),
-  query : ref(""),
+  query : ref("?page=1&size=10"),
   keyword: ref(null),
   category: ref(null),
   order: ref(null),
