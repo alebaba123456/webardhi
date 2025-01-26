@@ -22,6 +22,7 @@ export default {
       },
       backgroundImage: {
         'login' : "url('@/assets/backgrounds/background.jpg')",
+        'pattern' : "url('@/assets/backgrounds/pattern.png')",
         'gradient-conic': 'conic-gradient(var(--tw-gradient-stops))',
       },
       keyframes: {

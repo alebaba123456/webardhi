@@ -32,3 +32,18 @@ export const classAPI = async(query) => {
   const response = await api.get(`/classroom/get/${query}`)
   return response.data;
 }
+
+export const classPostAPI = async(payload) => {
+  const response = await api.post(`/classroom/create`, payload)
+  return response.data;
+}
+
+export const classEditAPI = async(payload) => {
+  const response = await api.put(`/classroom/edit`, payload)
+  return response.data;
+}
+
+export const classDeleteAPI = async(payload) => {
+  const response = await api.delete(`/classroom/delete/${payload}`)
+  return response.data;
+}

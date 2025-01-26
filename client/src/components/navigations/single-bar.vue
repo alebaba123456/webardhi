@@ -1,17 +1,19 @@
 <template>
-  <div class="h-full flex flex-col justify-between shadow-2xl shadow-shade-gr bg-shade-gr py-4 px-[0.3rem] [user-select:none]">
-    <div class="flex flex-col gap-3">
-      <div class="flex flex-col justify-center items-center mb-4">
-        <img class="w-[3rem] h-[3rem]" src="@/assets/logos/logo-sekolah.png" />
-        <div class="font-bold text-[1rem] text-white">AL-HUSNA</div>
+  <div class="left-0 top-0 w-fit h-screen z-10 sticky">
+    <div class="h-full flex flex-col justify-between shadow-2xl shadow-shade-gr bg-shade-gr py-4 px-[0.3rem] [user-select:none]">
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-col justify-center items-center mb-4">
+          <img class="w-[5rem] h-[5rem]" src="@/assets/logos/alhusna-ikon.png" />
+          <div class="font-bold text-[1rem] text-white">AL-HUSNA</div>
+        </div>
+        <div v-for="(route, index) in filteredRoutes" :key="index">
+          <RouterLink :to="route.path">
+            <SBarButton :pageName="route.name" />
+          </RouterLink>
+        </div>
       </div>
-      <div v-for="(route, index) in filteredRoutes" :key="index">
-        <RouterLink :to="route.path">
-          <SBarButton :pageName="route.name" />
-        </RouterLink>
-      </div>
+      <SBarButton pageName="Keluar" @click.prevent="doLogout()" />
     </div>
-    <SBarButton pageName="Keluar" @click.prevent="doLogout()" />
   </div>
 </template>
 

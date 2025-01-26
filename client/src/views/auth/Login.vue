@@ -8,13 +8,9 @@
             class="flex flex-col h-full w-[30%] justify-between bg-shade-gr shadow-2xl p-4 transition-all duration-1000"
         >
             <div class="flex flex-col gap-20 text-white">
-                <div class="flex justify-between">
-                    <img src="@/assets/logos/logo-sekolah.png" class="w-[3rem]" />
-                    <div class="flex flex-col justify-center items-center text-[1.2rem]">
-                        <div>MADRASAH TSANAWIYAH</div>
-                        <div>AL - HUSNA</div>
-                    </div>
-                    <img src="@/assets/logos/logo-yayasan.png" class="w-[3rem]" />
+                <div class="flex justify-center gap-4 items-center">
+                    <img src="@/assets/logos/alhusna-ikon.png" class="w-[5rem]" />
+                    <div class="text-[2.5rem] font-[Tajawal] font-extrabold">AL - HUSNA</div>
                 </div>
                 <form 
                     @submit.prevent="handleLogin"
@@ -88,13 +84,12 @@ const handleLogin = async () => {
     })
 };
 
-// Animasi saat mounted
 onMounted(() => {
     setTimeout(() => {
         boxPosition.value = {
             transform: 'translateX(0)',
         };
-    }, 300); // 300ms untuk animasi masuk
+    }, 300);
 });
 </script>
 

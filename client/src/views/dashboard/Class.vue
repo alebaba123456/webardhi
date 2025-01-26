@@ -1,24 +1,48 @@
 <template>
-    <div class="w-full h-full flex">
-        <Single />
-        <div class="w-full h-full px-[2rem] py-[1rem]">
-            <div class="font-bold text-shade text-[1.5rem] mb-6">DAFTAR KELAS</div>
-            <FilterBar class="w-full mb-4"/>
-            <TablesClass class="w-full"/>
+    <div class="w-full h-full flex relative bg-pattern bg-fixed bg-cover" ref="mainRef">
+        <Modal />
+        <Single class="sticky" />
+        <div class="w-full h-full px-8 py-4 bg-transparent">
+        <div class="font-extrabold text-shade bg-shade-gr flex px-2 text-[1.5rem] mb-6 w-full">DAFTAR KELAS</div>
+            <FilterBar class="w-full mb-4" ref="filter"/>
+            <TablesClass class="w-full my-2"/>
+            <Pagination class="w-full fixed bottom-4" ref="pagination" />
         </div>
     </div>
 </template>
 
 <script setup>
+import Modal from '@/components/modals/main-modal.vue'
 import Single from '@/components/navigations/single-bar.vue';
 import TablesClass from '@/components/tables/tables-class.vue';
 import FilterBar from '@/components/navigations/class-filter-bar.vue';
-import { onMounted } from 'vue';
+import Pagination from '@/components/navigations/pagination.vue';
+import { nextTick, onMounted, ref } from 'vue';
 import { useIndexStore } from "@/stores";
+import { storeToRefs } from 'pinia';
 
 const useStore = useIndexStore();
 const { getClass } = useStore;
-onMounted(async() => {
+const { size } = storeToRefs(useStore)
+
+const filter = ref(null);
+const pagination = ref(null);
+const mainRef = ref(null);
+
+onMounted(async () => {
+    await updateSize();
     await getClass();
+    await nextTick();
+    const trueWidth = filter.value?.$el.offsetWidth || 0;
+    if (pagination.value) {
+        pagination.value.$el.style.width = `${trueWidth}px`;
+    }
 })
+
+async function updateSize() {
+    const anyHeight = 221.4;
+    const maxHeight = mainRef.value.offsetHeight;
+    const newSize = Math.floor((maxHeight-anyHeight)/43);
+    size.value = newSize;
+}
 </script>

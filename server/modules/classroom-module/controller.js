@@ -21,7 +21,7 @@ class ClassController {
     
             const offset = (page - 1) * size;
             const limit = size;
-    
+            
             let whereClause = {};
             let orderClause = [];
     
@@ -74,15 +74,15 @@ class ClassController {
                 offset,
                 limit,
             });
-    
+            
             const totalClassrooms = await Classroom.count({ where: whereClause });
-    
+            
             const result = await Promise.all(
                 classrooms.map(async (classroom) => {
                     const profileCount = await Profile.count({
                         where: { ClassRoomId: classroom.id },
                     });
-    
+                    
                     return {
                         id: classroom.id,
                         grade: classroom.grade,
@@ -91,14 +91,13 @@ class ClassController {
                     };
                 })
             );
-    
+            
             res.status(200).json({
                 message: 'All classroom list.',
                 data: result,
                 totalData: Math.ceil(totalClassrooms / size),
             });
         } catch (error) {
-            console.error(error);
             next(error);
         }
     }
@@ -106,14 +105,13 @@ class ClassController {
     static async createClassroom (req, res, next) {
         try {
             const allowedFields = ['grade', 'code'];
-
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.', extraFields };
             }
 
             const { grade, code } = req.body
-
+            
             const sanitizedGrade = validator.toInt(grade || '')
             if (![0, 7, 8, 9].includes(sanitizedGrade)) {
                 throw { name: 'Modified payload.' };
@@ -122,6 +120,21 @@ class ClassController {
             const sanitizedCode = validator.escape(code.toUpperCase() || '');
             if (!/^[A-Z]*$/.test(sanitizedCode)) {
                 throw { name: 'Invalid code format.' };
+            }
+
+            if ((grade === 0 && code === 'guru') || (grade === 0 && code === 'admin')) {
+                throw { name : 'Duplicated.'}
+            }
+
+            const existingClass = await Classroom.findOne({
+                where: {
+                    code,
+                    grade
+                }
+            })
+
+            if (existingClass) {
+                throw { name : 'Duplicated.'}
             }
 
             const createdClass = await Classroom.create({
@@ -148,22 +161,23 @@ class ClassController {
             }
 
             const { id, code, grade } = req.body
-            const sanitizedId = validator.toInt(id || '', 10);
+            const sanitizedId = validator.isUUID(id || '');
             const sanitizedCode = (code || '').toUpperCase();
             const sanitizedGrade = validator.toInt(grade || '', 10);
-
+            
             if (!/^[A-Z]*$/.test(sanitizedCode)) {
                 throw { name: 'Invalid code format.' };
             }
-
+            
             if (![7, 8, 9].includes(sanitizedGrade)) {
-                throw { name: 'Invalid grade value.' };
+                throw { name: 'Modified payload.' };
             }
-
+            
             const classroom = await Classroom.findOne({
-                where: { id: sanitizedId }
+                where: {
+                    id : id
+                }
             });
-
             if (!classroom) {
                 throw { name: 'Data not found.' };
             }
@@ -186,22 +200,28 @@ class ClassController {
         try {
             const allowedFields = ['id'];
 
-            const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
+            const extraFields = Object.keys(req.params).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload' };
             }
-
-            const { id } = req.body;
-
-            const sanitizedId = validator.toInt(id || '', 10);
+            
+            const { id } = req.params;
+            
+            const sanitizedId = validator.isUUID(id || '');
 
             if (!sanitizedId) {
-                throw { name: 'Data not found.' };
+                throw { name: 'Modified payload.' };
             }
 
             const classroom = await Classroom.findOne({
-                where: { id: sanitizedId }
+                where: { 
+                    id : id 
+                }
             });
+            
+            if (classroom.id === 0) {
+                throw { name: 'Forbidden.' };
+            }
 
             if (!classroom) {
                 throw { name: 'Data not found.' };
@@ -213,6 +233,7 @@ class ClassController {
                 message: 'Classroom deleted successfully.'
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     }

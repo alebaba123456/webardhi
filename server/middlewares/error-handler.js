@@ -15,6 +15,9 @@ async function errorHandler(error, req, res, next) {
         case 'Invalid input.' :
             res.status(400).json({message: "INVALID INPUT NOT ALLOWED!"})
             break
+        case 'Duplicated.' :
+            res.status(400).json({message: "DATA ALREADY EXIST!"})
+            break
         case 'Email already used.' :
             res.status(400).json({message: "EMAIL ALREADY USED, PLEASE USE ANOTHER EMAIL!"})
             break
