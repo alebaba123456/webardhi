@@ -17,7 +17,7 @@ export default {
         'shade-sh' : '#dda15e60',
         'gr' : '#2C2C2C',
         'shade-wh': '#FFFFFFCC',
-        'shade-gr' : '#00000099',
+        'shade-gr' : '#000000D9',
 
       },
       backgroundImage: {

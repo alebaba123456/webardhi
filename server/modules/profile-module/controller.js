@@ -3,24 +3,24 @@ const validator = require('validator');
 const { Op } = require('sequelize')
 
 class ProfileController {
-    static async createProfile (req, res, next) {
+    static async createProfile(req, res, next) {
         try {
             const allowedFields = [
                 'name', 'birthDate', 'religion', 'gender', 'role', 'ClassRoomId'
             ];
-
+            
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
-
-            const { name, birthDate, religion, gender, role, ClassRoomId } = req.body;
             
+            const { name, birthDate, religion, gender, role, ClassRoomId } = req.body;
+
             const sanitizedName = validator.escape(name || '');
             const sanitizedBirthDate = validator.toDate(birthDate) || null;
             const sanitizedReligion = validator.escape(religion.toLowerCase() || '');
             const sanitizedGender = validator.escape(gender || '');
-            const sanitizedRole = validator.escape(role || '');
+            const sanitizedRole = validator.escape(role.toLowerCase() || '');
             let sanitizedClassRoomId = validator.escape(ClassRoomId || '');
 
             if (!['islam', 'kristen', 'katolik', 'hindu', 'budha', 'konghucu', 'lainnya'].includes(sanitizedReligion)) {
@@ -57,139 +57,168 @@ class ProfileController {
                 message: 'User profile created successfully.',
                 profile,
             });
-        } catch (error) {
-            console.log(error);
-            
+        } catch (error) { 
             next(error)
         }
     }
 
     static async getProfile(req, res, next) {
         try {
-            const allowedFields = ['name', 'religion', 'role', 'gender', 'grade', 'code'];
+            const allowedFields = ['page', 'size', 'keyword', 'category', 'order', 'role'];
             const extraFields = Object.keys(req.query).filter(key => !allowedFields.includes(key));
     
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
     
-            const { name, religion, role, gender, grade, code } = req.query;
+            const sanitizedPage = validator.toInt(req.query.page || 1);
+            const sanitizedSize = validator.toInt(req.query.size || 10);
     
-            const filters = {};
+            const page = sanitizedPage > 0 ? sanitizedPage : 1;
+            const size = sanitizedSize > 0 ? sanitizedSize : 10;
     
-            if (name) {
-                filters.name = {
-                    [Op.iLike]: `%${name.trim()}%`
-                };
+            const offset = (page - 1) * size;
+            const limit = size;
+    
+            let whereClause = {};
+            let orderClause = [];
+    
+            const sanitizedRole = validator.escape(req.query.role.toUpperCase() || "");
+            
+            if (sanitizedRole) {
+                whereClause.role = sanitizedRole;
             }
     
-            if (religion) {
-                const sanitizedReligion = validator.escape(religion.trim());
-                filters.religion = sanitizedReligion.toUpperCase();
-            }
-    
-            if (role) {
-                const sanitizedRole = validator.escape(role.trim());
-                filters.role = sanitizedRole.toUpperCase();
-            }
-    
-            if (gender) {
-                if (!['L', 'P'].includes(gender.toUpperCase())) {
-                    throw { name: 'Invalid input.' };
-                }
-                filters.gender = gender.toUpperCase();
-            }
-    
-            if (grade || code) {
-                if (!grade || !code) {
-                    throw { name: 'Invalid input.' };
+            if (req.query.category) {
+                const sanitizedCategory = validator.escape(req.query.category || "");
+                if (!['name', 'religion', 'gender', 'ClassRoomId'].includes(sanitizedCategory)) {
+                    throw { name: 'Modified payload.' };
                 }
     
-                const sanitizedGrade = validator.toInt(grade || '');
-                const sanitizedCode = code.toUpperCase();
-    
-                if (![0, 7, 8, 9].includes(sanitizedGrade)) {
-                    throw { name: 'Invalid input.' };
-                }
-    
-                if (!/^[A-Z]*$/.test(sanitizedCode)) {
-                    throw { name: 'Invalid input.' };
-                }
-    
-                const classroom = await Classroom.findOne({
-                    where: {
-                        grade: sanitizedGrade,
-                        code: sanitizedCode
+                if (req.query.keyword) {
+                    const sanitizedKeyword = validator.escape(req.query.keyword || "");
+
+                    const [fieldType] = await Profile.sequelize.query(`
+                        SELECT data_type 
+                        FROM information_schema.columns 
+                        WHERE table_name = 'Profiles' AND column_name = '${sanitizedCategory}'
+                    `);
+                    
+                    if (!fieldType || !fieldType.length) {
+                        
+                        throw { name: 'Invalid category.' };
                     }
-                });
-    
-                if (!classroom) {
-                    throw { name: 'Data not found.' };
+
+                    const isStringField = ['character varying', 'text'].includes(fieldType[0].data_type);
+
+                    if (isStringField) {
+                        whereClause[sanitizedCategory] = { [Op.iLike]: `%${sanitizedKeyword}%` };
+                    } else if (fieldType[0].data_type === 'integer') {
+                        const keywordAsInt = parseInt(sanitizedKeyword, 10);
+                        if (isNaN(keywordAsInt)) {
+                            throw { name: 'Modified payload.' };
+                        }
+                        whereClause[sanitizedCategory] = keywordAsInt;
+                    } else if (fieldType[0].data_type === 'uuid') {
+                        if (!validator.isUUID(sanitizedKeyword)) {
+                            throw { name: 'Modified payload.' };
+                        }
+                        whereClause[sanitizedCategory] = sanitizedKeyword;
+                    } else {
+                        throw { name: 'Unsupported field type.' };
+                    }
                 }
+            }
     
-                filters.ClassRoomId = classroom.id;
+            if (req.query.order) {
+                const sanitizedOrder = validator.escape(req.query.order.toLowerCase() || "");
+                if (!['asc', 'desc'].includes(sanitizedOrder)) {
+                    throw { name: 'Modified payload.' };
+                }
+                orderClause.push(['id', sanitizedOrder]);
             }
     
             const profiles = await Profile.findAll({
-                where: filters,
+                where: whereClause,
+                order: orderClause,
+                offset,
+                limit,
                 include: [
                     {
                         model: Classroom,
-                        attributes: ['grade', 'code'],
                     }
                 ]
             });
     
+            const totalProfiles = await Profile.count({
+                where: whereClause
+            });
+    
             res.status(200).json({
                 message: 'Profiles retrieved successfully.',
-                data: profiles
+                data: profiles,
+                totalData: Math.ceil(totalProfiles / size),
             });
         } catch (error) {
+            console.log(error);
+            
             next(error);
         }
     }
     
+
     static async editProfile(req, res, next) {
         try {
-            const allowedFields = ['name', 'religion', 'role', 'gender', 'ClassRoomId'];
+            const allowedFields = ['id', 'name', 'birthDate', 'religion', 'role', 'gender', 'ClassRoomId'];
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
-    
+            
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
-    
-            const { id } = req.params;
-            if (!id || isNaN(parseInt(id))) {
-                throw { name: 'Invalid input.' };
+            
+            const { id } = req.body;
+            
+            if (!validator.isUUID(id || '')) {
+                throw { name: 'Modified payload.' };
             }
-    
+
             const profile = await Profile.findByPk(id);
             if (!profile) {
                 throw { name: 'Data not found.' };
             }
-    
+
             const updates = {};
-            const { name, religion, role, gender, ClassRoomId } = req.body;
-    
+            const { name, religion, birthDate, role, gender, ClassRoomId } = req.body;
+
             if (name) {
                 updates.name = validator.escape(name.trim()).toUpperCase();
             }
-    
+
             if (religion) {
-                updates.religion = validator.escape(religion.trim()).toUpperCase();
+                if (!['islam', 'kristen', 'katolik', 'hindu', 'budha', 'khonghucu', 'lainnya'].includes(religion.toLowerCase())) {
+                    throw { name: 'Modified payload.' };
+                }
+                updates.religion = validator.escape(religion.trim().toUpperCase() || "");
             }
-    
+
             if (role) {
-                updates.role = validator.escape(role.trim()).toUpperCase();
+                if (!['siswa', 'guru', 'admin'].includes(role.toLowerCase())) {
+                    throw { name: 'Modified payload.' };
+                }
+                updates.role = validator.escape(role.trim().toUpperCase() || "");
             }
-    
+
+            if (birthDate) {
+                updates.birthDate = validator.toDate(birthDate) || null;
+            }
+
             if (gender) {
                 if (!['L', 'P'].includes(gender.toUpperCase())) {
-                    throw { name: 'Invalid input.' };
+                    throw { name: 'Modified payload.' };
                 }
-                updates.gender = gender.toUpperCase();
+                updates.gender = gender.toUpperCase() || null;
             }
-    
+
             if (ClassRoomId) {
                 const classroom = await Classroom.findByPk(ClassRoomId);
                 if (!classroom) {
@@ -197,36 +226,52 @@ class ProfileController {
                 }
                 updates.ClassRoomId = ClassRoomId;
             }
-    
+
             await profile.update(updates);
-    
+
             res.status(200).json({
                 message: 'Profile updated successfully.',
                 data: profile
             });
         } catch (error) {
-            next(error);
+           next(error);
         }
     }
-    
+
     static async deleteProfile(req, res, next) {
         try {
-            const { id } = req.params;
-            if (!id || isNaN(parseInt(id))) {
-                throw { name: 'Invalid input.' };
+            const allowedFields = ['id'];
+
+            const extraFields = Object.keys(req.params).filter(key => !allowedFields.includes(key));
+            if (extraFields.length > 0) {
+                throw { name: 'Modified payload' };
             }
-    
+
+            const { id } = req.params;
+
+            const sanitizedId = validator.isUUID(id || '');
+            
+            if (!sanitizedId) {
+                throw { name: 'Modified payload.' };
+            }
+
             const profile = await Profile.findByPk(id);
             if (!profile) {
                 throw { name: 'Data not found.' };
             }
-    
+
+            if (profile.role === 'ADMIN') {
+                throw { name: 'Modified payload.' };
+            }
+
             await profile.destroy();
-    
+
             res.status(200).json({
                 message: 'Profile deleted successfully.'
             });
         } catch (error) {
+            console.log(error);
+            
             next(error);
         }
     }

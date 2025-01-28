@@ -1,7 +1,7 @@
 <template>
     <div class="w-full h-full flex flex-col justify-center items-center">
         <div class="text-center bg-gr text-shade font-bold w-6/12">{{ id ? "FORM PERUBAHAN KELAS" : "FORM PENAMBAHAN KELAS" }}</div>
-        <div class="w-6/12 h-[28%] bg-shade-wh">
+        <div class="w-6/12 h-fit bg-shade-wh">
             <form @submit.prevent="doSubmitClass(!id ? { grade, code } : {id, grade : grade.toString(), code })" class="px-4 py-2 w-full h-full">
                 <div class="flex flex-col justify-between h-full">
                     <div class="flex flex-col gap-8">
@@ -21,7 +21,7 @@
                             placeholder="Masukan kode kelas.." autocomplete="off" v-model="code" />
                         </div>
                     </div>
-                    <div class="flex gap-8 justify-end items-center">
+                    <div class="flex gap-8 justify-end items-center mt-10">
                         <SubmitButton />
                         <CancelButton @click.prevent="doCloseModal()"/>
                     </div>

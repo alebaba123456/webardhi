@@ -12,15 +12,20 @@ class ClassController {
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
-    
-            const sanitizedPage = validator.toInt(req.query.page || 1);
-            const sanitizedSize = validator.toInt(req.query.size || 10);
-    
-            const page = sanitizedPage > 0 ? sanitizedPage : 1;
-            const size = sanitizedSize > 0 ? sanitizedSize : 10;
-    
-            const offset = (page - 1) * size;
-            const limit = size;
+            
+            let offset = null;
+            let limit = null;
+
+            if (req.query.page && req.query.size) {
+                const sanitizedPage = validator.toInt(req.query.page || 1);
+                const sanitizedSize = validator.toInt(req.query.size || 10);
+        
+                const page = sanitizedPage > 0 ? sanitizedPage : 1;
+                const size = sanitizedSize > 0 ? sanitizedSize : 10;
+        
+                offset = (page - 1) * size;
+                limit = size;
+            }
             
             let whereClause = {};
             let orderClause = [];
@@ -71,8 +76,7 @@ class ClassController {
             const classrooms = await Classroom.findAll({
                 where: whereClause,
                 order: orderClause,
-                offset,
-                limit,
+                ...(offset !== null && limit !== null ? { offset, limit } : {}),
             });
             
             const totalClassrooms = await Classroom.count({ where: whereClause });
@@ -95,9 +99,11 @@ class ClassController {
             res.status(200).json({
                 message: 'All classroom list.',
                 data: result,
-                totalData: Math.ceil(totalClassrooms / size),
+                ...(limit !== null ? { totalData: Math.ceil(totalClassrooms / limit) } : {}),
             });
         } catch (error) {
+            console.log(error);
+            
             next(error);
         }
     }
@@ -164,6 +170,10 @@ class ClassController {
             const sanitizedId = validator.isUUID(id || '');
             const sanitizedCode = (code || '').toUpperCase();
             const sanitizedGrade = validator.toInt(grade || '', 10);
+
+            if (!sanitizedId) {
+                throw { name: 'Modified payload.' };
+            }
             
             if (!/^[A-Z]*$/.test(sanitizedCode)) {
                 throw { name: 'Invalid code format.' };

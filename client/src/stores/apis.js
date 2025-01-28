@@ -47,3 +47,23 @@ export const classDeleteAPI = async(payload) => {
   const response = await api.delete(`/classroom/delete/${payload}`)
   return response.data;
 }
+
+export const profileAPI = async(query) => {
+  const response = await api.get(`/profile/get/${query}`)
+  return response.data;
+}
+
+export const profilePostAPI = async(payload) => {
+  const response = await api.post(`/profile/create`, payload)
+  return response.data;
+}
+
+export const profileEditAPI = async(payload) => {
+  const response = await api.put(`/profile/edit`, payload)
+  return response.data;
+}
+
+export const profileDeleteAPI = async(payload) => {
+  const response = await api.delete(`/profile/delete/${payload}`)
+  return response.data;
+}

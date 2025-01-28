@@ -15,14 +15,14 @@
 import Modal from '@/components/modals/main-modal.vue'
 import Single from '@/components/navigations/single-bar.vue';
 import TablesClass from '@/components/tables/tables-class.vue';
-import FilterBar from '@/components/navigations/class-filter-bar.vue';
+import FilterBar from '@/components/navigations/filter-bar.vue';
 import Pagination from '@/components/navigations/pagination.vue';
 import { nextTick, onMounted, ref } from 'vue';
 import { useIndexStore } from "@/stores";
 import { storeToRefs } from 'pinia';
 
 const useStore = useIndexStore();
-const { getClass } = useStore;
+const { getClass, resetStates } = useStore;
 const { size } = storeToRefs(useStore)
 
 const filter = ref(null);
@@ -30,6 +30,7 @@ const pagination = ref(null);
 const mainRef = ref(null);
 
 onMounted(async () => {
+    resetStates();
     await updateSize();
     await getClass();
     await nextTick();

@@ -17,8 +17,9 @@ export const state = {
     { path: '/login', name: 'Login'},
   ]),
   fetched: ref(null),
-  query : ref("?page=1&size=10"),
+  query : ref(""),
   keyword: ref(null),
   category: ref(null),
   order: ref(null),
+  role: ref(null),
 };
