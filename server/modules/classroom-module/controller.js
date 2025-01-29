@@ -1,7 +1,7 @@
 const { Classroom, Profile } = require('../../models')
 const { textToLow } = require('../../helpers/loweringText')
 const validator = require('validator');
-const { Op } = require('sequelize')
+const { Op } = require('sequelize');
 
 class ClassController {
     static async getClassroom(req, res, next) {
@@ -102,8 +102,6 @@ class ClassController {
                 ...(limit !== null ? { totalData: Math.ceil(totalClassrooms / limit) } : {}),
             });
         } catch (error) {
-            console.log(error);
-            
             next(error);
         }
     }
@@ -128,7 +126,7 @@ class ClassController {
                 throw { name: 'Invalid code format.' };
             }
 
-            if ((grade === 0 && code === 'guru') || (grade === 0 && code === 'admin')) {
+            if ((grade === 0 && code === 'GURU') || (grade === 0 && code === 'ADMIN')) {
                 throw { name : 'Duplicated.'}
             }
 
