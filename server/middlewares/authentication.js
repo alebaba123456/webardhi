@@ -1,57 +1,67 @@
-const jwt = require('jsonwebtoken');
-const forge = require('node-forge');
 const dotenv = require('dotenv');
-
+const { Session, User, Profile } = require('../models');
+const { Op } = require('sequelize');
 dotenv.config();
 
 const authentication = async (req, res, next) => {
-    const encryptedToken = req.cookies?.cookie;
-    const iv = req.cookies?.cookie_india;
-    const tag = req.cookies?.cookie_tango;
-    const jwtKey = process.env.JWT_SECRET;
-    
+    const session = req.cookies?.cookie;
+    const pubKey = req.cookies?.cookie_one;
+
     try {
-        if (!encryptedToken || !iv || !tag) {
-            throw { name: 'Unauthenticated.' }
+        if (!session || !pubKey) {
+            throw { name: 'Unauthenticated.' };
         }
-        
-        const encryptionKey = forge.util.createBuffer(process.env.AES_SECRET_KEY, 'utf8');
-        const decipher = forge.cipher.createDecipher('AES-GCM', encryptionKey.bytes());
 
-        decipher.start({
-            iv: forge.util.decode64(iv),
-            tag: forge.util.decode64(tag),
+        const existingSession = await Session.findOne({
+            where: {
+                session: session
+            },
+            include: [
+                {
+                    model: User,
+                    include: [Profile],
+                }
+            ]
         });
-        decipher.update(forge.util.createBuffer(forge.util.decode64(encryptedToken)));
-        const success = decipher.finish();
 
-        if (!success) {
-            throw { name: 'DecryptionError', message: 'Failed to decrypt token.' };
+        if (!existingSession) {
+            await clearSession(res, session);
+            throw { name: 'Unauthenticated.' };
         }
-        const decryptedToken = decipher.output.toString();
-        const decoded = jwt.verify(decryptedToken, jwtKey);
-        if (!decoded) {
-            res.clearCookie('cookie', {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'Strict',
-            });
-            res.clearCookie('cookie_india', {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'Strict',
-            });
-            res.clearCookie('cookie_tango', {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'Strict',
-            });
+
+        const sessionCreatedAt = new Date(existingSession.createdAt);
+        const currentTime = new Date();
+        const hoursDifference = Math.abs(currentTime - sessionCreatedAt) / (1000 * 60 * 60);
+
+        if (hoursDifference > 12) {
+            await clearSession(res, session);
+            throw { name: 'Session expired.' };
         }
-        req.user = decoded;
+
+        req.user = existingSession.User.Profile;
+        req.session = existingSession;
         next();
-    } catch (error) {     
-        next(error)
+    } catch (error) {
+        next(error);
     }
+};
+
+const clearSession = async (res, session) => {
+    res.clearCookie('cookie', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+    });
+    res.clearCookie('cookie_one', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+    });
+    await Session.destroy({
+        where: {
+            session: session
+        }
+    });
 };
 
 module.exports = authentication;

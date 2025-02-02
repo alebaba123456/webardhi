@@ -1,11 +1,25 @@
-// apis.js
 import axios from "axios";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 const baseUrl = "http://localhost:3000";
 
 const api = axios.create({
   baseURL: baseUrl,
   withCredentials: true,
+});
+
+FingerprintJS.load().then(fp => {
+  fp.get().then(result => {
+    const fingerprint = result.visitorId;
+    api.interceptors.request.use((config) => {
+      if (typeof window !== 'undefined') {
+        config.headers['User-X'] = window.screen.width;
+        config.headers['User-Y'] = window.screen.height;
+        config.headers['User-Z'] = fingerprint;
+      }
+      return config;
+    });
+  });
 });
 
 export const validateAPI = async () => {
