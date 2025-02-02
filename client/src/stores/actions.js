@@ -211,6 +211,8 @@ export const actions = {
       await this.doGeneratingQuery();
       const response = await profileAPI(query.value);
       fetched.value = response.data;
+      
+      console.log(fetched.value);
       max.value = response.totalData;
       this.doUpdateVisible();
     } catch (error) {

@@ -86,5 +86,10 @@ module.exports = (sequelize, DataTypes) => {
     instance.password = hashPassword(instance.password)
   })
 
+  User.beforeUpdate((instance) => {
+    instance.email = textToLow(instance.email)
+    instance.password = hashPassword(instance.password)
+  })
+
   return User;
 };

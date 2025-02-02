@@ -1,4 +1,4 @@
-const { Profile, Classroom } = require('../../models');
+const { Profile, Classroom, User } = require('../../models');
 const validator = require('validator');
 const { Op } = require('sequelize')
 
@@ -8,12 +8,12 @@ class ProfileController {
             const allowedFields = [
                 'name', 'birthDate', 'religion', 'gender', 'role', 'ClassRoomId'
             ];
-            
+
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
-            
+
             const { name, birthDate, religion, gender, role, ClassRoomId } = req.body;
 
             const sanitizedName = validator.escape(name || '');
@@ -57,7 +57,7 @@ class ProfileController {
                 message: 'User profile created successfully.',
                 profile,
             });
-        } catch (error) { 
+        } catch (error) {
             next(error)
         }
     }
@@ -66,35 +66,35 @@ class ProfileController {
         try {
             const allowedFields = ['page', 'size', 'keyword', 'category', 'order', 'role'];
             const extraFields = Object.keys(req.query).filter(key => !allowedFields.includes(key));
-    
+
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
-    
+
             const sanitizedPage = validator.toInt(req.query.page || 1);
             const sanitizedSize = validator.toInt(req.query.size || 10);
-    
+
             const page = sanitizedPage > 0 ? sanitizedPage : 1;
             const size = sanitizedSize > 0 ? sanitizedSize : 10;
-    
+
             const offset = (page - 1) * size;
             const limit = size;
-    
+
             let whereClause = {};
             let orderClause = [];
-    
+
             const sanitizedRole = validator.escape(req.query.role.toUpperCase() || "");
-            
+
             if (sanitizedRole) {
                 whereClause.role = sanitizedRole;
             }
-    
+
             if (req.query.category) {
                 const sanitizedCategory = validator.escape(req.query.category || "");
                 if (!['name', 'religion', 'gender', 'ClassRoomId'].includes(sanitizedCategory)) {
                     throw { name: 'Modified payload.' };
                 }
-    
+
                 if (req.query.keyword) {
                     const sanitizedKeyword = validator.escape(req.query.keyword || "");
 
@@ -103,9 +103,9 @@ class ProfileController {
                         FROM information_schema.columns 
                         WHERE table_name = 'Profiles' AND column_name = '${sanitizedCategory}'
                     `);
-                    
+
                     if (!fieldType || !fieldType.length) {
-                        
+
                         throw { name: 'Invalid category.' };
                     }
 
@@ -129,7 +129,7 @@ class ProfileController {
                     }
                 }
             }
-    
+
             if (req.query.order) {
                 const sanitizedOrder = validator.escape(req.query.order.toLowerCase() || "");
                 if (!['asc', 'desc'].includes(sanitizedOrder)) {
@@ -137,7 +137,7 @@ class ProfileController {
                 }
                 orderClause.push(['id', sanitizedOrder]);
             }
-    
+
             const profiles = await Profile.findAll({
                 where: whereClause,
                 order: orderClause,
@@ -146,14 +146,19 @@ class ProfileController {
                 include: [
                     {
                         model: Classroom,
+                    },
+                    {
+                        model: User,
+                        attributes: ['email'],
+                        required: false
                     }
                 ]
             });
-    
+
             const totalProfiles = await Profile.count({
                 where: whereClause
             });
-    
+
             res.status(200).json({
                 message: 'Profiles retrieved successfully.',
                 data: profiles,
@@ -163,19 +168,18 @@ class ProfileController {
             next(error);
         }
     }
-    
 
     static async editProfile(req, res, next) {
         try {
             const allowedFields = ['id', 'name', 'birthDate', 'religion', 'role', 'gender', 'ClassRoomId'];
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
-            
+
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
-            
+
             const { id } = req.body;
-            
+
             if (!validator.isUUID(id || '')) {
                 throw { name: 'Modified payload.' };
             }
@@ -232,7 +236,7 @@ class ProfileController {
                 data: profile
             });
         } catch (error) {
-           next(error);
+            next(error);
         }
     }
 
@@ -248,7 +252,7 @@ class ProfileController {
             const { id } = req.params;
 
             const sanitizedId = validator.isUUID(id || '');
-            
+
             if (!sanitizedId) {
                 throw { name: 'Modified payload.' };
             }
@@ -269,7 +273,7 @@ class ProfileController {
             });
         } catch (error) {
             console.log(error);
-            
+
             next(error);
         }
     }
