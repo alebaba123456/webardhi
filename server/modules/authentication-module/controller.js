@@ -4,7 +4,6 @@ const bcrypt = require('../../helpers/bcrypt');
 const { generateRSAKeyPair } = require('../../helpers/crypto');
 const crypto = require('crypto');
 const { sendSessionVerification } = require('../../helpers/nodemailer');
-const { encryptWithRSA_OAEP, decryptWithRSA } = require('../../helpers/crypto');
 const jwt = require('jsonwebtoken');
 
 class AuthenticationController {
@@ -64,8 +63,13 @@ class AuthenticationController {
                     id : existingSession.id,
                     session : existingSession.session
                 }
-                const token = jwt.sign(sessionPayload, existingSession.privateKey, { expiresIn: '30m', algorithm: 'RS256' });
-                await sendSessionVerification(email, token);
+                
+                const userMail = process.env.EMAIL_USER
+                const userPass = process.env.EMAIL_PASS
+                const baseUrl = process.env.BASE_URL || 'http://localhost:3000'
+
+                const token = jwt.sign(sessionPayload, process.env.JWT_SECRET, { expiresIn: '30m', algorithm: 'HS256' });
+                await sendSessionVerification(baseUrl, userMail, userPass, email, token);
                 throw { name: 'Unauthenticated.' }
             } else {
                 const { publicKey, privateKey } = generateRSAKeyPair()
@@ -132,10 +136,10 @@ class AuthenticationController {
     static async resetSession(req, res, next) {
         try {
             const { token } = req.params
-            const privateKey = process.env.RSA_PRIVATE_KEY;
-            const decryptedToken = decryptWithRSA(decodeURIComponent(token), privateKey);
-
-            const payload = jwt.verify(decryptedToken, process.env.JWT_SECRET, { algorithms: ['HS256'] });
+            if (!token) {
+                throw {name: 'Modified payload.'}
+            }
+            const payload = jwt.verify(token, process.env.JWT_SECRET, { algorithms: 'HS256' });
             await Session.destroy({
                 where: {
                     session : payload.session

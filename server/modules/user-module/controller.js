@@ -20,12 +20,12 @@ class UserController {
                 throw { name: 'Invalid input.' };
             }
 
-            const existingUser = await User.findOne({ 
-                where: { 
-                    email : email.toLowerCase() 
-                } 
+            const existingUser = await User.findOne({
+                where: {
+                    email: email.toLowerCase()
+                }
             });
-            
+
             if (existingUser) {
                 throw { name: 'Email already used.' };
             }
@@ -45,7 +45,9 @@ class UserController {
                 ProfileId,
             });
 
-            await sendUserVerification(email, username, password)
+            const userMail = process.env.EMAIL_USER
+            const userPass = process.env.EMAIL_PASS
+            await sendUserVerification( userMail, userPass, email, username, password )
 
             res.status(201).json({
                 message: 'User created successfully. Login credentials sent to the provided email.'
@@ -67,7 +69,7 @@ class UserController {
             if (!user) {
                 throw { name: 'Data not found.' };
             }
-            
+
             const isPasswordMatch = await comparePassword(oldPassword, user.password);
             if (!isPasswordMatch) {
                 throw { name: 'Invalid password.' };
@@ -97,10 +99,11 @@ class UserController {
             const tokenPayload = { UserId: user.id };
             const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: '30m', algorithm: 'HS256' });
 
-            const publicKey = process.env.RSA_PUBLIC_KEY;
-            const encryptedToken = encryptWithRSA(token, publicKey);
+            const userMail = process.env.EMAIL_USER
+            const userPass = process.env.EMAIL_PASS
+            const baseUrl = process.env.BASE_URL || 'http://localhost:3000'
 
-            await sendRequestResetPassword(user.email, encryptedToken);
+            await sendRequestResetPassword(baseUrl, userMail, userPass, user.email, token);
 
             res.status(200).json({ message: 'Reset password email sent successfully.' });
         } catch (error) {
@@ -112,10 +115,7 @@ class UserController {
         try {
             const { token } = req.params;
 
-            const privateKey = process.env.RSA_PRIVATE_KEY;
-            const decryptedToken = decryptWithRSA(decodeURIComponent(token), privateKey);
-
-            const payload = jwt.verify(decryptedToken, process.env.JWT_SECRET, { algorithms: ['HS256'] });
+            const payload = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });
 
             const user = await User.findByPk(payload.UserId);
             if (!user) throw { name: 'Data not found.' };
@@ -124,7 +124,10 @@ class UserController {
 
             await user.update({ password: newPassword });
 
-            await sendConfirmResetPassword(user.email, newPassword);
+            const userMail = process.env.EMAIL_USER
+            const userPass = process.env.EMAIL_PASS
+
+            await sendConfirmResetPassword(userMail, userPass, user.email, newPassword);
 
             res.status(200).json({ message: 'Password reset successfully. Check your email.' });
         } catch (error) {

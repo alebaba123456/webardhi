@@ -50,7 +50,7 @@
             <td class="px-4 py-2 truncate text-center align-middle">{{ data.Classroom?.grade || "0"  }} - {{ data.Classroom?.code || "" }}</td>
             <td class="px-4 py-2 truncate align-middle">
               <div v-if="data.grade !== 0" class="flex gap-8 justify-center items-center">
-                <button v-if="!data.User" @click.prevent="doOpenModal('createUser')" class="group flex gap-1 items-center justify-center hover:bg-gr p-1 rounded-md">
+                <button v-if="!data.User" @click.prevent="doOpenModal('createUser', {id : data.id})" class="group flex gap-1 items-center justify-center hover:bg-gr p-1 rounded-md">
                   <IkonEditAkun />
                 </button>
                 <button @click.prevent="doOpenModal('createProfile', {id: data.id ,name : data.name, birthDate: data.birthDate, religion: data.religion, gender: data.gender, ClassRoomId: data.Classroom.id })" class="group flex gap-1 items-center justify-center hover:bg-gr p-1 rounded-md">
