@@ -94,7 +94,6 @@ class UserController {
             if (!isPasswordMatch) {
                 throw { name: 'Invalid password.' };
             }
-            console.log(sanitizedNewPassword, "new password KE HIT DISINI");
 
             await user.update({ password: sanitizedNewPassword });
 
@@ -102,8 +101,6 @@ class UserController {
                 message: 'Password changed successfully.',
             });
         } catch (error) {
-            console.log(error);
-            
             next(error);
         }
     }
