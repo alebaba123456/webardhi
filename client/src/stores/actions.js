@@ -11,9 +11,16 @@ import {
   classEditAPI,
   classDeleteAPI,
   profileAPI,
+  myProfileAPI,
   profilePostAPI,
   profileEditAPI,
   profileDeleteAPI,
+  userCreateAPI,
+  subjectAPI,
+  subjectPostAPI,
+  subjectEditAPI,
+  subjectDeleteAPI,
+  changePassAPI,
 } from "@/stores/apis";
 import {
   generateQuery,
@@ -129,6 +136,12 @@ export const actions = {
       case 'Guru':
         await this.getProfile();
         break;
+      case 'Pelajaran':
+        await this.getSubject();
+        break;
+      case 'Profil':
+        await this.getMyProfile();
+        break;
       default:
         break;
     }
@@ -211,10 +224,20 @@ export const actions = {
       await this.doGeneratingQuery();
       const response = await profileAPI(query.value);
       fetched.value = response.data;
-      
-      console.log(fetched.value);
       max.value = response.totalData;
       this.doUpdateVisible();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
+  async getMyProfile() {
+    try {
+      loading.value = true;
+      const response = await myProfileAPI();
+      fetched.value = response.data;
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
     } finally {
@@ -263,6 +286,75 @@ export const actions = {
     try {
       loading.value = true;
       await profileDeleteAPI(payload);
+      this.doRefreshData();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
+  async doSubmitUser(payload) {
+    try {
+      loading.value = true;
+      await userCreateAPI(payload);
+      this.resetStates();
+      this.doRefreshData();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      this.doCloseModal()
+      loading.value = false;
+    }
+  },
+
+  async doSubmitChangePassword(payload) {
+    try {
+      loading.value = true;
+      await changePassAPI(payload);
+      this.resetStates();
+      this.doRefreshData();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      this.doCloseModal()
+      loading.value = false;
+    }
+  },
+
+  async getSubject() {
+    try {
+      loading.value = true;
+      await this.doGeneratingQuery();
+      const response = await subjectAPI(query.value);
+      fetched.value = response.data;
+      max.value = response.totalData;
+      this.doUpdateVisible();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
+  async doSubmitSubject(payload) {
+    try {
+      loading.value = true;
+      props.value.id ? await subjectEditAPI(payload) : await subjectPostAPI(payload);
+      this.resetStates();
+      this.doRefreshData();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      this.doCloseModal()
+      loading.value = false;
+    }
+  },
+
+  async doDeleteSubject(payload) {
+    try {
+      loading.value = true;
+      await subjectDeleteAPI(payload);
       this.doRefreshData();
     } catch (error) {
       console.error("Terjadi kesalahan:", error);

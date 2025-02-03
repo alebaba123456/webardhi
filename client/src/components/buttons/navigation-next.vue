@@ -1,6 +1,6 @@
 <template>
     <button @click="nextPage()"
-        class="px-2 bg-white rounded-md text-[0.85rem] hover:bg-shade transition-all duration-300 ease-in-out"
+        class="px-2 bg-white rounded-md text-[0.85rem] hover:bg-tosca transition-all duration-300 ease-in-out"
         :class="{ 'opacity-50 cursor-not-allowed': page === max }">
         <div class="flex gap-2 justify-center align-middle items-center">
             <div>Selanjutnya</div>

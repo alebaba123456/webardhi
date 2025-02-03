@@ -278,6 +278,38 @@ class ProfileController {
         }
     }
 
+    static async getMyProfile(req, res, next) {
+        try {
+            const classDetail = await Classroom.findOne({
+                where : {
+                    id : req.user?.ClassRoomId || ""
+                } 
+            })
+
+            if (!classDetail) {
+                throw {name: 'Modified payload.'}
+            }
+
+            const myClassroom = `${classDetail.grade} - ${classDetail.code}`
+
+            const myProfile = {
+                name : req.user?.name||"",
+                birthDate : req.user?.birthDate||"",
+                religion : req.user?.religion||"",
+                gender : req.user?.gender||"",
+                role : req.user?.role||"",
+                classroom : myClassroom
+            }
+
+            res.status(200).json({
+                message: 'Profiles retrieved successfully.',
+                data: myProfile
+            });
+        } catch (error) {
+            next(error)
+        }
+    }
+
 }
 
 module.exports = ProfileController

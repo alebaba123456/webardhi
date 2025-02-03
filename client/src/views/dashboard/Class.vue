@@ -3,7 +3,7 @@
         <Modal />
         <Single class="sticky" />
         <div class="w-full h-full px-8 py-4 bg-transparent">
-        <div class="font-extrabold text-shade bg-shade-gr flex px-2 text-[1.5rem] mb-6 w-full">DAFTAR KELAS</div>
+        <div class="font-extrabold text-tosca bg-gradient-to-r from-shade-gr to-transparent rounded-xl flex px-2 text-[1.5rem] mb-6 w-full">DAFTAR KELAS</div>
             <FilterBar class="w-full mb-4" ref="filter"/>
             <TablesClass class="w-full my-2"/>
             <Pagination class="w-full fixed bottom-4" ref="pagination" />

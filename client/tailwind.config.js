@@ -17,8 +17,9 @@ export default {
         'shade-sh' : '#dda15e60',
         'gr' : '#2C2C2C',
         'shade-wh': '#FFFFFFCC',
-        'shade-gr' : '#000000D9',
-
+        'shade-gr' : '#00000099',
+        'tosca' : '#A1E3D8',
+        'shade-tc' : '#A1E3D8CC'
       },
       backgroundImage: {
         'login' : "url('@/assets/backgrounds/background.jpg')",

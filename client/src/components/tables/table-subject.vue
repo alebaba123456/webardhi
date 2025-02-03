@@ -10,17 +10,12 @@
             </th>
             <th class="px-4 py-2">
                 <div class="flex gap-[0.4rem] justify-center">
-                  <div>Kelas</div>
+                  <div>Nama</div>
                 </div>
             </th>
             <th class="px-4 py-2">
                 <div class="flex gap-[0.4rem] justify-center">
-                  <div>Kode Kelas</div>
-                </div>
-            </th>
-            <th class="px-4 py-2">
-                <div class="flex gap-[0.4rem] justify-center">
-                  <div>Anggota</div>
+                  <div>Kode Mata Pelajaran</div>
                 </div>
             </th>
             <th class="px-4 py-2">
@@ -33,16 +28,15 @@
         <tbody>
           <tr v-for="(data, index) in fetched" :key="index"  class="hover:bg-tosca group hover:text-gr bg-shade-gr text-white border border-gr w-full cursor-pointer transition-colors duration-300 ease-out text-[0.75rem]">
             <td class="px-4 py-2 text-center truncate align-middle border-r border-gr bg-shade-gr text-white">{{ numberingIndex(index) }}</td>
-            <td class="px-4 py-2 truncate text-center align-middle">{{ data.grade }}</td>
+            <td class="px-4 py-2 truncate text-center align-middle">{{ data.name }}</td>
             <td class="px-4 py-2 truncate text-center align-middle">{{ data.code }}</td>
-            <td class="px-4 py-2 truncate text-center align-middle">{{ data.profileCount }}</td>
             <td class="px-4 py-2 truncate align-middle">
               <div v-if="data.grade !== 0" class="flex gap-8 justify-center items-center">
-                <button @click.prevent="doOpenModal('createClass', {id: data.id ,code : data.code, grade : data.grade})" class="flex gap-1 items-center justify-center hover:bg-shade-wh p-1 rounded-md ease-out transition-all duration-200">
+                <button @click.prevent="doOpenModal('createSubject', {id: data.id ,name : data.name })" class="flex gap-1 items-center justify-center hover:bg-shade-wh p-1 rounded-md ease-out transition-all duration-200">
                   <IkonPerbarui />
                   <div>Perbarui</div>
                 </button>
-                <button @click.prevent="doDeleteClass(data.id)" class="flex gap-1 items-center justify-center hover:bg-shade-wh p-1 rounded-md ease-out transition-all duration-200">
+                <button @click.prevent="doDeleteSubject(data.id)" class="flex gap-1 items-center justify-center hover:bg-shade-wh p-1 rounded-md ease-out transition-all duration-200">
                   <IkonDelete />
                   <div>Hapus</div>
                 </button>
@@ -61,6 +55,6 @@
   import IkonPerbarui from "@/assets/table-item-icons/ikon-perbarui.vue";
 
   const useStore = useIndexStore();
-  const { numberingIndex, doOpenModal, doDeleteClass } = useStore
+  const { numberingIndex, doOpenModal, doDeleteSubject } = useStore
   const { fetched } = storeToRefs(useStore);
-  </script>  
+  </script>

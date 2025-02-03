@@ -3,6 +3,8 @@
         <CreateClassModal v-if="modal && modalName === 'createClass'" />
         <CreateProfileModal v-if="modal && modalName === 'createProfile'" />
         <CreateUserModal v-if="modal && modalName === 'createUser'" />
+        <CreateSubjectModal v-if="modal && modalName === 'createSubject'" />
+        <ChangePasswordModal v-if="modal && modalName === 'changePassword'" />
     </div>
 </template>
 
@@ -10,6 +12,8 @@
 import CreateClassModal from "@/components/modals/create-class-modal.vue"
 import CreateProfileModal from "@/components/modals/create-profile-modal.vue"
 import CreateUserModal from "@/components/modals/create-user-modal.vue"
+import CreateSubjectModal from "@/components/modals/create-subject-modal.vue"
+import ChangePasswordModal from "@/components/modals/change-password-modal.vue"
 import { ref } from "vue"
 import { useIndexStore} from "@/stores"
 import { storeToRefs } from "pinia"

@@ -1,6 +1,6 @@
 <template>
     <button>
-        <div class="flex gap-2 hover:text-white hover:bg-shade p-1 border-gr border-2 text-gr group">
+        <div class="flex gap-2 hover:bg-tosca p-1 bg-gr border-gr border-2 hover:text-gr hover:font-bold text-tosca group transition-all ease-out duration-200">
             <CancelIcon />
             <div>Batalkan</div>
         </div>

@@ -2,7 +2,7 @@
     <div class="flex gap-2 text-white">
         <button v-for="pageNumber in visible" :key="pageNumber" @click="goToPage(pageNumber)"
             class="hover:font-semibold transition-colors duration-300 ease-in-out"
-            :class="{ 'font-extrabold underline text-shade': page === pageNumber }">
+            :class="{ 'font-extrabold underline text-tosca': page === pageNumber }">
             {{ pageNumber }}
         </button>
     </div>

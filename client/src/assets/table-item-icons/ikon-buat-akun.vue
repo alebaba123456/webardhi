@@ -1,9 +1,5 @@
 <template>
-    <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" class="fill-white" width="24" height="24" />
-        <g>
-            <path d="M21 14v5c0 1.105-.895 2-2 2H5c-1.105 0-2-.895-2-2V5c0-1.105.895-2 2-2h5v2H5v14h14v-5h2z" />
-            <path d="M21 7h-4V3h-2v4h-4v2h4v4h2V9h4" />
-        </g>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 18L14 18M17 15V21M4 21C4 17.134 7.13401 14 11 14C11.695 14 12.3663 14.1013 13 14.2899M15 7C15 9.20914 13.2091 11 11 11C8.79086 11 7 9.20914 7 7C7 4.79086 8.79086 3 11 3C13.2091 3 15 4.79086 15 7Z" class="stroke-white group-hover:stroke-gr" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
 </template>

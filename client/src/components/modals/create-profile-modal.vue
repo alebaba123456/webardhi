@@ -1,6 +1,6 @@
 <template>
     <div class="w-full h-full flex flex-col justify-center items-center">
-        <div class="text-center bg-gr text-shade font-bold w-6/12">{{ id ? `FORM PERUBAHAN ${role.toUpperCase()}` : `FORM PENAMBAHAN ${role.toUpperCase()}` }}</div>
+        <div class="text-center bg-gr text-tosca font-bold w-6/12">{{ id ? `FORM PERUBAHAN ${role.toUpperCase()}` : `FORM PENAMBAHAN ${role.toUpperCase()}` }}</div>
         <div class="w-6/12 h-fit bg-shade-wh">
             <form @submit.prevent="doSubmitProfile(!id ? {name, religion, gender, birthDate, role, ClassRoomId} : {id, name, religion, gender, birthDate, role, ClassRoomId})" class="px-4 py-2 w-full h-full">
                 <div class="flex flex-col justify-between h-full">

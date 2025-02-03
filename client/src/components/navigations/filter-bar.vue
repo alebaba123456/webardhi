@@ -1,6 +1,6 @@
 <template>
     <div class="w-full flex gap-4 justify-between">
-        <form @submit.prevent="applyFilter()" class="flex gap-8 text-[0.85rem] bg-shade-gr shadow-md shadow-shade-gr px-2 py-1">
+        <form @submit.prevent="applyFilter()" class="flex gap-8 text-[0.85rem] rounded-lg bg-shade-gr shadow-md shadow-shade-tc px-2 py-1">
             <div v-if="['name', 'code', null].includes(category)"  class="flex gap-2 items-center">
                 <label for="keyword" class="text-white font-medium">Pencarian :</label>
                 <input id="keyword"
@@ -70,11 +70,11 @@
                     <option value="desc">Turun</option>
                 </select>
             </div>
-            <button class="bg-white hover:bg-shade hover:font-bold hover:text-white transition-all duration-300 ease-out rounded-lg border-shade-gr border text-shade-gr px-6">
+            <button class="bg-gr hover:bg-tosca hover:font-bold hover:text-gr transition-all duration-300 ease-out rounded-lg border-shade-gr border text-tosca px-6">
                 <div>Cari</div>
             </button>
         </form>
-        <div class="flex gap-8 text-[0.85rem] bg-shade-gr shadow-md shadow-shade-gr px-2 py-1">
+        <div class="flex gap-8 text-[0.85rem] bg-shade-gr shadow-md shadow-shade-tc px-2 py-1 rounded-lg">
             <CreateClassButton />
         </div>
     </div>

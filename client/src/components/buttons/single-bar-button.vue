@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex text-[0.8rem] font-semibold hover:bg-shade text-white group flex-col justify-start p-1 items-start hover:text-gr hover:font-extrabold transition-all duration-300 ease-out cursor-pointer">
+    class="flex text-[0.8rem] font-semibold hover:bg-tosca text-white group flex-col justify-start p-1 items-start hover:text-gr hover:font-extrabold transition-all duration-300 ease-out cursor-pointer">
     <div class="flex justify-center items-center gap-2">
       <Component :is="currentIcon" />
       <div>{{ pageName.toUpperCase() }}</div>

@@ -81,3 +81,38 @@ export const profileDeleteAPI = async(payload) => {
   const response = await api.delete(`/profile/delete/${payload}`)
   return response.data;
 }
+
+export const userCreateAPI = async(payload) => {
+  const response = await api.post(`/user/create`, payload)
+  return response.data;
+}
+
+export const changePassAPI = async(payload) => {
+  const response = await api.post(`/user/change-password`, payload)
+  return response.data;
+}
+
+export const subjectAPI = async(query) => {
+  const response = await api.get(`/subject/get/${query}`)
+  return response.data;
+}
+
+export const subjectPostAPI = async(payload) => {
+  const response = await api.post(`/subject/create`, payload)
+  return response.data;
+}
+
+export const subjectEditAPI = async(payload) => {
+  const response = await api.put(`/subject/edit`, payload)
+  return response.data;
+}
+
+export const subjectDeleteAPI = async(payload) => {
+  const response = await api.delete(`/subject/delete/${payload}`)
+  return response.data;
+}
+
+export const myProfileAPI = async() => {
+  const response = await api.get(`/profile/get/myprofile`)
+  return response.data;
+}

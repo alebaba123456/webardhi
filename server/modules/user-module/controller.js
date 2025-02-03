@@ -4,6 +4,7 @@ const { User, Profile } = require('../../models');
 const crypto = require('crypto');
 const { sendUserVerification, sendRequestResetPassword, sendConfirmResetPassword } = require('../../helpers/nodemailer');
 const { comparePassword } = require('../../helpers/bcrypt');
+const validator = require('validator');
 
 class UserController {
     static async createUser(req, res, next) {
@@ -59,32 +60,50 @@ class UserController {
 
     static async changeUserPassword(req, res, next) {
         try {
-            const { UserId, oldPassword, newPassword, confirmationNewPassword } = req.body;
+            const allowedFields = ['oldPassword', 'newPassword', 'confirmationNewPassword'];
+            const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
+            if (extraFields.length > 0) {
+                throw { name: 'Modified payload.' };
+            }
+            
+            const { oldPassword, newPassword, confirmationNewPassword } = req.body;
+            
+            const sanitizedOldPassword = validator.escape(oldPassword || "");
+            const sanitizedNewPassword = validator.escape(newPassword || "");
+            const sanitizedConfirmationPassword = validator.escape(confirmationNewPassword || "")
 
-            if (!UserId || !oldPassword || !newPassword || !confirmationNewPassword) {
+            if (!sanitizedNewPassword || !sanitizedOldPassword || !sanitizedConfirmationPassword) {
                 throw { name: 'Invalid input.' };
             }
-
-            const user = await User.findByPk(UserId);
-            if (!user) {
-                throw { name: 'Data not found.' };
+            
+            if (sanitizedNewPassword !== sanitizedConfirmationPassword) {
+                throw { name: 'Password did not match.' };
             }
+            
+            const user = await User.findOne({
+                where: {
+                    ProfileId : req.user.id
+                }
+            });
 
-            const isPasswordMatch = await comparePassword(oldPassword, user.password);
+            if (!user) {
+                throw { name: 'Modified payload.' };
+            }
+            
+            const isPasswordMatch = await comparePassword(sanitizedOldPassword, user.password);
             if (!isPasswordMatch) {
                 throw { name: 'Invalid password.' };
             }
+            console.log(sanitizedNewPassword, "new password KE HIT DISINI");
 
-            if (newPassword !== confirmationNewPassword) {
-                throw { name: 'Password did not match.' };
-            }
-
-            await user.update({ password: newPassword });
+            await user.update({ password: sanitizedNewPassword });
 
             res.status(200).json({
                 message: 'Password changed successfully.',
             });
         } catch (error) {
+            console.log(error);
+            
             next(error);
         }
     }
