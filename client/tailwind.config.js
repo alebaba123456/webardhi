@@ -22,7 +22,7 @@ export default {
         'shade-tc' : '#A1E3D8CC'
       },
       backgroundImage: {
-        'login' : "url('@/assets/backgrounds/background.jpg')",
+        'login' : "url('@/assets/backgrounds/background.png')",
         'pattern' : "url('@/assets/backgrounds/pattern.png')",
         'gradient-conic': 'conic-gradient(var(--tw-gradient-stops))',
       },

@@ -70,34 +70,41 @@ class ProfileController {
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
-
-            const sanitizedPage = validator.toInt(req.query.page || 1);
-            const sanitizedSize = validator.toInt(req.query.size || 10);
-
+            
+            let sanitizedPage
+            let sanitizedSize
+            if (req.query.page) {
+                sanitizedPage = validator.toInt(req.query.page);
+            }
+            console.log(req.query, 'IAM HEREEEEEEE');
+            if (req.query.size) {
+                sanitizedSize = validator.toInt(req.query.size || 10);
+            }
+            
             const page = sanitizedPage > 0 ? sanitizedPage : 1;
             const size = sanitizedSize > 0 ? sanitizedSize : 10;
-
+            
             const offset = (page - 1) * size;
             const limit = size;
-
+            
             let whereClause = {};
             let orderClause = [];
-
-            const sanitizedRole = validator.escape(req.query.role.toUpperCase() || "");
-
+            
+            const sanitizedRole = validator.escape(req.query.role?.toUpperCase() || "");
+            
             if (sanitizedRole) {
                 whereClause.role = sanitizedRole;
             }
-
+            
             if (req.query.category) {
                 const sanitizedCategory = validator.escape(req.query.category || "");
                 if (!['name', 'religion', 'gender', 'ClassRoomId'].includes(sanitizedCategory)) {
                     throw { name: 'Modified payload.' };
                 }
-
+                
                 if (req.query.keyword) {
                     const sanitizedKeyword = validator.escape(req.query.keyword || "");
-
+                    
                     const [fieldType] = await Profile.sequelize.query(`
                         SELECT data_type 
                         FROM information_schema.columns 
@@ -141,8 +148,7 @@ class ProfileController {
             const profiles = await Profile.findAll({
                 where: whereClause,
                 order: orderClause,
-                offset,
-                limit,
+                ...(offset !== null && limit !== null ? { offset, limit } : {}),
                 include: [
                     {
                         model: Classroom,
@@ -165,6 +171,8 @@ class ProfileController {
                 totalData: Math.ceil(totalProfiles / size),
             });
         } catch (error) {
+            console.log(error);
+            
             next(error);
         }
     }

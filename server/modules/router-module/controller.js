@@ -3,15 +3,15 @@ class RouterController {
     try {
       const routesByRole = {
         ADMIN: [
-          { path: '/kelas', name: 'Kelas' },
+          { path: '/ruang-kelas', name: 'RuangKelas' },
           { path: '/siswa', name: 'Siswa' },
           { path: '/guru', name: 'Guru' },
           { path: '/ujian', name: 'Ujian' },
           { path: '/pelajaran', name: 'Pelajaran' },
+          { path: '/kelas', name: 'Kelas' },
         ],
         GURU: [
-          { path: '/kelas', name: 'Kelas' },
-          { path: '/pelajaran', name: 'Pelajaran' },
+          { path: '/ruangkelas', name: 'Ruang Kelas' },
           { path: '/siswa', name: 'Siswa' },
           { path: '/ujian', name: 'Ujian' },
         ],

@@ -78,17 +78,11 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.beforeCreate(async (instance) => {
-    if (instance.password.length < 12 || instance.password.length > 40) {
-      throw new Error("PASSWORD MUST BE AT 12-40 CHARACTERS");
-    }
     instance.email = textToLow(instance.email)
     instance.password = await hashPassword(instance.password)
   })
 
   User.beforeUpdate(async (instance) => {
-    if (instance.password.length < 12 || instance.password.length > 40) {
-      throw new Error("PASSWORD MUST BE AT 12-40 CHARACTERS");
-    }
     instance.email = textToLow(instance.email)
     instance.password = await hashPassword(instance.password)
   })

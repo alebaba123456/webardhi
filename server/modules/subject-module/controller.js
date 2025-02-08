@@ -115,9 +115,14 @@ class SubjectController {
                 ...(offset !== null && limit !== null ? { offset, limit } : {}),
             });
 
+            const totalSubject = await Subject.count({
+                where: whereClause
+            });
+
             res.status(200).json({
                 message: 'Subjects retrieved successfully.',
-                data: subjects
+                data: subjects,
+                totalData: Math.ceil(totalSubject / req.query.size),
             });
         } catch (error) {
             next(error);
@@ -173,8 +178,7 @@ class SubjectController {
     }    
 
     static async deleteSubject(req, res, next) {
-        try {
-            
+        try {  
             const allowedFields = ['id'];
             const extraFields = Object.keys(req.params).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {

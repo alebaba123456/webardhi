@@ -20,6 +20,7 @@ const props = defineProps({
 
 const iconMap = {
   Kelas: shallowRef(() => import('@/assets/single-bar-icons/ikon-kelas.vue')),
+  RuangKelas: shallowRef(() => import ('@/assets/single-bar-icons/ikon-ruang-kelas.vue')),
   Profil: shallowRef(() => import('@/assets/single-bar-icons/ikon-profil.vue')),
   Guru: shallowRef(() => import('@/assets/single-bar-icons/ikon-guru.vue')),
   Siswa: shallowRef(() => import('@/assets/single-bar-icons/ikon-siswa.vue')),

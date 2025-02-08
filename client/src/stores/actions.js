@@ -21,6 +21,10 @@ import {
   subjectEditAPI,
   subjectDeleteAPI,
   changePassAPI,
+  subjectClassAPI,
+  subjectClassPostAPI,
+  subjectClassEditAPI,
+  subjectClassDeleteAPI,
 } from "@/stores/apis";
 import {
   generateQuery,
@@ -129,7 +133,7 @@ export const actions = {
 
   async doRefreshData() {
     switch (router.currentRoute.value.name) {
-      case 'Kelas':
+      case 'RuangKelas':
         await this.getClass();
         break;
       case 'Siswa':
@@ -141,6 +145,9 @@ export const actions = {
         break;
       case 'Profil':
         await this.getMyProfile();
+        break;
+      case 'Kelas':
+        await this.getSubjectClass();
         break;
       default:
         break;
@@ -252,6 +259,7 @@ export const actions = {
       let filteredData = [];
       switch (router.currentRoute.value.name) {
         case 'Siswa':
+        case 'Kelas':
           filteredData = response.data.filter(item => [7, 8, 9].includes(item.grade));
           break;
         case 'Guru':
@@ -314,6 +322,7 @@ export const actions = {
       await changePassAPI(payload);
       this.resetStates();
       this.doRefreshData();
+      this.doLogout();
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
     } finally {
@@ -363,12 +372,80 @@ export const actions = {
     }
   },
 
+  async getSubjectClass() {
+    try {
+      loading.value = true
+      await this.doGeneratingQuery()
+      const response = await subjectClassAPI(query.value);
+      fetched.value = response.data;
+      max.value = response.totalData;
+      this.doUpdateVisible()
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false
+    }
+  },
+
+  async getProfileSelection() {
+    try {
+      loading.value = true;
+      const response = await profileAPI("");
+      let filteredData = response.data.filter(item => item.role === 'GURU');
+      return filteredData
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
+  async getSubjectSelection() {
+    try {
+      loading.value = true;
+      const response = await subjectAPI("");
+      return response.data
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
+  async doSubmitSubjectClass(payload) {
+    try {
+      loading.value = true;
+      props.value.id ? await subjectClassEditAPI(payload) : await subjectClassPostAPI(payload);
+      this.resetStates();
+      this.doRefreshData();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      this.doCloseModal()
+      loading.value = false;
+    }
+  },
+
+  async doDeleteSubjectClass(payload) {
+    try {
+      loading.value = true;
+      await subjectClassDeleteAPI(payload);
+      this.doRefreshData();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
   resetStates() {
     page.value = 1;
     fetched.value = null;
     keyword.value = null;
     category.value = null;
     order.value = null;
-    props.value = null
+    props.value = null;
+    modal.value = false;
+    modalName.value = null;
   },
 };

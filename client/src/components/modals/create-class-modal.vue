@@ -1,6 +1,6 @@
 <template>
     <div class="w-full h-full flex flex-col justify-center items-center">
-        <div class="text-center bg-gr text-tosca font-bold w-6/12">{{ id ? "FORM PERUBAHAN KELAS" : "FORM PENAMBAHAN KELAS" }}</div>
+        <div class="text-center bg-gr text-tosca font-bold w-6/12">{{ id ? "FORM PERUBAHAN RUANG KELAS" : "FORM PENAMBAHAN RUANG KELAS" }}</div>
         <div class="w-6/12 h-fit bg-shade-wh">
             <form @submit.prevent="doSubmitClass(!id ? { grade, code } : {id, grade : grade.toString(), code })" class="px-4 py-2 w-full h-full">
                 <div class="flex flex-col justify-between h-full">

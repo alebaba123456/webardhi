@@ -1,9 +1,9 @@
 const { Op } = require('sequelize');
-const { SubjectClass, Profile, Classroom, Subject } = require('../../models');
+const { SubjectClass, Examination, Classroom, Subject, Profile } = require('../../models');
 const validator = require('validator');
 
-class SubjectClassController {
-    static async getSubjectClass(req, res, next) {
+class ExaminationController {
+    static async getExamination(req, res, next) {
         try {
             const allowedFields = ['page', 'size', 'keyword', 'category', 'order'];
             const extraFields = Object.keys(req.query).filter(key => !allowedFields.includes(key));
@@ -73,86 +73,76 @@ class SubjectClassController {
                 orderClause.push(['id', sanitizedOrder]);
             }
 
-            const subjectClasses = await SubjectClass.findAll({
+            const examination = await Examination.findAll({
                 where: whereClause,
                 order: orderClause,
                 ...(offset !== null && limit !== null ? { offset, limit } : {}),
                 include: [
-                    { model: Profile, attributes: ['id', 'name'] },
-                    { model: Classroom, attributes: ['id', 'grade', 'code'] },
-                    { model: Subject, attributes: ['id', 'name', 'code'] }
+                    { 
+                        model: SubjectClass,
+                        include: [
+                            {
+                                model: Subject,
+                                attributes: ['name']
+                            },
+                            {
+                                model: Classroom,
+                                attributes: ['grade', 'code']
+                            },
+                        ]
+                    }
                 ]
-            });
+            });            
 
-            const totalSubjectClass = await SubjectClass.count({
+            const totalExamination = await Examination.count({
                 where: whereClause
             });
 
             res.status(200).json({
                 message: 'SubjectClass data retrieved successfully.',
-                data: subjectClasses,
-                totalData: Math.ceil(totalSubjectClass / sanitizedSize),
+                data: examination,
+                totalData: Math.ceil(totalExamination / sanitizedSize),
             });
         } catch (error) {
-            console.log(error);
-
             next(error);
         }
     }
 
-    static async createSubjectClass(req, res, next) {
+    static async createExamination(req, res, next) {
         try {
-            const allowedFields = ['ProfileId', 'ClassRoomId', 'SubjectId'];
+            const allowedFields = ['SubjectClassId', 'type'];
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
 
-            const { ProfileId, ClassRoomId, SubjectId } = req.body;
+            const { SubjectClassId, type } = req.body;
 
-            if (!ProfileId || !ClassRoomId || !SubjectId) {
+            if (!SubjectClassId || !type) {
                 throw { name: 'Invalid input.' };
             }
 
-            if (!validator.isUUID(ProfileId) ||
-                !validator.isUUID(ClassRoomId) ||
-                !validator.isUUID(SubjectId)) {
+            if (!validator.isUUID(SubjectClassId)) {
                 throw { name: 'Modified payload.' };
             }
 
-            const profile = await Profile.findOne({
+            const subjectClass = await SubjectClass.findOne({
                 where: {
-                    id: ProfileId,
-                    role: 'GURU'
-                }
-            });
-            const classroom = await Classroom.findOne({
-                where: {
-                    id: ClassRoomId,
-                    grade: {
-                        [Op.ne]: 0
-                    }
-                }
-            });
-            const subject = await Subject.findOne({
-                where: {
-                    id: SubjectId
+                    id: SubjectClassId,
                 }
             });
 
-            if (!profile || !classroom || !subject) {
+            if (!subjectClass) {
                 throw { name: 'Data not found.' };
             }
 
-            const newSubjectClass = await SubjectClass.create({
-                ProfileId,
-                ClassRoomId,
-                SubjectId
+            await Examination.create({
+                SubjectClassId,
+
             });
 
             res.status(201).json({
                 message: 'SubjectClass created successfully.',
-                data: newSubjectClass
             });
         } catch (error) {
             next(error);
@@ -234,4 +224,4 @@ class SubjectClassController {
     }
 }
 
-module.exports = SubjectClassController;
+module.exports = ExaminationController;

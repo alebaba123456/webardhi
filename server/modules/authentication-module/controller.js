@@ -149,6 +149,63 @@ class AuthenticationController {
             next(error)
         }
     }
+
+    static async requestForgetPassword(req, res, next) {
+        try {
+            const { email } = req.body;
+
+            const user = await User.findOne({
+                where: {
+                    email : email
+                }
+            });
+
+            const sanitizedEmail = validator.escape(email||"");
+            const isAnEmail = validator.isEmail(sanitizedEmail)
+            if (!isAnEmail) {
+                throw {name: 'Invalid input.'}
+            }
+
+            if (!user) throw { name: 'Data not found.' };
+
+            const tokenPayload = { UserId: user.id };
+            const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: '30m', algorithm: 'HS256' });
+
+            const userMail = process.env.EMAIL_USER;
+            const userPass = process.env.EMAIL_PASS;
+            const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+
+            // await sendRequestResetPassword(baseUrl, userMail, userPass, sanitizedEmail, token);
+
+            res.status(200).json({ message: 'Reset password email sent successfully.' });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async confirmForgetPassword(req, res, next) {
+        try {
+            const { token } = req.params;
+
+            const payload = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });
+
+            const user = await User.findByPk(payload.UserId);
+            if (!user) throw { name: 'Data not found.' };
+
+            const newPassword = this.generateRandomPassword();
+
+            await user.update({ password: newPassword });
+
+            const userMail = process.env.EMAIL_USER
+            const userPass = process.env.EMAIL_PASS
+
+            await sendConfirmResetPassword(userMail, userPass, user.email, newPassword);
+
+            res.status(200).json({ message: 'Password reset successfully. Check your email.' });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = AuthenticationController;

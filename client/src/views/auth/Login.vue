@@ -7,7 +7,7 @@
             :style="boxPosition"
             class="flex flex-col h-full w-[30%] justify-between bg-shade-gr shadow-2xl p-4 transition-all duration-1000"
         >
-            <div class="flex flex-col gap-20 text-white">
+            <div class="flex flex-col gap-20 text-tosca">
                 <div class="flex justify-center gap-4 items-center">
                     <img src="@/assets/logos/alhusna-ikon.png" class="w-[5rem]" />
                     <div class="text-[2.5rem] font-[Tajawal] font-extrabold">AL - HUSNA</div>
@@ -17,10 +17,10 @@
                     class="flex flex-col gap-6"
                 >
                     <div class="w-full px-2 flex flex-col gap-2">
-                        <label for="email">Email</label>
+                        <label for="email" class="font-semibold text-tosca">EMAIL</label>
                         <input 
                             id="email" 
-                            class="w-full text-white border-b-2 border-white bg-transparent outline-none focus:ring-0 px-2 py-1 rounded-md" 
+                            class="w-full text-white border-b-2 border-tosca bg-transparent outline-none focus:ring-0 px-2 py-1 rounded-md" 
                             placeholder="email.saya@website.com" 
                             type="email"
                             required
@@ -29,10 +29,10 @@
                         />
                     </div>
                     <div class="w-full px-2 flex flex-col gap-2">
-                        <label for="password">Kata sandi</label>
+                        <label for="password" class="font-semibold text-tosca">KATA SANDI</label>
                         <input 
                             id="password"
-                            class="w-full text-white border-b-2 border-white bg-transparent outline-none focus:ring-0 px-2 py-1 rounded-md" 
+                            class="w-full text-white border-b-2 border-tosca bg-transparent outline-none focus:ring-0 px-2 py-1 rounded-md" 
                             placeholder="password_saya" 
                             type="password"
                             required
@@ -41,8 +41,9 @@
                         />
                     </div>
                     <div class="flex justify-center">
-                        <div 
-                            class="text-center cursor-pointer ease-out hover:font-extrabold hover:underline transition-all duration-300"
+                        <div
+                        @click.prevent="isLogin = false" 
+                            class="text-center cursor-pointer ease-out hover:font-extrabold hover:text-tosca hover:underline transition-all duration-200"
                         >
                             lupa password
                         </div>
@@ -52,7 +53,7 @@
                         class="flex justify-center items-center mt-6"
                     >
                         <div 
-                            class="bg-white text-gr text-center rounded-l px-4 hover:bg-gr hover:font-extrabold hover:text-white w-[65%] cursor-pointer duration-500 ease-out transition-all py-1"
+                            class="bg-gr border-2 border-tosca hover:border-gr text-tosca text-center rounded-lg px-4 hover:bg-tosca hover:font-extrabold hover:text-gr w-[65%] cursor-pointer duration-200 ease-out transition-all py-1"
                         >
                             MASUK
                         </div>
@@ -72,17 +73,22 @@ const { doLogin } = useStore;
 
 const email = ref('');
 const password = ref('');
+const isLogin = ref(true);
 
 const boxPosition = ref({
     transform: 'translateX(100%)',
 });
 
 const handleLogin = async () => {
-    doLogin({
+    await doLogin({
         email: email.value,
         password: password.value 
     })
 };
+
+const handleForgetPassword = () => {
+    isLogin.value = false
+}
 
 onMounted(() => {
     setTimeout(() => {

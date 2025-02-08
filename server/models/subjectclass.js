@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class SubjectClass extends Model {
     static associate(models) {
       SubjectClass.belongsTo(models.Profile, {foreignKey: 'ProfileId'})
-      SubjectClass.belongsTo(models.Classroom, {foreignKey: 'ClassroomId'})
+      SubjectClass.belongsTo(models.Classroom, {foreignKey: 'ClassRoomId'})
       SubjectClass.belongsTo(models.Subject, {foreignKey: 'SubjectId'})
       SubjectClass.hasMany(models.Examination, {foreignKey: 'SubjectClassId'})
     }

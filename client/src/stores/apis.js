@@ -116,3 +116,43 @@ export const myProfileAPI = async() => {
   const response = await api.get(`/profile/get/myprofile`)
   return response.data;
 }
+
+export const subjectClassAPI = async(query) => {
+  const response = await api.get(`/subject-classes/${query}`);
+  return response.data
+}
+
+export const subjectClassPostAPI = async(payload) => {
+  const response = await api.post(`/subject-classes`, payload)
+  return response.data;
+}
+
+export const subjectClassEditAPI = async(payload) => {
+  const response = await api.put(`/subject-classes`, payload)
+  return response.data;
+}
+
+export const subjectClassDeleteAPI = async(payload) => {
+  const response = await api.delete(`/subject-classes/${payload}`)
+  return response.data;
+}
+
+export const examinationAPI = async(query) => {
+  const response = await api.get(`/subject-classes/${query}`);
+  return response.data
+}
+
+export const examinationPostAPI = async(payload) => {
+  const response = await api.post(`/subject-classes`, payload)
+  return response.data;
+}
+
+export const examinationEditAPI = async(payload) => {
+  const response = await api.put(`/subject-classes`, payload)
+  return response.data;
+}
+
+export const examinationDeleteAPI = async(payload) => {
+  const response = await api.delete(`/subject-classes/${payload}`)
+  return response.data;
+}

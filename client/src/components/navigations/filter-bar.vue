@@ -7,7 +7,7 @@
                     class="text-white bg-transparent outline-none focus:ring-0 px-2 rounded-md border-b border-white"
                     placeholder="Kata pencarian.." autocomplete="off" v-model="keyword" />
             </div>
-            <div v-if="['religion', 'gender', 'grade', 'ClassRoomId'].includes(category)" class="flex gap-2 items-center">
+            <div v-if="['religion', 'gender', 'grade', 'ClassRoomId', 'ProfileId', 'SubjectId'].includes(category)" class="flex gap-2 items-center">
                 <label for="keyword" class="text-white font-medium">Keyword :</label>
                 <select id="keyword"
                     class="text-white bg-transparent hover:text-gr cursor-pointer outline-none focus:ring-0 px-2 py-[0.15rem] rounded-md border-b border-white"
@@ -40,6 +40,24 @@
                             {{ classroom.grade }} - {{ classroom.code }}
                         </option>
                     </template>
+                    <template v-if="category === 'ProfileId'">
+                        <option
+                            v-for="profile in profiles"
+                            :key="profile.id"
+                            :value="profile.id"
+                        >
+                            {{ profile.name }}
+                        </option>
+                    </template>
+                    <template v-if="category === 'SubjectId'">
+                        <option
+                            v-for="subject in subjects"
+                            :key="subject.id"
+                            :value="subject.id"
+                        >
+                            {{ subject.name }}
+                        </option>
+                    </template>
                 </select>
             </div>
             <div class="flex gap-2 items-center">
@@ -54,9 +72,18 @@
                         <option value="gender">Jenis kelamin</option>
                         <option value="ClassRoomId">Kelas</option>
                     </template>
-                    <template v-if="router.currentRoute.value.name === 'Kelas'">
+                    <template v-if="router.currentRoute.value.name === 'RuangKelas'">
                         <option value="grade">Kelas</option>
                         <option value="code">Kode Kelas</option>
+                    </template>
+                    <template v-if="router.currentRoute.value.name === 'Pelajaran'">
+                        <option value="name">Nama pelajaran</option>
+                        <option value="code">Kode pelajaran</option>
+                    </template>
+                    <template v-if="router.currentRoute.value.name === 'Kelas'">
+                        <option value="ClassRoomId">Kelas</option>
+                        <option value="ProfileId">Guru</option>
+                        <option value="SubjectId">Pelajaran</option>
                     </template>
                 </select>
             </div>
@@ -87,13 +114,15 @@
     import { useIndexStore } from "@/stores";
 
     const useStore = useIndexStore()
-    const { doSearch, doOpenModal, getClassSelection } = useStore
+    const { doSearch, doOpenModal, getClassSelection, getProfileSelection, getSubjectSelection } = useStore
 
     const order = ref(null)
     const category = ref(null)
     const keyword = ref(null)
     const size = ref(null)
     const classrooms = ref([]);
+    const profiles = ref([]);
+    const subjects = ref([]);
 
     async function applyFilter() {
         const payload = {
@@ -106,7 +135,19 @@
     }
 
     onMounted(async () => {
-        const response = await getClassSelection();
-        classrooms.value = response;
+        let response
+        switch (router.currentRoute.value.name) {
+            case 'Siswa':
+            case 'Guru':
+                classrooms.value = await getClassSelection();
+                break;
+            case 'Kelas':
+                classrooms.value = await getClassSelection();
+                profiles.value = await getProfileSelection();
+                subjects.value = await getSubjectSelection();
+                break;
+            default:
+                break;
+        }
     })
 </script>
