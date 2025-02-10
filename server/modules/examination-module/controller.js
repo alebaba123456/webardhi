@@ -110,13 +110,13 @@ class ExaminationController {
 
     static async createExamination(req, res, next) {
         try {
-            const allowedFields = ['SubjectClassId', 'type'];
+            const allowedFields = ['ClassSubjectId', 'type', 'date'];
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
 
-            const { SubjectClassId, type } = req.body;
+            const { SubjectClassId, type, date } = req.body;
 
             if (!SubjectClassId || !type) {
                 throw { name: 'Invalid input.' };
@@ -126,19 +126,47 @@ class ExaminationController {
                 throw { name: 'Modified payload.' };
             }
 
+            const sanitizedType = validator.escape(type.toUpperCase() || "")
+            if (!['UTS', 'UAS', 'UJIAN', 'LATIHAN'].includes(sanitizedType)) {
+                throw { name: 'Modified payload.' };
+                
+            }
+
             const subjectClass = await SubjectClass.findOne({
                 where: {
                     id: SubjectClassId,
-                }
+                },
+                include: [
+                    {
+                        model: Subject,
+                        attributes: ['name']
+                    },
+                    {
+                        model: Classroom,
+                        attributes: ['grade', 'code']
+                    },
+                    {
+                        model: Profile,
+                        attributes: ['name']
+                    },
+                ]
             });
 
             if (!subjectClass) {
                 throw { name: 'Data not found.' };
             }
+            
+            const currentDate = new Date();
+            const day = String(currentDate.getDate()).padStart(2, '0');
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+            const year = String(currentDate.getFullYear()).slice(-2);
+            const formattedDate = `${day}${month}${year}`;
+            const code = `${type}-${subjectClass.Subject.code}-${subjectClass.Classroom.grade}-${formattedDate}`
 
             await Examination.create({
                 SubjectClassId,
-
+                type : sanitizedType,
+                code
             });
 
             res.status(201).json({

@@ -26,6 +26,9 @@ async function handleOpenModal() {
         case 'Kelas' :
             doOpenModal('createSubjectClass');
             break;
+        case 'Ujian' :
+            doOpenModal('createExamination');
+            break;
         default:
             break;
     }

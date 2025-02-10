@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       SubjectClass.belongsTo(models.Profile, {foreignKey: 'ProfileId'})
       SubjectClass.belongsTo(models.Classroom, {foreignKey: 'ClassRoomId'})
       SubjectClass.belongsTo(models.Subject, {foreignKey: 'SubjectId'})
-      SubjectClass.hasMany(models.Examination, {foreignKey: 'SubjectClassId'})
+      SubjectClass.hasMany(models.SubjectExamination, {foreignKey: 'SubjectClassId'})
     }
   }
   SubjectClass.init({

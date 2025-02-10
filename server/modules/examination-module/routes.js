@@ -3,7 +3,7 @@ const examinationRouter = express.Router();
 const ExaminationController = require('./controller');
 
 examinationRouter.get('/examination', ExaminationController.getExamination);
-// examinationRouter.post('/examination', ExaminationController.createSubjectClass);
+examinationRouter.post('/examination', ExaminationController.createExamination);
 // examinationRouter.put('/examination', ExaminationController.editSubjectClass);
 // examinationRouter.delete('/examination/:id', ExaminationController.deleteSubjectClass);
 

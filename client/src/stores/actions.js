@@ -25,6 +25,10 @@ import {
   subjectClassPostAPI,
   subjectClassEditAPI,
   subjectClassDeleteAPI,
+  examinationAPI,
+  examinationPostAPI,
+  examinationEditAPI,
+  examinationDeleteAPI,
 } from "@/stores/apis";
 import {
   generateQuery,
@@ -435,6 +439,33 @@ export const actions = {
       console.error("Terjadi kesalahan:", error);
     } finally {
       loading.value = false;
+    }
+  },
+
+  async getSubjectClassSelection() {
+    try {
+      loading.value = true;
+      const response = await subjectClassAPI("");
+      return response.data;
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
+  async getExamination() {
+    try {
+      loading.value = true
+      await this.doGeneratingQuery()
+      const response = await examinationAPI(query.value);
+      fetched.value = response.data;
+      max.value = response.totalData;
+      this.doUpdateVisible()
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false
     }
   },
 

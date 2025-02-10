@@ -12,14 +12,19 @@ class SubjectClassController {
                 throw { name: 'InvalidQuery', message: `Invalid query fields: ${extraFields.join(', ')}` };
             }
 
-            const sanitizedSize = validator.toInt(req.query.size || 0);
-            const sanitizedPage = validator.toInt(req.query.page || 1);
-
             let offset = null;
             let limit = null;
 
-            offset = (sanitizedPage - 1) * sanitizedSize;
-            limit = sanitizedSize;
+            if (req.query.page && req.query.size) {
+                const sanitizedPage = validator.toInt(req.query.page || 1);
+                const sanitizedSize = validator.toInt(req.query.size || 10);
+
+                const page = sanitizedPage > 0 ? sanitizedPage : 1;
+                const size = sanitizedSize > 0 ? sanitizedSize : 10;
+
+                offset = (page - 1) * size;
+                limit = size;
+            }
 
             let whereClause = {};
             let orderClause = [];
@@ -91,7 +96,7 @@ class SubjectClassController {
             res.status(200).json({
                 message: 'SubjectClass data retrieved successfully.',
                 data: subjectClasses,
-                totalData: Math.ceil(totalSubjectClass / sanitizedSize),
+                totalData: Math.ceil(totalSubjectClass / limit),
             });
         } catch (error) {
             console.log(error);

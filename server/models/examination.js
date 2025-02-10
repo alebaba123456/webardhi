@@ -5,9 +5,9 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Examination extends Model {
     static associate(models) {
-      Examination.hasMany(models.Question, {foreignKey:'ExaminationId'})
       Examination.hasMany(models.ScoreReport, {foreignKey:'ExaminationId'})
-      Examination.belongsTo(models.SubjectClass, {foreignKey:'SubjectClassId'})
+      Examination.hasMany(models.SubjectExamination, {foreignKey:'ExaminationId'})
+      Examination.hasMany(models.ExaminationQuestion, {foreignKey:'ExaminationId'})
     }
   }
   Examination.init({
@@ -41,15 +41,15 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    SubjectClassId: {
-      type: DataTypes.UUID,
+    examinationDate: {
+      type: DataTypes.DATE,
       allowNull: false,
       validate: {
         notNull: {
-          msg: "SUBJECT CLASS ID IS REQUIRED"
+          msg: "EXAMINATION IS REQUIRED"
         },
         notEmpty: {
-          msg: "SUBJECT CLASS ID IS REQUIRED"
+          msg: "EXAMINATION IS REQUIRED"
         }
       }
     }

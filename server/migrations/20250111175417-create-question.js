@@ -25,17 +25,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BOOLEAN
       },
-      ExaminationId: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: {
-            tableName: "Examinations"
-          }
-        },
-        onDelete : 'CASCADE',
-        onUpdate : 'CASCADE'
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

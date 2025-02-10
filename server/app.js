@@ -12,6 +12,7 @@
     const subjectRouter = require('./modules/subject-module/routes')
     const subjectClassRouter = require('./modules/subjectclass-module/routes')
     const userRouter = require('./modules/user-module/routes')
+    const examinationRouter = require('./modules/examination-module/routes')
     const authenticationRouter = require('./modules/authentication-module/routes')
     const validationRouter = require('./modules/validation-module/routes')
     const routerRouter = require('./modules/router-module/routes')
@@ -38,6 +39,7 @@
     app.use(subjectRouter)
     app.use(userRouter)
     app.use(subjectClassRouter)
+    app.use(examinationRouter)
 
     app.use(errorHandler)
     

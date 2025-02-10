@@ -138,7 +138,7 @@ export const subjectClassDeleteAPI = async(payload) => {
 }
 
 export const examinationAPI = async(query) => {
-  const response = await api.get(`/subject-classes/${query}`);
+  const response = await api.get(`/examination/${query}`);
   return response.data
 }
 

@@ -2,24 +2,34 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Examinations', {
+    await queryInterface.createTable('ExaminationQuestions', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4
       },
-      type: {
+      ExaminationId: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.UUID,
+        references: {
+          model: {
+            tableName: "Examinations"
+          }
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
       },
-      code: {
+      QuestionId: {
         allowNull: false,
-        type: Sequelize.STRING
-      },
-      examinationDate: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.UUID,
+        references: {
+          model: {
+            tableName: "Questions"
+          }
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Examinations');
+    await queryInterface.dropTable('ExaminationQuestions');
   }
 };
