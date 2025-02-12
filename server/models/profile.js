@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Profile.hasOne(models.User, {foreignKey:'ProfileId'})
       Profile.hasMany(models.ScoreReport, {foreignKey: 'ProfileId'})
-      Profile.hasMany(models.SubjectClass, {foreignKey: 'ProfileId'})
+      Profile.hasMany(models.Subject, {foreignKey: 'ProfileId'})
       Profile.belongsTo(models.Classroom, {foreignKey: 'ClassRoomId'})
     }
   }

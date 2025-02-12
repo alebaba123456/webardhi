@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     question: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         notNull: {
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     answer: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         notNull: {
@@ -41,18 +41,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     option: {
       type: DataTypes.STRING,
-    },
-    status: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "STATUS IS REQUIRED"
-        },
-        notEmpty: {
-          msg: "STATUS IS REQUIRED"
-        }
-      }
     },
     ExaminationId: {
       type: DataTypes.UUID,

@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   class Examination extends Model {
     static associate(models) {
       Examination.hasMany(models.ScoreReport, {foreignKey:'ExaminationId'})
-      Examination.hasMany(models.SubjectExamination, {foreignKey:'ExaminationId'})
-      Examination.hasMany(models.ExaminationQuestion, {foreignKey:'ExaminationId'})
+      Examination.hasMany(models.Question, {foreignKey:'ExaminationId'})
+      Examination.belongsTo(models.Subject, {foreignKey:'SubjectId'})
     }
   }
   Examination.init({
@@ -52,7 +52,19 @@ module.exports = (sequelize, DataTypes) => {
           msg: "EXAMINATION IS REQUIRED"
         }
       }
-    }
+    },
+    SubjectId : {
+      type: DataTypes.UUID,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "SUBJECT ID IS REQUIRED"
+        },
+        notEmpty: {
+          msg: "SUBJECT ID IS REQUIRED"
+        }
+      }
+    },
   }, {
     sequelize,
     modelName: 'Examination',

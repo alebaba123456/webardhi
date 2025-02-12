@@ -13,13 +13,12 @@ const { routes, accessible, active } = storeToRefs(useStore);
 const routeComponents = {
   Login: () => import('@/views/auth/Login.vue'),
   Profil: () => import('@/views/profile/Profile.vue'),
-  RuangKelas: () => import('@/views/dashboard/Classroom.vue'),
+  Kelas: () => import('@/views/dashboard/Classroom.vue'),
   Siswa: () => import('@/views/dashboard/Student.vue'),
   Guru: () => import('@/views/dashboard/Teacher.vue'),
   Ujian: () => import('@/views/dashboard/Exam.vue'),
   Pelajaran: () => import('@/views/dashboard/Subject.vue'),
   Rapot: () => import('@/views/dashboard/Report.vue'),
-  Kelas: () => import('@/views/dashboard/SubjectClass.vue'),
 };
 
 const initialRoutes = routes.value.map((route) => ({

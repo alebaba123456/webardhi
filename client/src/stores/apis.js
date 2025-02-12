@@ -143,16 +143,16 @@ export const examinationAPI = async(query) => {
 }
 
 export const examinationPostAPI = async(payload) => {
-  const response = await api.post(`/subject-classes`, payload)
+  const response = await api.post(`/examination`, payload)
   return response.data;
 }
 
 export const examinationEditAPI = async(payload) => {
-  const response = await api.put(`/subject-classes`, payload)
+  const response = await api.put(`/examination`, payload)
   return response.data;
 }
 
 export const examinationDeleteAPI = async(payload) => {
-  const response = await api.delete(`/subject-classes/${payload}`)
+  const response = await api.delete(`/examination/${payload}`)
   return response.data;
 }

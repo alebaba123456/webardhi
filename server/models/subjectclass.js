@@ -5,10 +5,8 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class SubjectClass extends Model {
     static associate(models) {
-      SubjectClass.belongsTo(models.Profile, {foreignKey: 'ProfileId'})
       SubjectClass.belongsTo(models.Classroom, {foreignKey: 'ClassRoomId'})
       SubjectClass.belongsTo(models.Subject, {foreignKey: 'SubjectId'})
-      SubjectClass.hasMany(models.SubjectExamination, {foreignKey: 'SubjectClassId'})
     }
   }
   SubjectClass.init({
@@ -17,18 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-    },
-    ProfileId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "PROFILE ID IS REQUIRED"
-        },
-        notEmpty: {
-          msg: "PROFILE ID IS REQUIRED"
-        }
-      }
     },
     ClassRoomId: {
       type: DataTypes.UUID,

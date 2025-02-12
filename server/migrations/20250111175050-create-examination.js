@@ -21,6 +21,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
+      SubjectId: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: {
+            tableName: 'Subjects'
+          }
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -11,19 +11,26 @@ module.exports = {
       },
       question: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       answer: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       option: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      status: {
+      ExaminationId: {
         allowNull: false,
-        type: Sequelize.BOOLEAN
+        type: Sequelize.UUID,
+        references: {
+          model: {
+            tableName: "Examinations"
+          }
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
       },
       createdAt: {
         allowNull: false,

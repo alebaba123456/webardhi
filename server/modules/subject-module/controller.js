@@ -1,39 +1,72 @@
-const { Subject } = require('../../models');
-const { textToLow } = require('../../helpers/loweringText');
+const { Subject, SubjectClass, Classroom, Profile } = require('../../models');
 const { Op } = require('sequelize')
 const validator = require('validator');
 
 class SubjectController {
     static async createSubject(req, res, next) {
         try {
-            const allowedFields = ['name'];
+            const allowedFields = ['name', 'grade', 'ProfileId'];
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
 
-            let { name } = req.body;
+            let { name, grade, ProfileId } = req.body;
+
+            const sanitizedName = validator.escape(name.toUpperCase() || "");
             
-            if (!/^[a-zA-Z]+$/.test(name)) {
-                throw { name: 'Invalid input.' };
+            if ([7, 8, 9].includes(grade)) {
+                throw { name: 'Modified payload.' };
             }
 
-            name = name.trim().toUpperCase();
-
-            let baseCode = name.substring(0, 3).toUpperCase();
-            let code = baseCode;
-
-            let counter = 1;
-            while (await Subject.findOne({ where: { code } })) {
-                code = `${baseCode}${counter}`;
-                counter++;
+            const isAnUUID = validator.isUUID(ProfileId)
+            if (!isAnUUID) {
+                throw { name: 'Modified payload.' };
             }
 
-            const subject = await Subject.create({ name, code });
+            const updatedName = sanitizedName.trim().toUpperCase();
+            const words = updatedName.split(/\s+/);
+
+            let baseCode;
+
+            if (words.length >= 3) {
+                baseCode = words[0][0] + words[1][0] + words[2][0];
+            } else if (words.length === 2) {
+                baseCode = words[0][0] + words[1][0] + (words[1][1] || words[0][1]);
+            } else {
+                baseCode = words[0].substring(0, 3);
+            }
+
+            baseCode = baseCode.toUpperCase();
+            
+            const code = `${baseCode}00${grade}`;
+
+            const subject = await Subject.create({ 
+                name : sanitizedName,
+                code,
+                grade,
+                ProfileId 
+            });
+
+            const classrooms = await Classroom.findAll({
+                where: {
+                    grade
+                }
+            })
+
+            if (classrooms.length === 0) {
+                throw { name: 'No classrooms found for the given grade.' };
+            }
+
+            const subjectClasses = classrooms.map(classroom => ({
+                SubjectId: subject.id,
+                ClassRoomId: classroom.id
+            }));
+
+            await SubjectClass.bulkCreate(subjectClasses);
 
             res.status(201).json({
-                message: 'Subject created successfully.',
-                subject
+                message: 'Subject created successfully.'
             });
         } catch (error) {
             next(error);
@@ -113,6 +146,9 @@ class SubjectController {
                 where: whereClause,
                 order: orderClause,
                 ...(offset !== null && limit !== null ? { offset, limit } : {}),
+                include: [
+                    { model: Profile, attributes: ['id', 'name'] },
+                ]
             });
 
             const totalSubject = await Subject.count({
@@ -131,43 +167,76 @@ class SubjectController {
 
     static async editSubject(req, res, next) {
         try {
-            const allowedFields = ['id', 'name'];
+            const allowedFields = ['id', 'name', 'grade', 'ProfileId'];
             const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {
                 throw { name: 'Modified payload.' };
             }
-    
-            const { id, name } = req.body;
-    
+
+            const { id, name, grade, ProfileId } = req.body;
+            
+            const sanitizedName = validator.escape(name.toUpperCase() || "");
+
             const sanitizedId = validator.escape(id || "");
-            const isAnUUID = validator.isUUID(sanitizedId);
-            if (!isAnUUID) {
+            if (!validator.isUUID(sanitizedId)) {
                 throw { name: 'Modified payload.' };
             }
-    
+
+            const sanitizedProfileId = validator.escape(ProfileId || "");
+            if (!validator.isUUID(sanitizedProfileId)) {
+                throw { name: 'Modified payload.' };
+            }
+
             const subject = await Subject.findOne({ where: { id: sanitizedId } });
-    
+
             if (!subject) {
                 throw { name: 'Data not found.' };
             }
 
-            const sanitizedName = validator.escape(name || "")
-    
             const updatedName = sanitizedName.trim().toUpperCase();
-            let baseCode = updatedName.substring(0, 3).toUpperCase();
-            let code = baseCode;
-    
-            let counter = 1;
-            while (await Subject.findOne({ where: { code, id: { [Op.ne]: sanitizedId } } })) {
-                code = `${baseCode}${counter}`;
-                counter++;
+            const words = updatedName.split(/\s+/);
+
+            let baseCode;
+
+            if (words.length >= 3) {
+                baseCode = words[0][0] + words[1][0] + words[2][0];
+            } else if (words.length === 2) {
+                baseCode = words[0][0] + words[1][0] + (words[1][1] || words[0][1]);
+            } else {
+                baseCode = words[0].substring(0, 3);
             }
-    
+
+            baseCode = baseCode.toUpperCase();
+            
+            const code = `${baseCode}00${grade}`;
+
+            const isGradeChanged = subject.grade !== grade;
+
             await subject.update({
-                name: updatedName,
-                code
+                name: sanitizedName,
+                code,
+                grade,
+                ProfileId: sanitizedProfileId,
             });
-    
+
+            if (isGradeChanged) {
+                await SubjectClass.destroy({ where: { SubjectId: sanitizedId } });
+                const classrooms = await Classroom.findAll({
+                    where: { grade }
+                });
+
+                if (classrooms.length === 0) {
+                    throw { name: 'No classrooms found for the given grade.' };
+                }
+
+                const subjectClasses = classrooms.map(classroom => ({
+                    SubjectId: sanitizedId,
+                    ClassRoomId: classroom.id
+                }));
+
+                await SubjectClass.bulkCreate(subjectClasses);
+            }
+
             res.status(200).json({
                 message: 'Subject updated successfully.',
                 subject
@@ -175,10 +244,11 @@ class SubjectController {
         } catch (error) {
             next(error);
         }
-    }    
+    }
+
 
     static async deleteSubject(req, res, next) {
-        try {  
+        try {
             const allowedFields = ['id'];
             const extraFields = Object.keys(req.params).filter(key => !allowedFields.includes(key));
             if (extraFields.length > 0) {

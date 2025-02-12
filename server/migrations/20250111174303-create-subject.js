@@ -17,6 +17,21 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      grade: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      ProfileId: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: {
+            tableName: "Profiles"
+          }
+        },
+        onDelete : 'CASCADE',
+        onUpdate : 'CASCADE'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

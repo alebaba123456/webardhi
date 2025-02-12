@@ -13,7 +13,7 @@ const { doOpenModal } = useStore
 
 async function handleOpenModal() {
     switch (router.currentRoute.value.name) {
-        case 'RuangKelas':
+        case 'Kelas':
             doOpenModal('createClass');
             break;
         case 'Siswa':
@@ -22,9 +22,6 @@ async function handleOpenModal() {
             break;
         case 'Pelajaran' :
             doOpenModal('createSubject');
-            break;
-        case 'Kelas' :
-            doOpenModal('createSubjectClass');
             break;
         case 'Ujian' :
             doOpenModal('createExamination');

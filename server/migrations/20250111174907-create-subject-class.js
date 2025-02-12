@@ -9,17 +9,6 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4
       },
-      ProfileId: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: {
-            tableName: "Profiles"
-          }
-        },
-        onDelete : 'CASCADE',
-        onUpdate : 'CASCADE'
-      },
       ClassRoomId: {
         allowNull: false,
         type: Sequelize.UUID,

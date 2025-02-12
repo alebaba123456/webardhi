@@ -98,7 +98,7 @@ class ProfileController {
             
             if (req.query.category) {
                 const sanitizedCategory = validator.escape(req.query.category || "");
-                if (!['name', 'religion', 'gender', 'ClassRoomId'].includes(sanitizedCategory)) {
+                if (!['name', 'religion', 'gender', 'ClassRoomId', 'role'].includes(sanitizedCategory)) {
                     throw { name: 'Modified payload.' };
                 }
                 
