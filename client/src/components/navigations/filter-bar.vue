@@ -7,7 +7,7 @@
                     class="text-white bg-transparent outline-none focus:ring-0 px-2 rounded-md border-b border-white"
                     placeholder="Kata pencarian.." autocomplete="off" v-model="keyword" />
             </div>
-            <div v-if="['religion', 'gender', 'grade', 'ClassRoomId', 'ProfileId', 'SubjectId'].includes(category)" class="flex gap-2 items-center">
+            <div v-if="['religion', 'gender', 'grade', 'ClassRoomId', 'ProfileId', 'SubjectId', 'type'].includes(category)" class="flex gap-2 items-center">
                 <label for="keyword" class="text-white font-medium">Keyword :</label>
                 <select id="keyword"
                     class="text-white bg-transparent hover:text-gr cursor-pointer outline-none focus:ring-0 px-2 py-[0.15rem] rounded-md border-b border-white"
@@ -30,6 +30,11 @@
                         <option value="7">7</option>
                         <option value="8">8</option>
                         <option value="9">9</option>
+                    </template>
+                    <template v-if="category == 'type'">
+                        <option value="UJIAN">Ujian Harian</option>
+                        <option value="UTS">UTS</option>
+                        <option value="UAS">UAS</option>
                     </template>
                     <template v-if="category === 'ClassRoomId'">
                         <option
@@ -72,18 +77,18 @@
                         <option value="gender">Jenis kelamin</option>
                         <option value="ClassRoomId">Kelas</option>
                     </template>
-                    <template v-if="router.currentRoute.value.name === 'RuangKelas'">
+                    <template v-if="router.currentRoute.value.name === 'Kelas'">
                         <option value="grade">Kelas</option>
                         <option value="code">Kode Kelas</option>
                     </template>
                     <template v-if="router.currentRoute.value.name === 'Pelajaran'">
                         <option value="name">Nama pelajaran</option>
                         <option value="code">Kode pelajaran</option>
+                        <option value="grade">Kelas</option>
                     </template>
-                    <template v-if="router.currentRoute.value.name === 'Kelas'">
-                        <option value="ClassRoomId">Kelas</option>
+                    <template v-if="router.currentRoute.value.name === 'Ujian'">
+                        <option value="type">Tipe ujian</option>
                         <option value="ProfileId">Guru</option>
-                        <option value="SubjectId">Pelajaran</option>
                     </template>
                 </select>
             </div>
@@ -135,7 +140,6 @@
     }
 
     onMounted(async () => {
-        let response
         switch (router.currentRoute.value.name) {
             case 'Siswa':
             case 'Guru':
@@ -143,8 +147,12 @@
                 break;
             case 'Kelas':
                 classrooms.value = await getClassSelection();
-                profiles.value = await getProfileSelection();
+                profiles.value = await getProfileSelection(`?page=1&size=999&category=role&keyword=GURU`);
                 subjects.value = await getSubjectSelection();
+                break;
+            case 'Ujian':
+            case 'Pelajaran':
+                profiles.value = await getProfileSelection(`?page=1&size=999&category=role&keyword=GURU`);
                 break;
             default:
                 break;

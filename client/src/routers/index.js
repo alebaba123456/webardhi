@@ -19,6 +19,7 @@ const routeComponents = {
   Ujian: () => import('@/views/dashboard/Exam.vue'),
   Pelajaran: () => import('@/views/dashboard/Subject.vue'),
   Rapot: () => import('@/views/dashboard/Report.vue'),
+  Bank_Soal: () => import('@/views/dashboard/Question.vue'),
 };
 
 const initialRoutes = routes.value.map((route) => ({

@@ -4,7 +4,7 @@ const ExaminationController = require('./controller');
 
 examinationRouter.get('/examination', ExaminationController.getExamination);
 examinationRouter.post('/examination', ExaminationController.createExamination);
-// examinationRouter.put('/examination', ExaminationController.editSubjectClass);
-// examinationRouter.delete('/examination/:id', ExaminationController.deleteSubjectClass);
+examinationRouter.put('/examination', ExaminationController.editExamination);
+examinationRouter.delete('/examination/:id', ExaminationController.deleteExamination);
 
 module.exports = examinationRouter;

@@ -8,11 +8,13 @@ class RouterController {
           { path: '/guru', name: 'Guru' },
           { path: '/pelajaran', name: 'Pelajaran' },
           { path: '/ujian', name: 'Ujian' },
+          { path: '/bank-soal', name: 'Bank_Soal' },
         ],
         GURU: [
           { path: '/kelas', name: 'Kelas' },
           { path: '/siswa', name: 'Siswa' },
           { path: '/ujian', name: 'Ujian' },
+          { path: '/bank-soal', name: 'Bank_Soal' },
         ],
         SISWA: [
           { path: '/pelajaran', name: 'Pelajaran' },

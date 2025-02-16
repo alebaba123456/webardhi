@@ -145,6 +145,9 @@ class AuthenticationController {
                     session : payload.session
                 }
             })
+            res.status(200).json({
+                message: 'Logout successful.'
+            });
         } catch (error) {
             next(error)
         }

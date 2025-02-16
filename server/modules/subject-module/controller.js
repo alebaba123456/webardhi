@@ -101,7 +101,7 @@ class SubjectController {
 
             if (req.query.category) {
                 const sanitizedCategory = validator.escape(req.query.category.toLowerCase() || "");
-                if (!['name', 'code'].includes(sanitizedCategory)) {
+                if (!['name', 'code', 'grade'].includes(sanitizedCategory)) {
                     throw { name: 'Modified payload.' };
                 }
 

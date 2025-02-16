@@ -150,6 +150,9 @@ export const actions = {
       case 'Profil':
         await this.getMyProfile();
         break;
+      case 'Ujian':
+        await this.getExamination();
+        break;
       default:
         break;
     }
@@ -491,14 +494,26 @@ export const actions = {
     }
   },
 
+  async getExaminationSelection() {
+    try {
+      loading.value = true;
+      const response = await examinationAPI("");
+      return response.data;
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
   resetStates() {
     page.value = 1;
     fetched.value = null;
-    keyword.value = null;
-    category.value = null;
     order.value = null;
     props.value = null;
     modal.value = false;
     modalName.value = null;
+    keyword.value = null;
+    category.value = null;
   },
 };

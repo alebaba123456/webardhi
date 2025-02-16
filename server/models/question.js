@@ -1,13 +1,13 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Question extends Model {
     static associate(models) {
-      Question.belongsTo(models.Examination, {foreignKey: 'ExaminationId'})
+      Question.belongsTo(models.Examination, { foreignKey: 'ExaminationId' });
     }
   }
+  
   Question.init({
     id: {
       type: DataTypes.UUID,
@@ -39,8 +39,31 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    type: {
+      type: DataTypes.ENUM('multiple_choice', 'essay'),
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "QUESTION TYPE IS REQUIRED"
+        },
+        isIn: {
+          args: [['multiple_choice', 'essay']],
+          msg: "TYPE MUST BE 'multiple_choice' OR 'essay'"
+        }
+      }
+    },
     option: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
+      allowNull: true,
+      validate: {
+        isValidOption(value) {
+          if (this.type === 'multiple_choice') {
+            if (!value || !Array.isArray(value) || value.length === 0) {
+              throw new Error('OPTIONS MUST BE A NON-EMPTY ARRAY FOR MULTIPLE CHOICE QUESTIONS');
+            }
+          }
+        }
+      }
     },
     ExaminationId: {
       type: DataTypes.UUID,
@@ -58,5 +81,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Question',
   });
+
   return Question;
 };

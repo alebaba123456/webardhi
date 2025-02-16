@@ -26,6 +26,9 @@ async function handleOpenModal() {
         case 'Ujian' :
             doOpenModal('createExamination');
             break;
+        case 'Bank_Soal' :
+            doOpenModal('createQuestion');
+            break;
         default:
             break;
     }

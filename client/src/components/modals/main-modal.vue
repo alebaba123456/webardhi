@@ -5,7 +5,9 @@
         <CreateUserModal v-if="modal && modalName === 'createUser'" />
         <CreateSubjectModal v-if="modal && modalName === 'createSubject'" />
         <CreateExaminationModal v-if="modal && modalName === 'createExamination'"/>
+        <createQuestionModal v-if="modal && modalName === 'createQuestion'"/>
         <ChangePasswordModal v-if="modal && modalName === 'changePassword'" />
+
     </div>
 </template>
 
@@ -15,6 +17,7 @@ import CreateProfileModal from "@/components/modals/create-profile-modal.vue"
 import CreateUserModal from "@/components/modals/create-user-modal.vue"
 import CreateSubjectModal from "@/components/modals/create-subject-modal.vue"
 import CreateExaminationModal from "@/components/modals/create-examination-modal.vue"
+import createQuestionModal from "@/components/modals/create-question-modal.vue"
 import ChangePasswordModal from "@/components/modals/change-password-modal.vue"
 
 import { useIndexStore} from "@/stores"

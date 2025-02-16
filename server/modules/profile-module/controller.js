@@ -76,13 +76,13 @@ class ProfileController {
             if (req.query.page) {
                 sanitizedPage = validator.toInt(req.query.page);
             }
-            console.log(req.query, 'IAM HEREEEEEEE');
+            
             if (req.query.size) {
                 sanitizedSize = validator.toInt(req.query.size || 10);
             }
             
             const page = sanitizedPage > 0 ? sanitizedPage : 1;
-            const size = sanitizedSize > 0 ? sanitizedSize : 10;
+            const size = sanitizedSize > 0 ? sanitizedSize : 30;
             
             const offset = (page - 1) * size;
             const limit = size;

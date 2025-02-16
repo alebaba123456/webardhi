@@ -15,6 +15,50 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date() 
       },
+      { 
+        id: 'a1e5f6d7-4b21-43c2-9f61-7890ab123456',
+        grade: 7,
+        code: 'A', 
+        createdAt: new Date(),
+        updatedAt: new Date() 
+      },
+      { 
+        id: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567',
+        grade: 7,
+        code: 'B', 
+        createdAt: new Date(),
+        updatedAt: new Date() 
+      },
+      { 
+        id: 'c3e6f8f9-6d43-65e4-9f83-9012cd345678',
+        grade: 8,
+        code: 'A', 
+        createdAt: new Date(),
+        updatedAt: new Date() 
+      },
+      { 
+        id: 'd4f7f9fa-7e54-76f5-af94-0123de456789',
+        grade: 8,
+        code: 'B', 
+        createdAt: new Date(),
+        updatedAt: new Date() 
+      },
+      { 
+        // Replaced invalid 'g' in segment with 'f' to produce a valid UUID
+        id: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890',
+        grade: 9,
+        code: 'A', 
+        createdAt: new Date(),
+        updatedAt: new Date() 
+      },
+      { 
+        // Replaced invalid 'g' and 'h' in segment with 'f' and 'a' respectively
+        id: 'f6f9fbfc-9f76-98a7-c1b6-2345f6789012',
+        grade: 9,
+        code: 'B', 
+        createdAt: new Date(),
+        updatedAt: new Date() 
+      },
     ]);
   },
 
