@@ -1,7 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('Profiles', [
-      // Data ADMIN (already exists)
       {
         id: 'f6d74824-03f6-4f5e-b109-5f14c9ddf674',
         name: 'ADMIN AL HUSNA',
@@ -13,7 +12,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      // 5 Data GURU
       {
         id: 'e79bb47c-3b77-4c4c-8b82-0a4c95e4d7b1',
         name: 'GURU Budi',
@@ -69,8 +67,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      // 20 Data SISWA
-      // Grade 7: 7A and 7B
       {
         id: '7a8f4b59-4c2d-4e8e-9a3e-1e4a0d5c9f01',
         name: 'SISWA 1',
@@ -78,7 +74,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'L',
         role: 'SISWA',
-        ClassRoomId: 'a1e5f6d7-4b21-43c2-9f61-7890ab123456', // 7A
+        ClassRoomId: 'a1e5f6d7-4b21-43c2-9f61-7890ab123456',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -89,7 +85,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'P',
         role: 'SISWA',
-        ClassRoomId: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567', // 7B
+        ClassRoomId: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -100,7 +96,7 @@ module.exports = {
         religion: 'KRISTEN',
         gender: 'L',
         role: 'SISWA',
-        ClassRoomId: 'a1e5f6d7-4b21-43c2-9f61-7890ab123456', // 7A
+        ClassRoomId: 'a1e5f6d7-4b21-43c2-9f61-7890ab123456',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -111,7 +107,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'P',
         role: 'SISWA',
-        ClassRoomId: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567', // 7B
+        ClassRoomId: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -122,7 +118,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'L',
         role: 'SISWA',
-        ClassRoomId: 'a1e5f6d7-4b21-43c2-9f61-7890ab123456', // 7A
+        ClassRoomId: 'a1e5f6d7-4b21-43c2-9f61-7890ab123456',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -133,7 +129,7 @@ module.exports = {
         religion: 'KRISTEN',
         gender: 'P',
         role: 'SISWA',
-        ClassRoomId: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567', // 7B
+        ClassRoomId: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -144,11 +140,10 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'L',
         role: 'SISWA',
-        ClassRoomId: 'a1e5f6d7-4b21-43c2-9f61-7890ab123456', // 7A
+        ClassRoomId: 'a1e5f6d7-4b21-43c2-9f61-7890ab123456',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      // Grade 8: 8A and 8B
       {
         id: '22334455-6677-8899-aabb-ccddeeff0011',
         name: 'SISWA 8',
@@ -156,7 +151,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'P',
         role: 'SISWA',
-        ClassRoomId: 'c3e6f8f9-6d43-65e4-9f83-9012cd345678', // 8A
+        ClassRoomId: 'c3e6f8f9-6d43-65e4-9f83-9012cd345678',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -167,7 +162,7 @@ module.exports = {
         religion: 'KRISTEN',
         gender: 'L',
         role: 'SISWA',
-        ClassRoomId: 'd4f7f9fa-7e54-76f5-af94-0123de456789', // 8B
+        ClassRoomId: 'd4f7f9fa-7e54-76f5-af94-0123de456789',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -178,7 +173,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'P',
         role: 'SISWA',
-        ClassRoomId: 'c3e6f8f9-6d43-65e4-9f83-9012cd345678', // 8A
+        ClassRoomId: 'c3e6f8f9-6d43-65e4-9f83-9012cd345678',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -189,7 +184,7 @@ module.exports = {
         religion: 'KRISTEN',
         gender: 'L',
         role: 'SISWA',
-        ClassRoomId: 'd4f7f9fa-7e54-76f5-af94-0123de456789', // 8B
+        ClassRoomId: 'd4f7f9fa-7e54-76f5-af94-0123de456789',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -200,7 +195,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'P',
         role: 'SISWA',
-        ClassRoomId: 'c3e6f8f9-6d43-65e4-9f83-9012cd345678', // 8A
+        ClassRoomId: 'c3e6f8f9-6d43-65e4-9f83-9012cd345678',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -211,11 +206,10 @@ module.exports = {
         religion: 'KRISTEN',
         gender: 'L',
         role: 'SISWA',
-        ClassRoomId: 'd4f7f9fa-7e54-76f5-af94-0123de456789', // 8B
+        ClassRoomId: 'd4f7f9fa-7e54-76f5-af94-0123de456789',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      // Grade 9: 9A and 9B
       {
         id: '8899aabb-ccdd-eeff-0011-223344556677',
         name: 'SISWA 14',
@@ -223,8 +217,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'P',
         role: 'SISWA',
-        // Updated to a valid UUID
-        ClassRoomId: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890', // 9A (fixed)
+        ClassRoomId: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -235,8 +228,7 @@ module.exports = {
         religion: 'KRISTEN',
         gender: 'L',
         role: 'SISWA',
-        // Updated to a valid UUID
-        ClassRoomId: 'f6f9fbfc-9f76-98a7-c1b6-2345f6789012', // 9B (fixed)
+        ClassRoomId: 'f6f9fbfc-9f76-98a7-c1b6-2345f6789012',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -247,8 +239,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'P',
         role: 'SISWA',
-        // Updated to a valid UUID
-        ClassRoomId: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890', // 9A (fixed)
+        ClassRoomId: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -259,8 +250,7 @@ module.exports = {
         religion: 'KRISTEN',
         gender: 'L',
         role: 'SISWA',
-        // Updated to a valid UUID
-        ClassRoomId: 'f6f9fbfc-9f76-98a7-c1b6-2345f6789012', // 9B (fixed)
+        ClassRoomId: 'f6f9fbfc-9f76-98a7-c1b6-2345f6789012',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -271,8 +261,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'P',
         role: 'SISWA',
-        // Updated to a valid UUID
-        ClassRoomId: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890', // 9A (fixed)
+        ClassRoomId: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -283,8 +272,7 @@ module.exports = {
         religion: 'KRISTEN',
         gender: 'L',
         role: 'SISWA',
-        // Updated to a valid UUID
-        ClassRoomId: 'f6f9fbfc-9f76-98a7-c1b6-2345f6789012', // 9B (fixed)
+        ClassRoomId: 'f6f9fbfc-9f76-98a7-c1b6-2345f6789012',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -295,8 +283,7 @@ module.exports = {
         religion: 'ISLAM',
         gender: 'P',
         role: 'SISWA',
-        // Updated to a valid UUID
-        ClassRoomId: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890', // 9A (fixed)
+        ClassRoomId: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

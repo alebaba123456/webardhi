@@ -123,17 +123,13 @@ class QuestionController {
 
   static async createQuestion(req, res, next) {
     try {
-      const allowedFields = ['SubjectId', 'type', 'examinationDate'];
+      const allowedFields = ['ExaminationId', 'question', 'answer', 'option', 'type'];
       const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
       if (extraFields.length > 0) {
         throw { name: 'Modified payload.' };
       }
 
-      const { SubjectId, type, examinationDate } = req.body;
-
-      if (!SubjectId || !type || !examinationDate) {
-        throw { name: 'Invalid input.' };
-      }
+      const { ExaminationId, question, answer, option, type } = req.body;
 
       const sanitizedExaminationDate = validator.toDate(examinationDate || null);
 
@@ -141,14 +137,14 @@ class QuestionController {
         throw { name: 'Invalid date format.' };
       }
 
-      const sanitizedSubjectId = validator.escape(SubjectId || "")
-      if (!validator.isUUID(sanitizedSubjectId)) {
+      const sanitizedExaminationId = validator.escape(ExaminationId || "")
+      if (!validator.isUUID(sanitizedExaminationId)) {
         throw { name: 'Modified payload.' };
       }
 
-      const subject = await Subject.findOne({
+      const subject = await Examination.findOne({
         where: {
-          id: sanitizedSubjectId
+          id: sanitizedExaminationId
         }
       })
 

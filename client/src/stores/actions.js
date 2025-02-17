@@ -29,6 +29,10 @@ import {
   examinationPostAPI,
   examinationEditAPI,
   examinationDeleteAPI,
+  questionAPI,
+  questionPostAPI,
+  questionEditAPI,
+  questionDeleteAPI
 } from "@/stores/apis";
 import {
   generateQuery,
@@ -499,6 +503,47 @@ export const actions = {
       loading.value = true;
       const response = await examinationAPI("");
       return response.data;
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
+  async getQuestion() {
+    try {
+      loading.value = true
+      await this.doGeneratingQuery()
+      const response = await questionAPI(query.value);
+      fetched.value = response.data;
+      max.value = response.totalData;
+      this.doUpdateVisible()
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false
+    }
+  },
+
+  async doSubmitQuestion(payload) {
+    try {
+      loading.value = true;
+      props.value.id ? await questionEditAPI(payload) : await questionPostAPI(payload);
+      this.resetStates();
+      this.doRefreshData();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      this.doCloseModal()
+      loading.value = false;
+    }
+  },
+
+  async doDeleteQuestion(payload) {
+    try {
+      loading.value = true;
+      await questionDeleteAPI(payload);
+      this.doRefreshData();
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
     } finally {
