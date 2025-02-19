@@ -1,13 +1,13 @@
 <template>
     <div class="w-full h-full flex flex-col justify-center items-center">
-      <div class="text-center bg-gr text-tosca font-bold w-6/12">FORM PERUBAHAN KATA SANDI</div>
-      <div class="w-6/12 h-fit bg-shade-wh">
+      <div class="w-6/12 h-fit bg-white shadow-2xl shadow-shade-tc border-gr border">
+        <div class="text-center bg-gr text-tosca font-bold">FORM PERUBAHAN KATA SANDI</div>
         <form @submit.prevent="doSubmitChangePassword({ oldPassword, newPassword, confirmationNewPassword })" class="px-4 py-2 w-full h-full">
-          <div class="flex flex-col justify-between h-full">
+          <div class="flex flex-col justify-between">
             <div class="flex flex-col gap-8">
               <div class="flex gap-6 items-center">
-                <label for="oldPassword" class="font-semibold">KATA SANDI LAMA</label>
-                <div class="relative w-auto">
+                <label for="oldPassword" class="font-semibold whitespace-nowrap">KATA SANDI LAMA</label>
+                <div class="relative w-full">
                   <input 
                     id="oldPassword" 
                     class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0 w-full pr-10" 
@@ -22,8 +22,8 @@
                 </div>
               </div>
               <div class="flex gap-6 items-center">
-                <label for="newPassword" class="font-semibold">KATA SANDI BARU</label>
-                <div class="relative w-auto">
+                <label for="newPassword" class="font-semibold whitespace-nowrap">KATA SANDI BARU</label>
+                <div class="relative w-full">
                   <input 
                     id="newPassword" 
                     class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0 w-full pr-10" 
@@ -38,8 +38,8 @@
                 </div>
               </div>
               <div class="flex gap-6 items-center">
-                <label for="confirmationNewPassword" class="font-semibold">KONFIRMASI KATA SANDI BARU</label>
-                <div class="relative w-auto">
+                <label for="confirmationNewPassword" class="font-semibold whitespace-nowrap">KONFIRMASI KATA SANDI BARU</label>
+                <div class="relative w-full">
                   <input 
                     id="confirmationNewPassword" 
                     class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0 w-full pr-10" 

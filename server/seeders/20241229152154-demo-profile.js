@@ -14,7 +14,7 @@ module.exports = {
       },
       {
         id: 'e79bb47c-3b77-4c4c-8b82-0a4c95e4d7b1',
-        name: 'GURU Budi',
+        name: 'BUDI SULISTYO',
         birthDate: '1970-01-15T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'L',
@@ -25,7 +25,7 @@ module.exports = {
       },
       {
         id: 'd3d9a839-bc4c-4c89-a6e4-8f30f87366e2',
-        name: 'GURU Siti',
+        name: 'SITI BADRIAH',
         birthDate: '1975-03-20T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'P',
@@ -36,7 +36,7 @@ module.exports = {
       },
       {
         id: 'a69c0b72-3ea9-44b0-80de-25c4b7b5f3e3',
-        name: 'GURU Agus',
+        name: 'AGUS SALIM',
         birthDate: '1980-07-10T00:00:00.000Z',
         religion: 'KRISTEN',
         gender: 'L',
@@ -47,7 +47,7 @@ module.exports = {
       },
       {
         id: 'f2a8e2fa-1f09-41a2-a3c8-5baf1d3f3f44',
-        name: 'GURU Rina',
+        name: 'RINA CHIKA',
         birthDate: '1982-11-25T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'P',
@@ -58,7 +58,7 @@ module.exports = {
       },
       {
         id: 'c5b9d1a0-9a7a-4e39-b1c2-2a88b9f73e57',
-        name: 'GURU Joko',
+        name: 'JOKO DRIYONO',
         birthDate: '1978-09-30T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'L',
@@ -69,7 +69,7 @@ module.exports = {
       },
       {
         id: '7a8f4b59-4c2d-4e8e-9a3e-1e4a0d5c9f01',
-        name: 'SISWA 1',
+        name: 'ARDHI FIRMANSYAH',
         birthDate: '2007-05-01T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'L',
@@ -80,10 +80,10 @@ module.exports = {
       },
       {
         id: 'b1e2a3d4-f5c6-47a8-9b01-c2d3e4f5a678',
-        name: 'SISWA 2',
+        name: 'AULIA AGUS MAULANA',
         birthDate: '2007-06-02T00:00:00.000Z',
         religion: 'ISLAM',
-        gender: 'P',
+        gender: 'L',
         role: 'SISWA',
         ClassRoomId: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567',
         createdAt: new Date(),
@@ -91,7 +91,7 @@ module.exports = {
       },
       {
         id: '9c8d7e6f-5a4b-3c2d-1e0f-1234567890ab',
-        name: 'SISWA 3',
+        name: 'RYAN HARIYANTO',
         birthDate: '2007-07-03T00:00:00.000Z',
         religion: 'KRISTEN',
         gender: 'L',
@@ -102,10 +102,10 @@ module.exports = {
       },
       {
         id: 'f0e1d2c3-b4a5-6789-0cde-1f23456789ab',
-        name: 'SISWA 4',
+        name: 'FAHRUL MAULANA FIKRI',
         birthDate: '2007-08-04T00:00:00.000Z',
         religion: 'ISLAM',
-        gender: 'P',
+        gender: 'L',
         role: 'SISWA',
         ClassRoomId: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567',
         createdAt: new Date(),
@@ -113,7 +113,7 @@ module.exports = {
       },
       {
         id: '123e4567-e89b-12d3-a456-426614174000',
-        name: 'SISWA 5',
+        name: 'KAUSAR RAMADHANA',
         birthDate: '2007-09-05T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'L',
@@ -124,9 +124,9 @@ module.exports = {
       },
       {
         id: '00112233-4455-6677-8899-aabbccddeeff',
-        name: 'SISWA 6',
+        name: 'CHAVIKA XAVERIUS LOVA',
         birthDate: '2007-10-06T00:00:00.000Z',
-        religion: 'KRISTEN',
+        religion: 'KATOLIK',
         gender: 'P',
         role: 'SISWA',
         ClassRoomId: 'b2d5f7e8-5c32-54d3-8f72-8901bc234567',
@@ -135,7 +135,7 @@ module.exports = {
       },
       {
         id: '11223344-5566-7788-99aa-bbccddeeff00',
-        name: 'SISWA 7',
+        name: 'FAIZ FANANI',
         birthDate: '2007-11-07T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'L',
@@ -146,7 +146,7 @@ module.exports = {
       },
       {
         id: '22334455-6677-8899-aabb-ccddeeff0011',
-        name: 'SISWA 8',
+        name: 'DWIKA ARIYANI',
         birthDate: '2006-05-01T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'P',
@@ -157,7 +157,7 @@ module.exports = {
       },
       {
         id: '33445566-7788-99aa-bbcc-ddeeff001122',
-        name: 'SISWA 9',
+        name: 'LUCYANA VOLAHRAY NOVELINA',
         birthDate: '2006-06-02T00:00:00.000Z',
         religion: 'KRISTEN',
         gender: 'L',
@@ -168,7 +168,7 @@ module.exports = {
       },
       {
         id: '44556677-8899-aabb-ccdd-eeff00112233',
-        name: 'SISWA 10',
+        name: 'DIAN KRISTIANA',
         birthDate: '2006-07-03T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'P',
@@ -179,9 +179,9 @@ module.exports = {
       },
       {
         id: '55667788-99aa-bbcc-ddee-ff0011223344',
-        name: 'SISWA 11',
+        name: 'DENNY CHRISTIANTO',
         birthDate: '2006-08-04T00:00:00.000Z',
-        religion: 'KRISTEN',
+        religion: 'KATOLIK',
         gender: 'L',
         role: 'SISWA',
         ClassRoomId: 'd4f7f9fa-7e54-76f5-af94-0123de456789',
@@ -190,7 +190,7 @@ module.exports = {
       },
       {
         id: '66778899-aabb-ccdd-eeff-001122334455',
-        name: 'SISWA 12',
+        name: 'WINDADIA SABRINA',
         birthDate: '2006-09-05T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'P',
@@ -201,7 +201,7 @@ module.exports = {
       },
       {
         id: '778899aa-bbcc-ddee-ff00-112233445566',
-        name: 'SISWA 13',
+        name: 'DANIEL HILARIOUS',
         birthDate: '2006-10-06T00:00:00.000Z',
         religion: 'KRISTEN',
         gender: 'L',
@@ -212,7 +212,7 @@ module.exports = {
       },
       {
         id: '8899aabb-ccdd-eeff-0011-223344556677',
-        name: 'SISWA 14',
+        name: 'GADIS FAUZIAH',
         birthDate: '2005-05-01T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'P',
@@ -223,7 +223,7 @@ module.exports = {
       },
       {
         id: '99aabbcc-ddee-ff00-1122-334455667788',
-        name: 'SISWA 15',
+        name: 'YOSEPH FERDINAND',
         birthDate: '2005-06-02T00:00:00.000Z',
         religion: 'KRISTEN',
         gender: 'L',
@@ -234,7 +234,7 @@ module.exports = {
       },
       {
         id: 'aabbccdd-eeff-0011-2233-445566778899',
-        name: 'SISWA 16',
+        name: 'SALSABILA GISYA',
         birthDate: '2005-07-03T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'P',
@@ -245,7 +245,7 @@ module.exports = {
       },
       {
         id: 'bbccddee-ffee-0011-2233-4455667788aa',
-        name: 'SISWA 17',
+        name: 'ENRICO CHRISTIAN LAZAUDA',
         birthDate: '2005-08-04T00:00:00.000Z',
         religion: 'KRISTEN',
         gender: 'L',
@@ -256,7 +256,7 @@ module.exports = {
       },
       {
         id: 'ccddeeff-0011-2233-4455-66778899aabb',
-        name: 'SISWA 18',
+        name: 'AMIRAH FATIMAH',
         birthDate: '2005-09-05T00:00:00.000Z',
         religion: 'ISLAM',
         gender: 'P',
@@ -267,7 +267,7 @@ module.exports = {
       },
       {
         id: 'ddeeff00-1122-3344-5566-778899aabbcc',
-        name: 'SISWA 19',
+        name: 'FREDY TOBING',
         birthDate: '2005-10-06T00:00:00.000Z',
         religion: 'KRISTEN',
         gender: 'L',
@@ -278,9 +278,9 @@ module.exports = {
       },
       {
         id: 'eeff0011-2233-4455-6677-8899aabbccdd',
-        name: 'SISWA 20',
+        name: 'PATRICIA LADY',
         birthDate: '2005-11-07T00:00:00.000Z',
-        religion: 'ISLAM',
+        religion: 'KRISTEN',
         gender: 'P',
         role: 'SISWA',
         ClassRoomId: 'e5f8fafb-8f65-87f6-b0a5-1234ef567890',

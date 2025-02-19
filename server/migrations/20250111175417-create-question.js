@@ -19,7 +19,7 @@ module.exports = {
       },
       type: {
         allowNull: false,
-        type: Sequelize.ENUM('multiple_choice', 'essay'),
+        type: Sequelize.ENUM('Pilihan ganda', 'Esai'),
       },
       option: {
         allowNull: true,

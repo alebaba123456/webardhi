@@ -1,6 +1,6 @@
 <template>
     <div class="w-full shadow-md shadow-shade-tc">
-        <div class="px-8 py-1 w-full bg-shade-gr flex justify-between items-center rounded-md">
+        <div class="px-8 py-1 w-full bg-gr flex justify-between items-center rounded-md">
             <PrevButton />
             <PageButton />
             <NextButton />

@@ -8,13 +8,13 @@ class RouterController {
           { path: '/guru', name: 'Guru' },
           { path: '/pelajaran', name: 'Pelajaran' },
           { path: '/ujian', name: 'Ujian' },
-          { path: '/bank-soal', name: 'Bank_Soal' },
+          { path: '/bank-soal/:id?', name: 'Bank_Soal' },
         ],
         GURU: [
           { path: '/kelas', name: 'Kelas' },
           { path: '/siswa', name: 'Siswa' },
           { path: '/ujian', name: 'Ujian' },
-          { path: '/bank-soal', name: 'Bank_Soal' },
+          { path: '/bank-soal/:id?', name: 'Bank_Soal' },
         ],
         SISWA: [
           { path: '/pelajaran', name: 'Pelajaran' },
@@ -25,7 +25,7 @@ class RouterController {
 
       const { role } = req.user;
       if (!role || !routesByRole[role]) {
-        throw { name: 'Modified payload.' }
+        throw { name: 'Modified payload.' };
       }
 
       res.status(200).json({
@@ -37,9 +37,9 @@ class RouterController {
         roleRoutes: routesByRole[role],
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }
 
-module.exports = RouterController
+module.exports = RouterController;

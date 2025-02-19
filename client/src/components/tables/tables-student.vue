@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-shade-gr shadow-md shadow-shade-tc w-full text-left text-[0.75rem]">
+    <div class="bg-gr shadow-md shadow-shade-tc w-full text-left text-[0.75rem]">
       <table class="w-full table-fixed">
         <thead class="bg-shade-gr text-tosca border border-gr">
           <tr>
@@ -43,7 +43,7 @@
         <tbody>
           <tr v-for="(data, index) in fetched" :key="index"  class="hover:bg-tosca group hover:text-gr bg-shade-gr text-white border border-gr w-full cursor-pointer transition-colors duration-300 ease-out text-[0.75rem]">
             <td class="px-4 py-2 text-center truncate align-middle border-r border-gr bg-shade-gr text-white">{{ numberingIndex(index) }}</td>
-            <td class="px-4 py-2 truncate text-center align-middle">{{ data.name }}</td>
+            <td class="px-4 py-2 truncate align-middle">{{ data.name }}</td>
             <td class="px-4 py-2 truncate text-center align-middle">{{ new Date(data.birthDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) }}</td>
             <td class="px-4 py-2 truncate text-center align-middle">{{ data.religion }}</td>
             <td class="px-4 py-2 truncate text-center align-middle">{{ data.gender === 'L' ? 'Laki-laki' : 'Perempuan' }}</td>

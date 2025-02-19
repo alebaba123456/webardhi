@@ -7,7 +7,7 @@
                     <div class="flex flex-col gap-8">
                         <div class="flex gap-6 items-center">
                             <label for="email" class="font-semibold">EMAIL</label>
-                            <input v-if="!isRegistered" id="email" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <input v-if="!isRegistered" id="email" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Masukkan email.." autocomplete="off" v-model="email" />
                             <div v-if="isRegistered" class="font-bold underline underline-offset-2">{{ email }}</div>
                         </div>

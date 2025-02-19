@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-shade-gr shadow-md shadow-shade-tc w-full text-left text-[0.75rem]">
+  <div class="bg-gr shadow-md shadow-shade-tc w-full text-left text-[0.75rem]">
     <table class="w-full table-fixed">
       <thead class="bg-shade-gr text-tosca border border-gr">
         <tr>
@@ -80,6 +80,6 @@ const { numberingIndex, doOpenModal, doDeleteExamination } = useStore
 const { fetched, category, keyword } = storeToRefs(useStore);
 
 async function handleOpenQuestion(id) {
-  await router.push({ path: '/bank-soal', query: { id } });
+  await router.push({ path: `/bank-soal/${id}` });
 }
 </script>

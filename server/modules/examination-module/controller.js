@@ -109,7 +109,6 @@ class ExaminationController {
             ]
           });
       
-          // Count using the same conditions, including the join if filtering by ProfileId.
           const totalExamination = await Examination.count({
             where: examWhereClause,
             include: [
@@ -126,7 +125,6 @@ class ExaminationController {
             totalData: Math.ceil(totalExamination / sanitizedSize),
           });
         } catch (error) {
-          console.log(error);
           next(error);
         }
       }
@@ -187,8 +185,6 @@ class ExaminationController {
                 message: 'SubjectClass created successfully.',
             });
         } catch (error) {
-            console.log(error);
-            
             next(error);
         }
     }

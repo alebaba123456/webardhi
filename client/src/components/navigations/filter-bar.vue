@@ -1,16 +1,16 @@
 <template>
     <div class="w-full flex gap-4 justify-between">
-        <form @submit.prevent="applyFilter()" class="flex gap-8 text-[0.85rem] rounded-lg bg-shade-gr shadow-md shadow-shade-tc px-2 py-1">
+        <form v-if="!['Bank_Soal'].includes(router.currentRoute.value.name)" @submit.prevent="applyFilter()" class="flex gap-8 text-[0.85rem] rounded-lg bg-gr shadow-md shadow-shade-tc px-2 py-1">
             <div v-if="['name', 'code', null].includes(category)"  class="flex gap-2 items-center">
-                <label for="keyword" class="text-white font-medium">Pencarian :</label>
+                <label for="keyword" class="text-tosca font-medium">Pencarian :</label>
                 <input id="keyword"
-                    class="text-white bg-transparent outline-none focus:ring-0 px-2 rounded-md border-b border-white"
+                    class="text-tosca bg-transparent outline-none focus:ring-0 px-2 rounded-md border-b border-tosca"
                     placeholder="Kata pencarian.." autocomplete="off" v-model="keyword" />
             </div>
             <div v-if="['religion', 'gender', 'grade', 'ClassRoomId', 'ProfileId', 'SubjectId', 'type'].includes(category)" class="flex gap-2 items-center">
-                <label for="keyword" class="text-white font-medium">Keyword :</label>
+                <label for="keyword" class="text-tosca font-medium">Keyword :</label>
                 <select id="keyword"
-                    class="text-white bg-transparent hover:text-gr cursor-pointer outline-none focus:ring-0 px-2 py-[0.15rem] rounded-md border-b border-white"
+                    class="text-tosca bg-transparent hover:text-gr cursor-pointer outline-none focus:ring-0 px-2 py-[0.15rem] rounded-md border-b border-tosca"
                     placeholder="Pilih kategori.." autocomplete="off" v-model="keyword">
                     <option value="" disabled selected>Kata pencarian..</option>
                     <template v-if="category == 'religion'">
@@ -66,9 +66,9 @@
                 </select>
             </div>
             <div class="flex gap-2 items-center">
-                <label for="category" class="text-white font-medium">berdasarkan :</label>
+                <label for="category" class="text-tosca font-medium">berdasarkan :</label>
                 <select id="category"
-                    class="text-white bg-transparent hover:text-gr cursor-pointer outline-none focus:ring-0 px-2 py-[0.15rem] rounded-md border-b border-white"
+                    class="text-tosca bg-transparent hover:text-gr cursor-pointer outline-none focus:ring-0 px-2 py-[0.15rem] rounded-md border-b border-tosca"
                     placeholder="Pilih kategori.." autocomplete="off" v-model="category">
                     <option value="" disabled selected>Pilih kategori..</option>
                     <template v-if="['Siswa', 'Guru'].includes(router.currentRoute.value.name)">
@@ -93,9 +93,9 @@
                 </select>
             </div>
             <div class="flex gap-2 items-center">
-                <label for="order" class="text-white font-medium">urutan :</label>
+                <label for="order" class="text-tosca font-medium">urutan :</label>
                 <select id="order"
-                    class="text-white bg-transparent hover:text-gr cursor-pointer outline-none focus:ring-0 px-2 py-[0.15rem] rounded-md border-b border-white"
+                    class="text-tosca bg-transparent hover:text-gr cursor-pointer outline-none focus:ring-0 px-2 py-[0.15rem] rounded-md border-b border-tosca"
                     placeholder="Pilih urutan.." autocomplete="off" v-model="order">
                     <option class="" value="" disabled selected>Pilih urutan..</option>
                     <option value="asc">Naik</option>
@@ -106,7 +106,7 @@
                 <div>Cari</div>
             </button>
         </form>
-        <div class="flex gap-8 text-[0.85rem] bg-shade-gr shadow-md shadow-shade-tc px-2 py-1 rounded-lg">
+        <div class="flex gap-8 text-[0.85rem] bg-gr shadow-md shadow-shade-tc px-2 py-1 rounded-lg">
             <CreateClassButton />
         </div>
     </div>

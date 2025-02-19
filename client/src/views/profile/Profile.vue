@@ -1,12 +1,12 @@
 <template>
-    <div class="w-full h-full flex relative bg-pattern bg-fixed bg-cover" ref="mainRef">
+    <div class="w-full h-full flex relative bg-pattern bg-fixed bg-repeat" ref="mainRef">
         <Modal />
         <Single class="sticky" />
         <div class="w-full h-full px-8 py-4 bg-transparent">
             <div
-                class="font-extrabold text-tosca bg-gradient-to-r from-shade-gr to-transparent rounded-xl flex px-2 text-[1.5rem] mb-6 w-full">
+                class="font-extrabold text-tosca bg-gradient-to-r from-gr via-shade-gr to-transparent rounded-xl flex px-2 text-[1.5rem] mb-6 w-full">
                 PROFIL SAYA</div>
-            <div class="w-full flex flex-col gap-4 bg-shade-gr px-8 py-6 rounded-lg shadow-md shadow-shade-tc">
+            <div class="w-full flex flex-col gap-4 bg-gr px-8 py-6 rounded-lg shadow-md shadow-shade-tc">
                 <div class="flex gap-6 text-tosca">
                     <div>NAMA</div>
                     <div>:</div>

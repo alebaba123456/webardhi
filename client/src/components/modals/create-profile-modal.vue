@@ -1,23 +1,23 @@
 <template>
     <div class="w-full h-full flex flex-col justify-center items-center">
-        <div class="text-center bg-gr text-tosca font-bold w-6/12">{{ id ? `FORM PERUBAHAN ${role.toUpperCase()}` : `FORM PENAMBAHAN ${role.toUpperCase()}` }}</div>
-        <div class="w-6/12 h-fit bg-shade-wh">
+        <div class="w-6/12 h-fit bg-white shadow-2xl shadow-shade-tc border-gr border">
+            <div class="text-center bg-gr text-tosca font-bold">{{ id ? `FORM PERUBAHAN ${role.toUpperCase()}` : `FORM PENAMBAHAN ${role.toUpperCase()}` }}</div>
             <form @submit.prevent="doSubmitProfile(!id ? {name, religion, gender, birthDate, role, ClassRoomId} : {id, name, religion, gender, birthDate, role, ClassRoomId})" class="px-4 py-2 w-full h-full">
-                <div class="flex flex-col justify-between h-full">
-                    <div class="flex flex-col gap-8">
+                <div class="flex flex-col justify-between w-full">
+                    <div class="flex flex-col gap-8 w-full">
                         <div class="flex gap-6 items-center">
                             <label for="name" class="font-semibold">NAMA</label>
-                            <input id="name" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <input id="name" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Masukkan nama.." autocomplete="off" v-model="name" />
                         </div>
-                        <div class="flex gap-6 items-center">
-                            <label for="birthDate" class="font-semibold">TANGGAL LAHIR</label>
-                            <input id="birthDate" type="date" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                        <div class="flex gap-6 items-center w-full">
+                            <label for="birthDate" class="font-semibold whitespace-nowrap">TANGGAL LAHIR</label>
+                            <input id="birthDate" type="date" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             autocomplete="off" v-model="birthDate" />
                         </div>
                         <div class="flex gap-6 items-center">
                             <label for="religion" class="font-semibold">AGAMA</label>
-                            <select id="religion" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <select id="religion" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Pilih agama.." autocomplete="off" v-model="religion">
                             <option class="" value="" disabled selected>Pilih agama..</option>
                             <option value="ISLAM">Islam</option>
@@ -30,8 +30,8 @@
                             </select>
                         </div>
                         <div class="flex gap-6 items-center">
-                            <label for="gender" class="font-semibold">JENIS KELAMIN</label>
-                            <select id="gender" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <label for="gender" class="font-semibold whitespace-nowrap">JENIS KELAMIN</label>
+                            <select id="gender" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Pilih jenis kelamin.." autocomplete="off" v-model="gender">
                             <option class="" value="" disabled selected>Pilih jenis kelamin..</option>
                             <option value="L">Laki - laki</option>
@@ -40,7 +40,7 @@
                         </div>
                         <div class="flex gap-6 items-center" v-if="role === 'Siswa'">
                             <label for="ClassRoomId" class="font-semibold">KELAS</label>
-                            <select id="ClassRoomId" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <select id="ClassRoomId" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Pilih kelas.." autocomplete="off" v-model="ClassRoomId">
                             <option class="" value="" disabled selected>Pilih kelas..</option>
                             <option

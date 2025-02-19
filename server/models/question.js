@@ -40,15 +40,15 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     type: {
-      type: DataTypes.ENUM('multiple_choice', 'essay'),
+      type: DataTypes.ENUM('Pilihan ganda', 'Esai'),
       allowNull: false,
       validate: {
         notNull: {
           msg: "QUESTION TYPE IS REQUIRED"
         },
         isIn: {
-          args: [['multiple_choice', 'essay']],
-          msg: "TYPE MUST BE 'multiple_choice' OR 'essay'"
+          args: [['Pilihan ganda', 'Esai']],
+          msg: "TYPE MUST BE 'Pilihan ganda' OR 'Esai'"
         }
       }
     },
@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       validate: {
         isValidOption(value) {
-          if (this.type === 'multiple_choice') {
+          if (this.type === 'Pilihan ganda') {
             if (!value || !Array.isArray(value) || value.length === 0) {
               throw new Error('OPTIONS MUST BE A NON-EMPTY ARRAY FOR MULTIPLE CHOICE QUESTIONS');
             }

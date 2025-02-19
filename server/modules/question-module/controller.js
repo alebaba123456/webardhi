@@ -18,13 +18,13 @@ class QuestionController {
       const offset = (sanitizedPage - 1) * sanitizedSize;
       const limit = sanitizedSize;
 
+      let questionWhereClause = {};
       let examWhereClause = {};
-      let subjectWhereClause = {};
 
       if (req.query.category) {
         const sanitizedCategory = validator.escape(req.query.category || "");
 
-        if (!['ProfileId', 'type'].includes(sanitizedCategory)) {
+        if (!['ExaminationId', 'type'].includes(sanitizedCategory)) {
           throw { name: 'Modified payload.' };
         }
 
@@ -35,7 +35,7 @@ class QuestionController {
             const [fieldType] = await Examination.sequelize.query(`
                   SELECT data_type 
                   FROM information_schema.columns 
-                  WHERE table_name = 'Examinations' AND column_name = '${sanitizedCategory}'
+                  WHERE table_name = 'Questions' AND column_name = '${sanitizedCategory}'
                 `);
 
             if (!fieldType || !fieldType.length) {
@@ -46,28 +46,28 @@ class QuestionController {
             const isStringField = ['character varying', 'text'].includes(dataType);
 
             if (isStringField) {
-              examWhereClause[sanitizedCategory] = { [Op.iLike]: `%${sanitizedKeyword}%` };
+              questionWhereClause[sanitizedCategory] = { [Op.iLike]: `%${sanitizedKeyword}%` };
             } else if (dataType === 'integer') {
               const keywordAsInt = parseInt(sanitizedKeyword, 10);
               if (isNaN(keywordAsInt)) {
                 throw { name: 'Invalid keyword for integer field.' };
               }
-              examWhereClause[sanitizedCategory] = keywordAsInt;
+              questionWhereClause[sanitizedCategory] = keywordAsInt;
             } else if (dataType === 'uuid') {
               if (!validator.isUUID(sanitizedKeyword)) {
                 throw { name: 'Modified payload.' };
               }
-              examWhereClause[sanitizedCategory] = sanitizedKeyword;
+              questionWhereClause[sanitizedCategory] = sanitizedKeyword;
             } else {
               throw { name: 'Unsupported field type.' };
             }
           }
 
-          else if (sanitizedCategory === 'ProfileId') {
+          else if (sanitizedCategory === 'ExaminationId') {
             if (!validator.isUUID(sanitizedKeyword)) {
               throw { name: 'Modified payload.' };
             }
-            subjectWhereClause.ProfileId = sanitizedKeyword;
+            examWhereClause.id = sanitizedKeyword;
           }
         }
       }
@@ -81,39 +81,33 @@ class QuestionController {
         orderClause.push(['id', sanitizedOrder]);
       }
 
-      const examination = await Examination.findAll({
-        where: examWhereClause,
+      const question = await Question.findAll({
+        where: questionWhereClause,
         order: orderClause,
         offset,
         limit,
         include: [
           {
-            model: Subject,
-            where: Object.keys(subjectWhereClause).length ? subjectWhereClause : undefined,
-            include: [
-              {
-                model: Profile,
-                attributes: ['id', 'name']
-              }
-            ]
+            model: Examination,
+            where: Object.keys(examWhereClause).length ? examWhereClause : undefined,
+            attributes: ['id', 'code']
           }
         ]
       });
 
-      const totalExamination = await Examination.count({
-        where: examWhereClause,
+      const totalQuestion = await Question.count({
+        where: questionWhereClause,
         include: [
           {
-            model: Subject,
-            where: Object.keys(subjectWhereClause).length ? subjectWhereClause : undefined,
+            model: Examination,
+            where: Object.keys(examWhereClause).length ? examWhereClause : undefined,
           }
         ]
       });
-
       res.status(200).json({
         message: 'Examination data retrieved successfully.',
-        data: examination,
-        totalData: Math.ceil(totalExamination / sanitizedSize),
+        data: question,
+        totalData: Math.ceil(totalQuestion / sanitizedSize),
       });
     } catch (error) {
       console.log(error);
@@ -131,12 +125,6 @@ class QuestionController {
 
       const { ExaminationId, question, answer, option, type } = req.body;
 
-      const sanitizedExaminationDate = validator.toDate(examinationDate || null);
-
-      if (!sanitizedExaminationDate) {
-        throw { name: 'Invalid date format.' };
-      }
-
       const sanitizedExaminationId = validator.escape(ExaminationId || "")
       if (!validator.isUUID(sanitizedExaminationId)) {
         throw { name: 'Modified payload.' };
@@ -152,24 +140,32 @@ class QuestionController {
         throw { name: 'Data not found.' };
       }
 
-      const examMonth = sanitizedExaminationDate.getMonth() + 1;
-      const semester = (examMonth >= 7 && examMonth <= 12) ? 'GANJIL' : 'GENAP';
-      const generatedCode = `${type}-${semester}-${subject.code}`
-
-      const sanitizedType = validator.escape(type.toUpperCase() || "")
-      if (!['UTS', 'UAS', 'UJIAN'].includes(sanitizedType)) {
+      const sanitizedQuestion = validator.escape(question || "");
+      const sanitizedAnswer = validator.escape(answer || "");
+      const sanitizedType = validator.escape(type || "");
+      if (!['Pilihan ganda', 'Esai'].includes(sanitizedType)) {
         throw { name: 'Modified payload.' };
       }
+      let sanitizedOption = null;
+      if (sanitizedType === 'Pilihan ganda') {
+        if (!option || !Array.isArray(option) || option.length === 0) {
+          throw { name: 'Modified payload.' };
+        }
+        sanitizedOption = option.map(item => validator.escape(String(item)));
+      } else if (sanitizedType === 'Esai') {
+        sanitizedOption = null;
+      }
 
-      await Examination.create({
+      await Question.create({
+        ExaminationId: sanitizedExaminationId,
+        question: sanitizedQuestion,
+        answer: sanitizedAnswer,
         type: sanitizedType,
-        code: generatedCode,
-        examinationDate: sanitizedExaminationDate,
-        SubjectId: sanitizedSubjectId,
+        option: sanitizedOption
       });
 
       res.status(201).json({
-        message: 'SubjectClass created successfully.',
+        message: 'Question created successfully.',
       });
     } catch (error) {
       console.log(error);
@@ -177,81 +173,76 @@ class QuestionController {
     }
   }
 
-  static async editExamination(req, res, next) {
+  static async editQuestion(req, res, next) {
     try {
-      const allowedFields = ['id', 'SubjectId', 'type', 'examinationDate'];
+      const allowedFields = ['id', 'ExaminationId', 'question', 'answer', 'option', 'type'];
       const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
       if (extraFields.length > 0) {
         throw { name: 'Modified payload.' };
       }
 
-      const { id, SubjectId, type, examinationDate } = req.body;
+      const { id, ExaminationId, question, answer, option, type } = req.body;
 
-      if (!id || !SubjectId || !type || !examinationDate) {
-        throw { name: 'Invalid input.' };
-      }
-
-      const sanitizedExaminationDate = validator.toDate(examinationDate || null);
-
-      const sanitizedId = validator.escape(id || "")
+      // Validasi ID pertanyaan
+      const sanitizedId = validator.escape(id || "");
       if (!validator.isUUID(sanitizedId)) {
         throw { name: 'Modified payload.' };
       }
 
-      if (!sanitizedExaminationDate) {
-        throw { name: 'Invalid date format.' };
-      }
-
-      const sanitizedSubjectId = validator.escape(SubjectId || "")
-      if (!validator.isUUID(sanitizedSubjectId)) {
+      // Validasi ExaminationId
+      const sanitizedExaminationId = validator.escape(ExaminationId || "");
+      if (!validator.isUUID(sanitizedExaminationId)) {
         throw { name: 'Modified payload.' };
       }
 
-      const subject = await Subject.findOne({
-        where: {
-          id: sanitizedSubjectId
-        }
-      })
-
+      // Cek apakah ExaminationId valid
+      const subject = await Examination.findOne({ where: { id: sanitizedExaminationId } });
       if (!subject) {
         throw { name: 'Data not found.' };
       }
 
-      const examMonth = sanitizedExaminationDate.getMonth() + 1;
-      const semester = (examMonth >= 7 && examMonth <= 12) ? 'GANJIL' : 'GENAP';
-      const generatedCode = `${type}-${semester}-${subject.code}`
-
-      const sanitizedType = validator.escape(type.toUpperCase() || "")
-      if (!['UTS', 'UAS', 'UJIAN'].includes(sanitizedType)) {
+      // Validasi dan sanitasi input lainnya
+      const sanitizedQuestion = validator.escape(question || "");
+      const sanitizedAnswer = validator.escape(answer || "");
+      const sanitizedType = validator.escape(type || "");
+      if (!['Pilihan ganda', 'Esai'].includes(sanitizedType)) {
         throw { name: 'Modified payload.' };
       }
 
-      const examination = await Examination.findOne({
-        where: {
-          id: sanitizedId
+      let sanitizedOption = null;
+      if (sanitizedType === 'Pilihan ganda') {
+        if (!option || !Array.isArray(option) || option.length === 0) {
+          throw { name: 'Modified payload.' };
         }
-      })
+        sanitizedOption = option.map(item => validator.escape(String(item)));
+      } else if (sanitizedType === 'Esai') {
+        sanitizedOption = null;
+      }
 
-      if (!examination) {
+      // Cek apakah pertanyaan dengan ID tersebut ada
+      const questionData = await Question.findOne({ where: { id: sanitizedId } });
+      if (!questionData) {
         throw { name: 'Data not found.' };
       }
 
-      await examination.update({
+      // Update pertanyaan
+      await questionData.update({
+        ExaminationId: sanitizedExaminationId,
+        question: sanitizedQuestion,
+        answer: sanitizedAnswer,
         type: sanitizedType,
-        code: generatedCode,
-        examinationDate: sanitizedExaminationDate,
-        SubjectId: sanitizedSubjectId,
+        option: sanitizedOption
       });
 
       res.status(200).json({
-        message: 'Subject updated successfully.',
+        message: 'Question updated successfully.',
       });
     } catch (error) {
       next(error);
     }
   }
 
-  static async deleteExamination(req, res, next) {
+  static async deleteQuestion(req, res, next) {
     try {
       const allowedFields = ['id'];
       const extraFields = Object.keys(req.params).filter(key => !allowedFields.includes(key));
@@ -260,26 +251,28 @@ class QuestionController {
       }
 
       const { id } = req.params;
-      const sanitizedId = validator.escape(id || "")
-      const isAnUUID = validator.isUUID(sanitizedId);
-      if (!isAnUUID) {
+      const sanitizedId = validator.escape(id || "");
+      if (!validator.isUUID(sanitizedId)) {
         throw { name: 'Modified payload.' };
       }
 
-      const examination = await Examination.findOne({ where: { id: sanitizedId } });
-      if (!examination) {
+      // Cek apakah pertanyaan ada di database
+      const question = await Question.findOne({ where: { id: sanitizedId } });
+      if (!question) {
         throw { name: 'Data not found.' };
       }
 
-      await examination.destroy();
+      // Hapus pertanyaan dari database
+      await question.destroy();
 
       res.status(200).json({
-        message: 'Subject deleted successfully.'
+        message: 'Question deleted successfully.'
       });
     } catch (error) {
       next(error);
     }
   }
+
 }
 
 module.exports = QuestionController;

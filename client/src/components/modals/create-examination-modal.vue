@@ -1,13 +1,13 @@
 <template>
     <div class="w-full h-full flex flex-col justify-center items-center">
-        <div class="text-center bg-gr text-tosca font-bold w-6/12">{{ id ? "FORM PERUBAHAN KELAS" : "FORM PENAMBAHAN KELAS" }}</div>
-        <div class="w-6/12 h-fit bg-shade-wh">
+        <div class="w-6/12 h-fit bg-white shadow-2xl shadow-shade-tc border-gr border">
+            <div class="text-center bg-gr text-tosca font-bold">{{ id ? "FORM PERUBAHAN KELAS" : "FORM PENAMBAHAN KELAS" }}</div>
             <form @submit.prevent="doSubmitExamination(id ? { id, type, examinationDate, SubjectId } : { type, examinationDate, SubjectId })" class="px-4 py-2 w-full h-full">
-                <div class="flex flex-col justify-between h-full">
+                <div class="flex flex-col justify-between">
                     <div class="flex flex-col gap-8">
                         <div class="flex gap-6 items-center">
-                            <label for="type" class="font-semibold">JENIS UJIAN</label>
-                            <select id="type" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <label for="type" class="font-semibold whitespace-nowrap">JENIS UJIAN</label>
+                            <select id="type" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Pilih kelas.." autocomplete="off" v-model="type">
                             <option class="" value="" disabled selected>Pilih jenis ujian..</option>
                             <option value="UJIAN">UJIAN HARIAN</option>
@@ -16,8 +16,8 @@
                             </select>
                         </div>
                         <div class="flex gap-6 items-center">
-                            <label for="SubjectId" class="font-semibold">NAMA PELAJARAN</label>
-                            <select id="SubjectId" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <label for="SubjectId" class="font-semibold whitespace-nowrap">NAMA PELAJARAN</label>
+                            <select id="SubjectId" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Pilih kelas.." autocomplete="off" v-model="SubjectId">
                             <option class="" value="" disabled selected>Pilih kelas..</option>
                             <option
@@ -30,8 +30,8 @@
                             </select>
                         </div>
                         <div class="flex gap-6 items-center">
-                            <label for="examinationDate" class="font-semibold">TANGGAL UJIAN</label>
-                            <input id="examinationDate" type="date" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <label for="examinationDate" class="font-semibold whitespace-nowrap">TANGGAL UJIAN</label>
+                            <input id="examinationDate" type="date" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             autocomplete="off" v-model="examinationDate" />
                         </div>
                     </div>

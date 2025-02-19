@@ -1,13 +1,13 @@
 <template>
     <div class="w-full h-full flex flex-col justify-center items-center">
-        <div class="text-center bg-gr text-tosca font-bold w-6/12">{{ id ? "FORM PERUBAHAN RUANG KELAS" : "FORM PENAMBAHAN RUANG KELAS" }}</div>
-        <div class="w-6/12 h-fit bg-shade-wh">
+        <div class="w-6/12 h-fit bg-white shadow-2xl shadow-shade-tc border-gr border">
+            <div class="text-center bg-gr text-tosca font-bold">{{ id ? "FORM PERUBAHAN RUANG KELAS" : "FORM PENAMBAHAN RUANG KELAS" }}</div>
             <form @submit.prevent="doSubmitClass(!id ? { grade, code } : {id, grade : grade.toString(), code })" class="px-4 py-2 w-full h-full">
-                <div class="flex flex-col justify-between h-full">
+                <div class="flex flex-col justify-between">
                     <div class="flex flex-col gap-8">
                         <div class="flex gap-6 items-center">
                             <label for="grade" class="font-semibold">KELAS</label>
-                            <select id="grade" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <select id="grade" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Pilih kelas.." autocomplete="off" v-model="grade">
                             <option class="" value="" disabled selected>Pilih kelas..</option>
                             <option value="7">7</option>
@@ -16,8 +16,8 @@
                             </select>
                         </div>
                         <div class="flex gap-6 items-center">
-                            <label for="code" class="font-semibold">KODE KELAS</label>
-                            <input id="code" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" 
+                            <label for="code" class="font-semibold whitespace-nowrap">KODE KELAS</label>
+                            <input id="code" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Masukan kode kelas.." autocomplete="off" v-model="code" />
                         </div>
                     </div>

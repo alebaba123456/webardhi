@@ -157,6 +157,9 @@ export const actions = {
       case 'Ujian':
         await this.getExamination();
         break;
+      case 'Bank_Soal':
+        await this.getQuestion();
+        break;
       default:
         break;
     }
@@ -513,6 +516,8 @@ export const actions = {
   async getQuestion() {
     try {
       loading.value = true
+      category.value = "ExaminationId";
+      keyword.value = router.currentRoute.value.params.id;
       await this.doGeneratingQuery()
       const response = await questionAPI(query.value);
       fetched.value = response.data;
