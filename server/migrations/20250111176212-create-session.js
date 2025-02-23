@@ -30,6 +30,10 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
+      examQuestion: {
+        type: Sequelize.JSON,
+        allowNull: true,
+      },
       UserId: {
         type: Sequelize.UUID,
         allowNull: false,

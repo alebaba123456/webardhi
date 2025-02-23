@@ -17,9 +17,10 @@ class RouterController {
           { path: '/bank-soal/:id?', name: 'Bank_Soal' },
         ],
         SISWA: [
-          { path: '/pelajaran', name: 'Pelajaran' },
-          { path: '/ujian', name: 'Ujian' },
-          { path: '/hasil', name: 'Hasil' },
+          { path: '/pelajaran', name: 'Pelajaran_Ku' },
+          { path: '/ujian', name: 'Ujian_Ku' },
+          { path: '/sesi-ujian/:id?', name: 'Lembar_Ujian' },
+          { path: '/hasil', name: 'Hasil_Ku' },
         ],
       };
 

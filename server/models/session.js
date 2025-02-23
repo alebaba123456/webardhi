@@ -67,6 +67,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
+    examQuestion: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
     UserId: {
       type: DataTypes.UUID,
       allowNull: false,

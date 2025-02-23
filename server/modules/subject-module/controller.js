@@ -141,6 +141,17 @@ class SubjectController {
                 }
                 orderClause.push(['id', sanitizedOrder]);
             }
+            
+            if (req.user.role === 'GURU') {
+                whereClause.ProfileId = req.user.id
+            } else if (req.user.role === 'SISWA') {
+                const classrooms = await Classroom.findOne({
+                    where: {
+                        id: req.user.ClassRoomId
+                    }
+                })
+                whereClause.grade = classrooms.grade.toString()
+            }
 
             const subjects = await Subject.findAll({
                 where: whereClause,

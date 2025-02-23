@@ -3,20 +3,20 @@
     class="flex text-[0.8rem] font-semibold hover:bg-tosca text-white group flex-col justify-start p-1 items-start hover:text-gr hover:font-extrabold transition-all duration-300 ease-out cursor-pointer">
     <div class="flex justify-center items-center gap-2">
       <Component :is="currentIcon" />
-      <div>{{ pageName.toUpperCase() }}</div>
+      <div>{{ formattedPageName.toUpperCase() }}</div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, shallowRef } from 'vue';
+import { onMounted, shallowRef, computed } from 'vue';
 
 const props = defineProps({
   pageName: {
     type: String,
     required: true,
   }
-})
+});
 
 const iconMap = {
   Kelas: shallowRef(() => import('@/assets/single-bar-icons/ikon-kelas.vue')),
@@ -30,9 +30,16 @@ const iconMap = {
 
 const currentIcon = shallowRef(null);
 
+const formattedPageName = computed(() => {
+  if (props.pageName.endsWith('_Ku')) {
+    return props.pageName.replace('_Ku', '');
+  }
+  return props.pageName;
+});
+
 onMounted(async () => {
-  if (iconMap[props.pageName]) {
-    const component = await iconMap[props.pageName].value();
+  if (iconMap[formattedPageName.value]) {
+    const component = await iconMap[formattedPageName.value].value();
     currentIcon.value = component.default;
   } else {
     currentIcon.value = null;

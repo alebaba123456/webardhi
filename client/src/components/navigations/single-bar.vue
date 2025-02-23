@@ -29,7 +29,7 @@ const { routes } = storeToRefs(useStore)
 const filteredRoutes = ref([])
 
 async function filterRoutes() {
-  filteredRoutes.value = routes.value.filter(route => !['/', '/login', '/bank-soal/:id?'].includes(route.path))
+  filteredRoutes.value = routes.value.filter(route => !['/', '/login', '/bank-soal/:id?', '/sesi-ujian/:id?'].includes(route.path))
 }
 
 onBeforeMount(async () => {

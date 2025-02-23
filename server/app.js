@@ -17,6 +17,7 @@
     const validationRouter = require('./modules/validation-module/routes')
     const routerRouter = require('./modules/router-module/routes')
     const questionRouter = require('./modules/question-module/routes')
+    const examinationSessionRouter = require('./modules/do-exam-module/routes')
 
     const authentication = require('./middlewares/authentication')
     const errorHandler = require('./middlewares/error-handler')
@@ -34,6 +35,7 @@
     app.use(authenticationRouter)
     app.use(authentication)
     app.use(routerRouter)
+    app.use(examinationSessionRouter)
     app.use(validationRouter)
     app.use(profileRouter)
     app.use(classroomRouter)
