@@ -49,7 +49,7 @@
             <td class="px-4 py-2 truncate align-middle">
               <div v-if="data.grade !== 0" class="flex gap-8 justify-center items-center">
                 <button
-                  @click.prevent="doOpenModal('createExamination', { id: data.id, type: data.type, code: data.code, examinationDate: data.examinationDate, SubjectId: data.Subject.id })"
+                  @click.prevent="doStartExam({ExaminationId: data.id})"
                   class="flex gap-1 items-center justify-center hover:bg-shade-wh p-1 rounded-md ease-out transition-all duration-200">
                   <IkonPerbarui />
                   <div>Mulai Ujian</div>
@@ -71,7 +71,7 @@
   
   const router = useRouter();
   const useStore = useIndexStore();
-  const { numberingIndex, doOpenModal, doDeleteExamination } = useStore
+  const { numberingIndex, doStartExam, doDeleteExamination } = useStore
   const { fetched, category, keyword } = storeToRefs(useStore);
   
   async function handleOpenQuestion(id) {

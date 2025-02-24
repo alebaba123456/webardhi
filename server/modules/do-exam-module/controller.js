@@ -9,11 +9,17 @@ class ExaminationSessionController {
             if (extraFields.length > 0) {
                 throw { name: 'InvalidQuery', message: `Invalid query fields: ${extraFields.join(', ')}` };
             }
+
+            const { ExaminationId } = req.body;
             console.log(req.user);
+            console.log(ExaminationId);
             
             // if (req.user) {
                 
             // }
+            res.status(200).json({
+                message: 'Ok'
+            })
         } catch (error) {
             console.log(error);
 

@@ -176,3 +176,8 @@ export const questionDeleteAPI = async(payload) => {
   const response = await api.delete(`/question/${payload}`)
   return response.data;
 }
+
+export const startExaminationAPI = async(payload) => {
+  const response = await api.post('/examination/start', payload)
+  return response.data;
+}

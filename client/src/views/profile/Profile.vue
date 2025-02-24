@@ -25,7 +25,7 @@
                 <div class="flex gap-6 text-tosca">
                     <div>JENIS KELAMIN</div>
                     <div>:</div>
-                    <div class="underline underline-offset-4 font-semibold">{{ fetched?.gender || "" === 'L' ? "LAKI - LAKI" : "PEREMPUAN" }}</div>
+                    <div class="underline underline-offset-4 font-semibold">{{ fetched?.gender === 'L' ? "LAKI - LAKI" : "PEREMPUAN" }}</div>
                 </div>
                 <div class="flex gap-6 text-tosca">
                     <div>POSISI</div>

@@ -32,7 +32,8 @@ import {
   questionAPI,
   questionPostAPI,
   questionEditAPI,
-  questionDeleteAPI
+  questionDeleteAPI,
+  startExaminationAPI
 } from "@/stores/apis";
 import {
   generateQuery,
@@ -549,6 +550,19 @@ export const actions = {
       loading.value = true;
       await questionDeleteAPI(payload);
       this.doRefreshData();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
+  async doStartExam(payload) {
+    try {
+      loading.value = true;
+      console.log(payload);
+      
+      const response = await startExaminationAPI(payload);
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
     } finally {
