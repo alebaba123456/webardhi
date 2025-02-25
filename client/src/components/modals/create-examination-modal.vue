@@ -1,7 +1,7 @@
 <template>
     <div class="w-full h-full flex flex-col justify-center items-center">
         <div class="w-6/12 h-fit bg-white shadow-2xl shadow-shade-tc border-gr border">
-            <div class="text-center bg-gr text-tosca font-bold">{{ id ? "FORM PERUBAHAN KELAS" : "FORM PENAMBAHAN KELAS" }}</div>
+            <div class="text-center bg-gr text-tosca font-bold">{{ id ? "FORM PERUBAHAN UJIAN" : "FORM PEMBUATAN UJIAN" }}</div>
             <form @submit.prevent="doSubmitExamination(id ? { id, type, examinationDate, SubjectId } : { type, examinationDate, SubjectId })" class="px-4 py-2 w-full h-full">
                 <div class="flex flex-col justify-between">
                     <div class="flex flex-col gap-8">
@@ -19,7 +19,7 @@
                             <label for="SubjectId" class="font-semibold whitespace-nowrap">NAMA PELAJARAN</label>
                             <select id="SubjectId" class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0" 
                             placeholder="Pilih kelas.." autocomplete="off" v-model="SubjectId">
-                            <option class="" value="" disabled selected>Pilih kelas..</option>
+                            <option class="" value="" disabled selected>Pilih pelajaran..</option>
                             <option
                                 v-for="item in subjectSelection"
                                 :key="item.id"

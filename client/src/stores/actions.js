@@ -35,6 +35,7 @@ import {
   questionDeleteAPI,
   startExaminationAPI,
   saveExaminationAPI,
+  submitExaminationAPI,
 } from "@/stores/apis";
 import {
   generateQuery,
@@ -572,12 +573,23 @@ export const actions = {
 
   async saveExamAnswer() {
     try {
-      loading.value = true
-      await saveExaminationAPI(fetched.value)
+      loading.value = true;
+      await saveExaminationAPI(fetched.value);
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
     } finally {
-      loading.value = false
+      loading.value = false;
+    }
+  },
+
+  async submitExamAnswer() {
+    try {
+      loading.value = true;
+      await submitExaminationAPI();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
     }
   },
 

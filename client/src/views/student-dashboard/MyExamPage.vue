@@ -30,7 +30,7 @@
               ></textarea>
             </div>
           </div>
-          <button @click="submitAnswers" class="bg-tosca text-white px-4 py-2 rounded mt-4">
+          <button @click="submitExamAnswer" class="bg-tosca text-white px-4 py-2 rounded mt-4">
             Kirim Jawaban
           </button>
       </div>
@@ -44,7 +44,7 @@ import { useIndexStore } from "@/stores";
 import { storeToRefs } from 'pinia';
 
 const useStore = useIndexStore();
-const { saveExamAnswer } = useStore;
+const { saveExamAnswer, submitExamAnswer } = useStore;
 const { fetched } = storeToRefs(useStore);
 const mainRef = ref(null);
 const contentRef = ref(null);

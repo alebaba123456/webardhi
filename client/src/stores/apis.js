@@ -186,3 +186,8 @@ export const saveExaminationAPI = async(payload) => {
   const response = await api.put('/examination/save', payload)
   return response.data;
 }
+
+export const submitExaminationAPI = async() => {
+  const response = await api.get('/examination/submit')
+  return response.data;
+}

@@ -85,7 +85,6 @@ class ExaminationSessionController {
             await session.update({
                 examQuestion: JSON.stringify(updatedQuestions)
             });
-            console.log(session);
             
             res.status(200).json({
                 message: 'Answer saved.'
@@ -96,6 +95,42 @@ class ExaminationSessionController {
         }
     }
     
+    static async submitExamination(req, res, next) {
+        try {
+            const session = await Session.findOne({
+                where: { id: req.session.dataValues.id }
+            });
+
+            if (!session || !session.examQuestion) {
+                throw { name: 'SessionNotFound', message: 'Session not found or invalid.' };
+            }
+
+            const examQuestions = JSON.parse(session.examQuestion);
+
+            let correctAnswers = 0;
+
+            examQuestions.forEach(question => {
+                if (question.type === 'Pilihan ganda' && question.answer === question.userAnswer) {
+                    correctAnswers++;
+                }
+            });
+
+            const score = Math.round((correctAnswers / examQuestions.length) * 100);
+
+            await session.update({
+                status: false,
+                score
+            });
+
+            res.status(200).json({
+                message: 'Examination submitted successfully.',
+                score
+            });
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
 }
 
 module.exports = ExaminationSessionController
