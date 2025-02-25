@@ -117,10 +117,10 @@ class ExaminationSessionController {
 
             const score = Math.round((correctAnswers / examQuestions.length) * 100);
 
-            await session.update({
-                status: false,
-                score
-            });
+            // await session.update({
+            //     status: false,
+            //     score
+            // });
 
             res.status(200).json({
                 message: 'Examination submitted successfully.',
