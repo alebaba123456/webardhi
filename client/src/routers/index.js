@@ -8,7 +8,7 @@ setActivePinia(pinia);
 
 const useStore = useIndexStore();
 const { doAuthValidation, getMenu } = useStore;
-const { routes, accessible, active } = storeToRefs(useStore);
+const { routes, accessible, fetched } = storeToRefs(useStore);
 
 const routeComponents = {
   Login: () => import('@/views/auth/Login.vue'),
@@ -30,7 +30,6 @@ const initialRoutes = routes.value.map((route) => ({
   ...route,
   component: routeComponents[route.name],
 }));
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,7 +54,7 @@ function reloadRoutes() {
 async function isAuthenticated() {
   try {
     const response = await doAuthValidation();
-    return response.status === 200;
+    return response.data;
   } catch (error) {
     return false;
   }
@@ -70,43 +69,55 @@ watch(
 );
 
 router.beforeEach(async (to, from, next) => {
-  active.value = to.name;
   const authenticated = await isAuthenticated();
+  if (!authenticated && to.path !== '/login') {
+    return next({ path: '/login', replace: true });
+  }
+
+  if (authenticated?.data) {
+    fetched.value = JSON.parse(authenticated.data);
+  }
+
+  if (authenticated?.message === 'On Exam!' && to.path !== '/sesi-ujian') {
+    return next({ path: '/sesi-ujian', replace: true });
+  }
 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (authenticated) {
       if (!accessible.value) {
         try {
           await getMenu();
-          next();
         } catch (error) {
-          next({ path: '/login', replace: true });
+          return next({ path: '/login', replace: true });
         }
-      } else {
-        next();
       }
-    } else {
-      accessible.value = false;
-      routes.value = [
-        { path: '/', redirect: '/login' },
-        { path: '/login', name: 'Login', component: Login },
-      ];
-      next({ path: '/login', replace: true });
+      return next();
     }
-  } else if (to.path === '/login' && authenticated) {
-    next({ path: '/profil', replace: true });
-  } else {
-    if (authenticated && !accessible.value) {
-      try {
-        await getMenu();
-        next({path: to.fullPath, replace: true});
-      } catch (error) {
-        next({ path: '/login', replace: true });
-      }
-    } else {
-      next();
+
+    accessible.value = false;
+    routes.value = [
+      { path: '/', redirect: '/login' },
+      { path: '/login', name: 'Login', component: routeComponents.Login },
+    ];
+    return next({ path: '/login', replace: true });
+  }
+
+  // Cegah redirect loop jika sudah di /profil
+  if (to.path === '/login' && authenticated && from.path !== '/profil') {
+    return next({ path: '/profil', replace: true });
+  }
+
+  if (authenticated && !accessible.value) {
+    try {
+      await getMenu();
+      return next({ path: to.fullPath, replace: true });
+    } catch (error) {
+      return next({ path: '/login', replace: true });
     }
   }
+
+  next();
 });
+
 
 export default router;

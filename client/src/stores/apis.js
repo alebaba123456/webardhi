@@ -181,3 +181,8 @@ export const startExaminationAPI = async(payload) => {
   const response = await api.post('/examination/start', payload)
   return response.data;
 }
+
+export const saveExaminationAPI = async(payload) => {
+  const response = await api.put('/examination/save', payload)
+  return response.data;
+}

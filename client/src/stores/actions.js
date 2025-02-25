@@ -33,7 +33,8 @@ import {
   questionPostAPI,
   questionEditAPI,
   questionDeleteAPI,
-  startExaminationAPI
+  startExaminationAPI,
+  saveExaminationAPI,
 } from "@/stores/apis";
 import {
   generateQuery,
@@ -560,13 +561,23 @@ export const actions = {
   async doStartExam(payload) {
     try {
       loading.value = true;
-      console.log(payload);
-      
-      const response = await startExaminationAPI(payload);
+      await startExaminationAPI(payload);
+      router.push('sesi-ujian')
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
     } finally {
       loading.value = false;
+    }
+  },
+
+  async saveExamAnswer() {
+    try {
+      loading.value = true
+      await saveExaminationAPI(fetched.value)
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false
     }
   },
 
