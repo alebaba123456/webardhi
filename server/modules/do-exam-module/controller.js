@@ -1,4 +1,4 @@
-const { Examination, Session, Question } = require('../../models');
+const { ScoreReport, Session, Question } = require('../../models');
 const math = require('mathjs');
 const stringSimilarity = require('string-similarity');
 const he = require('he');
@@ -119,52 +119,84 @@ class ExaminationSessionController {
 
     static async submitExamination(req, res, next) {
         try {
-            const session = await Session.findOne({
-                where: { id: req.session.dataValues.id }
-            });
-
-            if (!session || !session.examQuestion) {
-                throw { name: 'SessionNotFound', message: 'Session not found or invalid.' };
+            const sessionId = req.session?.dataValues?.id;
+            const profileId = req.session?.dataValues?.User?.ProfileId;
+    
+            if (!sessionId || !profileId) {
+                throw { name: 'Forbidden.' };
             }
-
+    
+            const session = await Session.findOne({
+                where: { id: sessionId }
+            });
+    
+            if (!session || !session.examQuestion) {
+                throw { name: 'Not found.' };
+            }
+    
             const examQuestions = JSON.parse(session.examQuestion);
-
+    
+            if (!Array.isArray(examQuestions) || examQuestions.length === 0) {
+                throw { name: 'Modified payload.' };
+            }
+    
+            const questionIds = examQuestions.map(q => q.id);
+            const questions = await Question.findAll({
+                where: { id: questionIds }
+            });
+    
+            if (questions.length !== examQuestions.length) {
+                throw { name: 'Modified payload.' };
+            }
+    
+            const examinationIds = [...new Set(questions.map(q => q.ExaminationId))];
+            if (examinationIds.length !== 1) {
+                throw { name: 'Modified payload.' };
+            }
+    
+            const examinationId = examinationIds[0];
+    
             let correctAnswers = 0;
-
+    
             for (const question of examQuestions) {
-                const questionData = await Question.findOne({
-                    where: { id: question.id }
-                });
-
+                const questionData = questions.find(q => q.id === question.id);
+    
                 if (!questionData) continue;
-
-                if (question.type === 'Pilihan ganda' && question.answer === questionData.answer) {
+    
+                if (questionData.type === 'Pilihan ganda' && question.answer === questionData.answer) {
                     correctAnswers++;
-                } else if (question.type === 'Esai') {
+                } else if (questionData.type === 'Esai') {
                     if (ExaminationSessionController.compareMathAnswer(question.answer, questionData.answer) ||
                         ExaminationSessionController.compareTextAnswer(question.answer, questionData.answer)) {
                         correctAnswers++;
                     }
                 }
             }
-
+    
             const score = Math.round((correctAnswers / examQuestions.length) * 100);
-            console.log(score);
-            
-            // await session.update({
-            //     status: false,
-            //     score
-            // });
 
-            res.status(200).json({
-                message: 'Examination submitted successfully.',
+            await ScoreReport.create({
+                ProfileId: profileId,
+                ExaminationId: examinationId,
                 score
             });
+    
+            await session.update({
+                status: false,
+                examQuestion: null
+            });
+    
+            res.status(200).json({
+                message: 'Examination submitted successfully.',
+            });
         } catch (error) {
-            console.error(error);
+            console.log(error);
+            
             next(error);
         }
     }
+    
+    
 }
 
 module.exports = ExaminationSessionController;

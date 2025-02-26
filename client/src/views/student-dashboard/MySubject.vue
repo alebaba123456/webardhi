@@ -14,7 +14,6 @@
 import Modal from '@/components/modals/main-modal.vue'
 import Single from '@/components/navigations/single-bar.vue';
 import TableSubject from '@/components/tables/table-subject-student.vue';
-import FilterBar from '@/components/navigations/filter-bar.vue';
 import Pagination from '@/components/navigations/pagination.vue';
 import { nextTick, onMounted, ref } from 'vue';
 import { useIndexStore } from "@/stores";

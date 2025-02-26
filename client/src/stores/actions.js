@@ -586,6 +586,7 @@ export const actions = {
     try {
       loading.value = true;
       await submitExaminationAPI();
+      router.push('/Profil')
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
     } finally {
