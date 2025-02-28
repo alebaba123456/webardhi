@@ -49,12 +49,12 @@
           <td class="px-4 py-2 truncate align-middle">
             <div v-if="data.grade !== 0" class="flex gap-8 justify-center items-center">
               <button
-                @click.prevent="doOpenModal('createExamination', { id: data.id, type: data.type, code: data.code, examinationDate: data.examinationDate, SubjectId: data.Subject.id })"
+                @click.stop="doOpenModal('createExamination', { id: data.id, type: data.type, code: data.code, examinationDate: data.examinationDate, SubjectId: data.Subject.id })"
                 class="flex gap-1 items-center justify-center hover:bg-shade-wh p-1 rounded-md ease-out transition-all duration-200">
                 <IkonPerbarui />
                 <div>Perbarui</div>
               </button>
-              <button @click.prevent="doDeleteExamination(data.id)"
+              <button @click.stop="doDeleteExamination(data.id)"
                 class="flex gap-1 items-center justify-center hover:bg-shade-wh p-1 rounded-md ease-out transition-all duration-200">
                 <IkonDelete />
                 <div>Hapus</div>
