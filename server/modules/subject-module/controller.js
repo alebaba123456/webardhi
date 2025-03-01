@@ -3,6 +3,47 @@ const { Op } = require('sequelize')
 const validator = require('validator');
 
 class SubjectController {
+    static async generateUniqueCode(sanitizedName, grade) {
+        const updatedName = sanitizedName.trim().toUpperCase();
+        const words = updatedName.split(/\s+/);
+
+        const exisingSubjectName = await Subject.findOne({
+            where: {
+                name : sanitizedName
+            }
+        })
+
+        if (exisingSubjectName && exisingSubjectName.grade === grade) {
+            throw { name: 'Duplicated.'}
+        } else if (exisingSubjectName && exisingSubjectName.grade !== grade ) {
+            let code = `${exisingSubjectName.code.substring(0,3)}00${grade}`
+            return code;
+        } else if (!exisingSubjectName){
+            let baseCode;
+            let counter = 0;
+            let existingBaseCode;
+            do {
+                if (words.length >= 3) {
+                    baseCode = words[0][0] + words[1][0] + words[2][counter];
+                } else if (words.length === 2) {
+                    baseCode = words[0][0] + words[1][0] + words[1][counter + 1];
+                } else {
+                    baseCode = words[0][0] + words[0][1] + words[0][counter + 2];
+                }
+    
+                baseCode = baseCode.toUpperCase();
+                const code = `${baseCode}00${grade}`;
+                existingBaseCode = await Subject.findOne({ 
+                    where: {
+                        code: { [Op.iLike] : `${baseCode}%` }
+                    }
+                });
+                if (!existingBaseCode) return code;
+                counter++;
+            } while (existingBaseCode);
+        }
+    }
+
     static async createSubject(req, res, next) {
         try {
             const allowedFields = ['name', 'grade', 'ProfileId'];
@@ -14,7 +55,7 @@ class SubjectController {
             let { name, grade, ProfileId } = req.body;
 
             const sanitizedName = validator.escape(name.toUpperCase() || "");
-            
+
             if ([7, 8, 9].includes(grade)) {
                 throw { name: 'Modified payload.' };
             }
@@ -24,28 +65,13 @@ class SubjectController {
                 throw { name: 'Modified payload.' };
             }
 
-            const updatedName = sanitizedName.trim().toUpperCase();
-            const words = updatedName.split(/\s+/);
+            const code = await SubjectController.generateUniqueCode(sanitizedName, grade);
 
-            let baseCode;
-
-            if (words.length >= 3) {
-                baseCode = words[0][0] + words[1][0] + words[2][0];
-            } else if (words.length === 2) {
-                baseCode = words[0][0] + words[1][0] + (words[1][1] || words[0][1]);
-            } else {
-                baseCode = words[0].substring(0, 3);
-            }
-
-            baseCode = baseCode.toUpperCase();
-            
-            const code = `${baseCode}00${grade}`;
-
-            const subject = await Subject.create({ 
-                name : sanitizedName,
+            const subject = await Subject.create({
+                name: sanitizedName,
                 code,
                 grade,
-                ProfileId 
+                ProfileId
             });
 
             const classrooms = await Classroom.findAll({
@@ -69,6 +95,8 @@ class SubjectController {
                 message: 'Subject created successfully.'
             });
         } catch (error) {
+            console.log(error);
+
             next(error);
         }
     }
@@ -141,7 +169,7 @@ class SubjectController {
                 }
                 orderClause.push(['id', sanitizedOrder]);
             }
-            
+
             if (req.user.role === 'GURU') {
                 whereClause.ProfileId = req.user.id
             } else if (req.user.role === 'SISWA') {
@@ -185,7 +213,7 @@ class SubjectController {
             }
 
             const { id, name, grade, ProfileId } = req.body;
-            
+
             const sanitizedName = validator.escape(name.toUpperCase() || "");
 
             const sanitizedId = validator.escape(id || "");
@@ -218,7 +246,7 @@ class SubjectController {
             }
 
             baseCode = baseCode.toUpperCase();
-            
+
             const code = `${baseCode}00${grade}`;
 
             const isGradeChanged = subject.grade !== grade;
