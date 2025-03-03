@@ -7,50 +7,50 @@ async function errorHandler(error, req, res, next) {
             res.status(400).json({message: error.errors.map(el => el.message)})
             break
         case 'Data not found.' :
-            res.status(404).json({message: "DATA HAS NOT FOUND"})
+            res.status(404).json({message: "DATA TIDAK DITEMUKAN"})
             break
         case 'Empty input field.' :
-            res.status(400).json({message: "INPUT FIELD CAN'T BE EMPTY!"})
+            res.status(400).json({message: "INPUT TIDAK BOLEH KOSONG"})
             break
         case 'Invalid input.' :
-            res.status(400).json({message: "INVALID INPUT NOT ALLOWED!"})
+            res.status(400).json({message: "INPUT SALAH TIDAK DIIZINKAN"})
             break
         case 'Duplicated.' :
-            res.status(400).json({message: "DATA ALREADY EXIST!"})
+            res.status(400).json({message: "DATA TIDAK DAPAT DI DUPLIKASI"})
             break
         case 'Email already used.' :
-            res.status(400).json({message: "EMAIL ALREADY USED, PLEASE USE ANOTHER EMAIL!"})
+            res.status(400).json({message: "EMAIL SUDAH DIGUNAKAN"})
             break
         case 'Password did not match.' :
-            res.status(400).json({message: "PASSWORD DID NOT MATCH!"})
+            res.status(400).json({message: "KATA SANDI TIDAK SAMA"})
             break
         case 'Invalid grade value.' :
-            res.status(400).json({message: "INVALID CLASS GRADE!"})
+            res.status(400).json({message: "TINGKAT KELAS SALAH"})
             break
         case 'Invalid code format.' :
-            res.status(400).json({message: "INVALID CODE FORMAT!"})
+            res.status(400).json({message: "KODE KELAS SALAH"})
             break
         case 'Modified payload.' :
-            res.status(400).json({message: "PAYLOAD CONTAIN(S) MODIFIER!"})
+            res.status(400).json({message: "MODIFIKASI PAYLOAD"})
             break
         case 'User not registered.' :
-            res.status(401).json({message: "WRONG EMAIL OR PASSWORD!"})
+            res.status(401).json({message: "EMAIL ATAU KATA SANDI SALAH"})
             break
         case 'Authentication error.' :
-            res.status(401).json({message: "WRONG EMAIL OR PASSWORD!"})
+            res.status(401).json({message: "EMAIL ATAU KATA SANDI SALAH"})
             break
         case 'Forbidden.':
-            res.status(403).json({message: "UNAUTHORIZED!"})
+            res.status(403).json({message: "TIDAK MEMILIKI IZIN UNTUK MELAKUKAN INI"})
             break
         case 'OnExamination.':
-            res.status(403).json({message: "USER IS ALREADY ON EXAMINATION!"})
+            res.status(403).json({message: "PENGGUNA SEDANG DALAM UJIAN"})
             break
         case 'ExaminationTaken.':
-            res.status(403).json({message: "USER IS ALREADY ON TAKE THIS EXAMINATION!"})
+            res.status(403).json({message: "PENGGUNA TELAH MENGERJAKAN UJIAN INI"})
             break
         case 'JsonWebTokenError':
         case 'Unauthenticated.':
-            res.status(401).json({message: "AUTHENTICATION FAILED!"})
+            res.status(401).json({message: "AUTHENTIKASI GAGAL"})
             break
         default:
             res.status(500).json({message: "INTERNAL SERVER ERROR"})

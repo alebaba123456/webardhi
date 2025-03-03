@@ -22,4 +22,7 @@ export const state = {
   category: ref(null),
   order: ref(null),
   role: ref(null),
+  errStatus: ref(false),
+  errCode: ref(null),
+  errMessage: ref(null),
 };

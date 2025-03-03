@@ -1,5 +1,6 @@
 <template>
   <div class="w-full h-full px-2 py-4 relative bg-pattern bg-repeat" ref="mainRef">
+    <ErrorModal />
     <div class="bg-transparent" ref="contentRef">
       <div class="font-extrabold text-tosca bg-gradient-to-r from-gr via-shade-gr to-transparent rounded-xl flex px-2 text-[1.5rem] mb-6 w-full" ref="headerRef">
         MTS AL'HUSNA - LEMBAR UJIAN
@@ -39,6 +40,7 @@
 </template>
 
 <script setup>
+import ErrorModal from "@/components/modals/error-modal.vue";
 import { onMounted, onBeforeUnmount, ref } from 'vue';
 import { useIndexStore } from "@/stores";
 import { storeToRefs } from 'pinia';

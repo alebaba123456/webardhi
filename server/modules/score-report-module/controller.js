@@ -5,7 +5,6 @@ const validator = require('validator');
 class ReportController {
     static async getReport(req, res, next) {
         try {
-            // Validasi query parameter yang diizinkan
             const allowedFields = ['page', 'size', 'keyword', 'category', 'order'];
             const extraFields = Object.keys(req.query).filter(key => !allowedFields.includes(key));
 
@@ -13,18 +12,15 @@ class ReportController {
                 throw { name: 'InvalidQuery', message: `Invalid query fields: ${extraFields.join(', ')}` };
             }
 
-            // Pagination handling
             let sanitizedSize = req.query.size ? validator.toInt(req.query.size) : 10;
             let sanitizedPage = req.query.page ? validator.toInt(req.query.page) : 1;
 
             const offset = (sanitizedPage - 1) * sanitizedSize;
             const limit = sanitizedSize;
 
-            // Inisialisasi kondisi
             let reportWhereClause = {};
             let subjectWhereClause = {};
 
-            // Filtering berdasarkan kategori dan keyword
             if (req.query.category && req.query.keyword) {
                 const sanitizedCategory = validator.escape(req.query.category || "");
                 const sanitizedKeyword = validator.escape(req.query.keyword || "");
@@ -33,7 +29,6 @@ class ReportController {
                     throw { name: 'InvalidCategory', message: 'Invalid category for filtering.' };
                 }
 
-                // Validasi UUID
                 if (!validator.isUUID(sanitizedKeyword)) {
                     throw { name: 'InvalidUUID', message: 'Keyword must be a valid UUID.' };
                 }
@@ -45,17 +40,15 @@ class ReportController {
                 }
             }
 
-            // Filter berdasarkan role
             if (req.user.role === 'SISWA') {
                 reportWhereClause.ProfileId = req.user.id;
             } else if (req.user.role === 'GURU') {
                 subjectWhereClause.ProfileId = req.user.id;
             }
 
-            // Menentukan urutan (sorting)
             let orderClause = [
-                [Examination, Subject, 'name', 'ASC'], // Urutkan berdasarkan nama mata pelajaran
-                [Examination, 'examinationDate', 'ASC'] // Urutkan berdasarkan tanggal ujian
+                [Examination, Subject, 'name', 'ASC'],
+                [Examination, 'examinationDate', 'ASC']
             ];
 
             if (req.query.order) {
@@ -66,7 +59,6 @@ class ReportController {
                 orderClause.unshift(['score', sanitizedOrder]);
             }
 
-            // Ambil data report
             const reports = await ScoreReport.findAll({
                 where: reportWhereClause,
                 include: [
@@ -86,7 +78,6 @@ class ReportController {
                 order: orderClause
             });
 
-            // Hitung total data untuk pagination
             const totalReports = await ScoreReport.count({
                 where: reportWhereClause,
                 include: [

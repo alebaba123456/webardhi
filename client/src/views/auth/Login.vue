@@ -3,6 +3,7 @@
         class="w-full h-full flex justify-end items-center bg-login bg-cover" 
         :class="['overflow-hidden custom-scrollbar', 'scrollbar-track-background']"
     >
+    <ErrorModal />
         <div 
             :style="boxPosition"
             class="flex flex-col h-full w-[30%] justify-between bg-shade-gr shadow-2xl p-4 transition-all duration-1000"
@@ -65,6 +66,7 @@
 </template>
 
 <script setup>
+import ErrorModal from "@/components/modals/error-modal.vue";
 import { onMounted, ref } from "vue";
 import { useIndexStore } from "@/stores";
 

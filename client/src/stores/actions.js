@@ -61,6 +61,9 @@ const {
   category,
   order,
   role,
+  errStatus,
+  errMessage,
+  errCode,
 } = state;
 
 export const actions = {
@@ -69,7 +72,7 @@ export const actions = {
       const response = await validateAPI();
       return response
     } catch (error) {
-      console.error("Terjadi kesalahan:", error);
+      this.showError(error)
     }
   },
 
@@ -80,11 +83,9 @@ export const actions = {
       if (response.status === 200) {
         await this.getMenu()
         router.push('/Profil');
-      } else {
-        console.error("Login gagal:", response.data.message);
       }
     } catch (error) {
-      console.error("Terjadi kesalahan:", error);
+      this.showError(error)
     } finally {
       loading.value = false;
     }
@@ -608,6 +609,15 @@ export const actions = {
     } finally {
       loading.value = false;
     }
+  },
+
+  showError(item) {
+    errStatus.value = true;
+    errCode.value = item.status;
+    errMessage.value = item.response.data.message;
+    setTimeout(() => {
+      errStatus.value = false;
+    }, 2000);
   },
 
   resetStates() {

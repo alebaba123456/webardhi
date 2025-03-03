@@ -1,6 +1,7 @@
 <template>
     <div class="w-full h-full flex relative bg-pattern bg-fixed bg-repeat" ref="mainRef">
         <Modal />
+        <ErrorModal />
         <Single class="sticky" />
         <div class="w-full h-full px-8 py-4 bg-transparent">
             <div
@@ -48,6 +49,7 @@
 </template>
 
 <script setup>
+import ErrorModal from "@/components/modals/error-modal.vue";
 import Modal from '@/components/modals/main-modal.vue'
 import Single from '@/components/navigations/single-bar.vue';
 import { onMounted } from 'vue';

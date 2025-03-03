@@ -2,6 +2,7 @@ const { ScoreReport, Session, Question } = require('../../models');
 const math = require('mathjs');
 const stringSimilarity = require('string-similarity');
 const he = require('he');
+const { checkAnswerWithAI } = require ('../../helpers/gemini-AI')
 
 class ExaminationSessionController {
     static async startExamination(req, res, next) {
@@ -100,7 +101,6 @@ class ExaminationSessionController {
                 message: 'Answer saved.'
             });
         } catch (error) {
-            console.error(error);
             next(error);
         }
     }
@@ -174,6 +174,7 @@ class ExaminationSessionController {
                 if (questionData.type === 'Pilihan ganda' && question.answer === questionData.answer) {
                     correctAnswers++;
                 } else if (questionData.type === 'Esai') {
+                    const isTrueAnswer = checkAnswerWithAI(question.question, question.answer, questionData)
                     if (ExaminationSessionController.compareMathAnswer(question.answer, questionData.answer) ||
                         ExaminationSessionController.compareTextAnswer(question.answer, questionData.answer)) {
                         correctAnswers++;
@@ -198,8 +199,6 @@ class ExaminationSessionController {
                 message: 'Examination submitted successfully.',
             });
         } catch (error) {
-            console.log(error);
-            
             next(error);
         }
     }

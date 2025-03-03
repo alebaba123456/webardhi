@@ -1,5 +1,5 @@
 <template>
-    <div v-if="modal" class="w-screen h-screen z-50 absolute bg-shade-gr">
+    <div v-if="modal" class="w-screen h-screen z-40 absolute bg-shade-gr">
         <CreateClassModal v-if="modal && modalName === 'createClass'" />
         <CreateProfileModal v-if="modal && modalName === 'createProfile'" />
         <CreateUserModal v-if="modal && modalName === 'createUser'" />
