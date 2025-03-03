@@ -36,6 +36,7 @@ import {
   startExaminationAPI,
   saveExaminationAPI,
   submitExaminationAPI,
+  scoreReportAPI,
 } from "@/stores/apis";
 import {
   generateQuery,
@@ -587,6 +588,21 @@ export const actions = {
       loading.value = true;
       await submitExaminationAPI();
       router.push('/Profil')
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    } finally {
+      loading.value = false;
+    }
+  },
+
+  async getScoreReport() {
+    try {
+      loading.value = true;
+      await this.doGeneratingQuery();
+      const response = await scoreReportAPI(query.value);
+      fetched.value = response.data;
+      max.value = response.totalData;
+      this.doUpdateVisible();
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
     } finally {

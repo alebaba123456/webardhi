@@ -5,7 +5,7 @@
         <div class="w-full h-full px-8 py-4 bg-transparent">
         <div class="font-extrabold text-tosca bg-gradient-to-r from-gr via-shade-gr to-transparent rounded-xl flex px-2 text-[1.5rem] mb-6 w-full">HASIL UJIAN SAYA</div>
             <FilterBar class="w-full mb-4" ref="filter"/>
-            <TablesClass class="w-full my-2"/>
+            <TableReport class="w-full my-2"/>
             <Pagination class="w-full fixed bottom-4" ref="pagination" />
         </div>
     </div>
@@ -14,7 +14,7 @@
 <script setup>
 import Modal from '@/components/modals/main-modal.vue'
 import Single from '@/components/navigations/single-bar.vue';
-import TablesClass from '@/components/tables/tables-class.vue';
+import TableReport from '@/components/tables/table-report-student.vue';
 import FilterBar from '@/components/navigations/filter-bar.vue';
 import Pagination from '@/components/navigations/pagination.vue';
 import { nextTick, onMounted, ref } from 'vue';
@@ -22,7 +22,7 @@ import { useIndexStore } from "@/stores";
 import { storeToRefs } from 'pinia';
 
 const useStore = useIndexStore();
-const { getClass, resetStates } = useStore;
+const { getScoreReport, resetStates } = useStore;
 const { size } = storeToRefs(useStore)
 
 const filter = ref(null);
@@ -32,7 +32,7 @@ const mainRef = ref(null);
 onMounted(async () => {
     resetStates();
     await updateSize();
-    await getClass();
+    await getScoreReport();
     await nextTick();
     const trueWidth = filter.value?.$el.offsetWidth || 0;
     if (pagination.value) {

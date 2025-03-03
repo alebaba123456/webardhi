@@ -22,8 +22,9 @@ const routeComponents = {
   Bank_Soal: () => import('@/views/dashboard/Question.vue'),
   Pelajaran_Ku: () => import('@/views/student-dashboard/MySubject.vue'),
   Ujian_Ku: () => import('@/views/student-dashboard/MyExam.vue'),
-  Hasil_Ku: () => import('@/views/student-dashboard/MyReport.vue'),
-  Lembar_Ujian: () => import('@/views/student-dashboard/MyExamPage.vue')
+  Rapot_Ku: () => import('@/views/student-dashboard/MyReport.vue'),
+  Lembar_Ujian: () => import('@/views/student-dashboard/MyExamPage.vue'),
+  Lembar_Ujian: () => import('@/views/student-dashboard/MyExamPage.vue'),
 };
 
 const initialRoutes = routes.value.map((route) => ({

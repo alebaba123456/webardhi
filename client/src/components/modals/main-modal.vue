@@ -7,7 +7,6 @@
         <CreateExaminationModal v-if="modal && modalName === 'createExamination'"/>
         <createQuestionModal v-if="modal && modalName === 'createQuestion'"/>
         <ChangePasswordModal v-if="modal && modalName === 'changePassword'" />
-
     </div>
 </template>
 

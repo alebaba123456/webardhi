@@ -25,6 +25,7 @@ const iconMap = {
   Siswa: shallowRef(() => import('@/assets/single-bar-icons/ikon-siswa.vue')),
   Ujian: shallowRef(() => import('@/assets/single-bar-icons/ikon-ujian.vue')),
   Pelajaran: shallowRef(() => import('@/assets/single-bar-icons/ikon-pelajaran.vue')),
+  Rapot: shallowRef(() => import('@/assets/single-bar-icons/ikon-nilai.vue')),
   Keluar: shallowRef(() => import('@/assets/single-bar-icons/ikon-keluar.vue'))
 };
 

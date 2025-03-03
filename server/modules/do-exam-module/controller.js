@@ -13,13 +13,22 @@ class ExaminationSessionController {
             }
 
             const { ExaminationId } = req.body;
+            const takenExamination = await ScoreReport.findOne({
+                where: {
+                    ExaminationId
+                }
+            })
+
+            if (takenExamination) {
+                throw { name: 'ExaminationTaken.' };
+            }
 
             const session = await Session.findOne({
                 where: { id: req.session.dataValues.id }
             });
 
             if (session.status) {
-                throw { name: 'OnExamination' };
+                throw { name: 'OnExamination.' };
             }
 
             const questions = await Question.findAll({
@@ -46,7 +55,6 @@ class ExaminationSessionController {
                 message: 'Examination started successfully'
             });
         } catch (error) {
-            console.error(error);
             next(error);
         }
     }

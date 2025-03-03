@@ -28,7 +28,6 @@ class ExaminationController {
 
       let examWhereClause = {};
       let subjectWhereClause = {};
-      let profileWhereClause = {};
 
       if (req.query.category) {
         const sanitizedCategory = validator.escape(req.query.category || "");
@@ -97,7 +96,11 @@ class ExaminationController {
           where: {
             id: req.user.ClassRoomId
           }
-        })
+        });
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        examWhereClause.examinationDate = { [Op.gte]: today };
         subjectWhereClause.grade = classrooms.grade.toString();
       }
 

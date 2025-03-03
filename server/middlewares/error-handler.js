@@ -45,6 +45,9 @@ async function errorHandler(error, req, res, next) {
         case 'OnExamination.':
             res.status(403).json({message: "USER IS ALREADY ON EXAMINATION!"})
             break
+        case 'ExaminationTaken.':
+            res.status(403).json({message: "USER IS ALREADY ON TAKE THIS EXAMINATION!"})
+            break
         case 'JsonWebTokenError':
         case 'Unauthenticated.':
             res.status(401).json({message: "AUTHENTICATION FAILED!"})

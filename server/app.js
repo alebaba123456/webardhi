@@ -17,9 +17,11 @@
     const validationRouter = require('./modules/validation-module/routes')
     const routerRouter = require('./modules/router-module/routes')
     const questionRouter = require('./modules/question-module/routes')
+    const reportRouter = require('./modules/report-module/routes')
     const examinationSessionRouter = require('./modules/do-exam-module/routes')
 
     const authentication = require('./middlewares/authentication')
+    const studentAuthorization = require('./middlewares/student-authorization')
     const errorHandler = require('./middlewares/error-handler')
     
     app.use(cookieParser());
@@ -35,7 +37,8 @@
     app.use(authenticationRouter)
     app.use(authentication)
     app.use(routerRouter)
-    app.use(examinationSessionRouter)
+    app.use(reportRouter)
+    app.use(studentAuthorization, examinationSessionRouter)
     app.use(validationRouter)
     app.use(profileRouter)
     app.use(classroomRouter)
