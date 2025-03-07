@@ -6,12 +6,12 @@ dotenv.config();
 const authentication = async (req, res, next) => {
     const session = req.cookies?.cookie;
     const pubKey = req.cookies?.cookie_one;
-
+    
     try {
         if (!session || !pubKey) {
             throw { name: 'Unauthenticated.' };
         }
-
+        
         const existingSession = await Session.findOne({
             where: {
                 session: session
@@ -23,21 +23,21 @@ const authentication = async (req, res, next) => {
                 }
             ]
         });
-
+        
         if (!existingSession) {
             await clearSession(res, session);
             throw { name: 'Unauthenticated.' };
         }
-
+        
         const sessionCreatedAt = new Date(existingSession.createdAt);
         const currentTime = new Date();
         const hoursDifference = Math.abs(currentTime - sessionCreatedAt) / (1000 * 60 * 60);
-
+        
         if (hoursDifference > 12) {
             await clearSession(res, session);
             throw { name: 'Session expired.' };
         }
-
+        
         req.user = existingSession.User.Profile;
         req.session = existingSession;
         next();

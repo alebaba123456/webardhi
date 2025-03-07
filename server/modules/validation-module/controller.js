@@ -7,6 +7,8 @@ class ValidationController {
                 res.status(200).json({ message: 'Authenticated' });
             }
         } catch (error) {
+            console.log(error);
+            
             next(error)
         }
     }

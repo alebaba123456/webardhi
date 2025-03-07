@@ -171,8 +171,6 @@ class ProfileController {
                 totalData: Math.ceil(totalProfiles / size),
             });
         } catch (error) {
-            console.log(error);
-            
             next(error);
         }
     }

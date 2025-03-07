@@ -57,8 +57,6 @@ class AuthenticationController {
                     UserId: user.id
                 }
             })
-            console.log(existingSession);
-            
 
             if (existingSession && JSON.stringify(fingerPrint) !== existingSession?.fingerPrint) {
                 const sessionPayload = {
@@ -74,10 +72,13 @@ class AuthenticationController {
                 await sendSessionVerification(baseUrl, userMail, userPass, email, token);
                 throw { name: 'Unauthenticated.' }
             } else {
+                if (existingSession) {
+                    await existingSession.destroy();
+                }
+                
                 const { publicKey, privateKey } = generateRSAKeyPair()
-
                 const session = crypto.randomBytes(32).toString('hex')
-
+        
                 await Session.create({
                     session: session,
                     privateKey: privateKey,

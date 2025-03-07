@@ -38,7 +38,6 @@
     app.use(authentication)
     app.use(routerRouter)
     app.use(reportRouter)
-    app.use(studentAuthorization, examinationSessionRouter)
     app.use(validationRouter)
     app.use(profileRouter)
     app.use(classroomRouter)
@@ -47,6 +46,7 @@
     app.use(subjectClassRouter)
     app.use(examinationRouter)
     app.use(questionRouter)
+    app.use(studentAuthorization, examinationSessionRouter)
 
     app.use(errorHandler)
     
