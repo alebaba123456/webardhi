@@ -9,8 +9,7 @@
                     <div class="flex flex-col gap-8">
                         <div class="flex gap-6 items-center">
                             <label for="type" class="font-semibold">JENIS PERTANYAAN</label>
-                            <select id="type" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0"
-                                v-model="type">
+                            <select id="type" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0" v-model="type">
                                 <option value="" disabled selected>Pilih jenis pertanyaan..</option>
                                 <option value="Pilihan ganda">Pilihan Ganda</option>
                                 <option value="Esai">Essay</option>
@@ -21,6 +20,15 @@
                             <textarea id="question"
                                 class="bg-transparent w-full border-b-gr border-b-2 outline-none focus:ring-0"
                                 autocomplete="off" v-model="question"></textarea>
+                        </div>
+                        <div class="flex gap-6 items-center">
+                            <label class="font-semibold">GAMBAR</label>
+                            <div class="flex flex-col gap-2 w-full">
+                                <input type="file" @change="onImageSelected" accept="image/*"
+                                    class="bg-transparent outline-none focus:ring-0" />
+                                <img v-if="previewImage" :src="previewImage" alt="Preview Gambar"
+                                    class="max-w-xs max-h-52 rounded shadow mt-2" />
+                            </div>
                         </div>
                         <div v-if="type === 'Pilihan ganda'" class="flex gap-6 items-center">
                             <label class="font-semibold">OPTIONS</label>
@@ -40,6 +48,7 @@
                                 </button>
                             </div>
                         </div>
+
                         <div v-if="type === 'Pilihan ganda'" class="flex gap-6 items-center">
                             <label for="answer" class="font-semibold">JAWABAN</label>
                             <select id="answer" class="bg-transparent border-b-gr border-b-2 outline-none focus:ring-0"
@@ -77,7 +86,6 @@ import { storeToRefs } from 'pinia';
 
 const route = useRoute();
 const useStore = useIndexStore();
-
 const { doCloseModal, doSubmitQuestion } = useStore;
 const { props } = storeToRefs(useStore);
 
@@ -86,8 +94,10 @@ const question = ref(props.value.question || "");
 const answer = ref(props.value.answer || "");
 const type = ref(props.value.type || "");
 const ExaminationId = ref(props.value.ExaminationId || route.params.id);
-
 const options = ref(props.value.options || []);
+
+const imageFile = ref(null);
+const previewImage = ref(null);
 
 if (props.value.option) {
     options.value = Array.isArray(props.value.option)
@@ -110,17 +120,44 @@ function removeOption(idx) {
     }
 }
 
+function onImageSelected(event) {
+    const file = event.target.files[0];
+    if (file) {
+        imageFile.value = file;
+        const reader = new FileReader();
+        reader.onload = () => {
+            previewImage.value = reader.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
 watch(type, (newType, oldType) => {
     if (newType !== 'Pilihan ganda') {
         answer.value = "";
         options.value = [""];
     }
+    previewImage.value = null;
+    imageFile.value = null;
 });
 
 function handleSubmit() {
-    const payload = id.value
-        ? { id: id.value, question: question.value, answer: answer.value, type: type.value, option: type.value === 'Pilihan ganda' ? options.value : null, ExaminationId: ExaminationId.value }
-        : { question: question.value, answer: answer.value, type: type.value, option: type.value === 'Pilihan ganda' ? options.value : null, ExaminationId: ExaminationId.value };
-    doSubmitQuestion(payload);
+    const formData = new FormData();
+
+    if (id.value) formData.append('id', id.value);
+    formData.append('question', question.value);
+    formData.append('answer', answer.value);
+    formData.append('type', type.value);
+    formData.append('ExaminationId', ExaminationId.value);
+
+    if (type.value === 'Pilihan ganda') {
+        formData.append('option', JSON.stringify(options.value));
+    }
+
+    if (imageFile.value) {
+        formData.append('image', imageFile.value);
+    }
+
+    doSubmitQuestion(formData);
 }
 </script>

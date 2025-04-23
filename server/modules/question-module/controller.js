@@ -117,13 +117,15 @@ class QuestionController {
 
   static async createQuestion(req, res, next) {
     try {
-      const allowedFields = ['ExaminationId', 'question', 'answer', 'option', 'type'];
+      const allowedFields = ['ExaminationId', 'question', 'answer', 'image', 'option', 'type'];
       const extraFields = Object.keys(req.body).filter(key => !allowedFields.includes(key));
       if (extraFields.length > 0) {
         throw { name: 'Modified payload.' };
       }
 
       const { ExaminationId, question, answer, option, type } = req.body;
+      const image = req.file ? req.file.filename : null
+      data.image = image
 
       const sanitizedExaminationId = validator.escape(ExaminationId || "")
       if (!validator.isUUID(sanitizedExaminationId)) {
@@ -182,26 +184,25 @@ class QuestionController {
       }
 
       const { id, ExaminationId, question, answer, option, type } = req.body;
-
-      // Validasi ID pertanyaan
+      if (req.file) {
+        updateData.image = req.file.filename
+      }
+      
       const sanitizedId = validator.escape(id || "");
       if (!validator.isUUID(sanitizedId)) {
         throw { name: 'Modified payload.' };
       }
 
-      // Validasi ExaminationId
       const sanitizedExaminationId = validator.escape(ExaminationId || "");
       if (!validator.isUUID(sanitizedExaminationId)) {
         throw { name: 'Modified payload.' };
       }
 
-      // Cek apakah ExaminationId valid
       const subject = await Examination.findOne({ where: { id: sanitizedExaminationId } });
       if (!subject) {
         throw { name: 'Data not found.' };
       }
 
-      // Validasi dan sanitasi input lainnya
       const sanitizedQuestion = validator.escape(question || "");
       const sanitizedAnswer = validator.escape(answer || "");
       const sanitizedType = validator.escape(type || "");
@@ -219,13 +220,11 @@ class QuestionController {
         sanitizedOption = null;
       }
 
-      // Cek apakah pertanyaan dengan ID tersebut ada
       const questionData = await Question.findOne({ where: { id: sanitizedId } });
       if (!questionData) {
         throw { name: 'Data not found.' };
       }
 
-      // Update pertanyaan
       await questionData.update({
         ExaminationId: sanitizedExaminationId,
         question: sanitizedQuestion,
@@ -256,7 +255,6 @@ class QuestionController {
         throw { name: 'Modified payload.' };
       }
 
-      // Cek apakah pertanyaan ada di database
       const question = await Question.findOne({ where: { id: sanitizedId } });
       if (!question) {
         throw { name: 'Data not found.' };

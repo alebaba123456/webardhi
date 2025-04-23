@@ -70,7 +70,16 @@ watch(
 );
 
 router.beforeEach(async (to, from, next) => {
+  if (to.path === '/login') {
+    const authenticated = await isAuthenticated();
+    if (authenticated) {
+      return next({ path: '/profil', replace: true });
+    }
+    return next();
+  }
+
   const authenticated = await isAuthenticated();
+
   if (!authenticated && to.path !== '/login') {
     return next({ path: '/login', replace: true });
   }
@@ -103,11 +112,6 @@ router.beforeEach(async (to, from, next) => {
     return next({ path: '/login', replace: true });
   }
 
-  // Cegah redirect loop jika sudah di /profil
-  if (to.path === '/login' && authenticated && from.path !== '/profil') {
-    return next({ path: '/profil', replace: true });
-  }
-
   if (authenticated && !accessible.value) {
     try {
       await getMenu();
@@ -119,6 +123,5 @@ router.beforeEach(async (to, from, next) => {
 
   next();
 });
-
 
 export default router;

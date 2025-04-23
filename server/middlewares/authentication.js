@@ -34,6 +34,7 @@ const authentication = async (req, res, next) => {
         const hoursDifference = Math.abs(currentTime - sessionCreatedAt) / (1000 * 60 * 60);
         
         if (hoursDifference > 12) {
+            
             await clearSession(res, session);
             throw { name: 'Session expired.' };
         }

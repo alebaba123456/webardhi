@@ -57,6 +57,8 @@ class AuthenticationController {
                     UserId: user.id
                 }
             })
+            console.log(existingSession);
+            
 
             if (existingSession && JSON.stringify(fingerPrint) !== existingSession?.fingerPrint) {
                 const sessionPayload = {
@@ -107,6 +109,8 @@ class AuthenticationController {
             }
 
         } catch (error) {
+            console.log(error);
+            
             next(error);
         }
     }
