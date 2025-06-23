@@ -53,6 +53,8 @@ async function errorHandler(error, req, res, next) {
             res.status(401).json({message: "AUTHENTIKASI GAGAL"})
             break
         default:
+            console.log(error);
+            
             res.status(500).json({message: "INTERNAL SERVER ERROR"})
             break
     }

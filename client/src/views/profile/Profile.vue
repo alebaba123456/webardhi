@@ -31,7 +31,7 @@
                 <div class="flex gap-6 text-tosca">
                     <div>POSISI</div>
                     <div>:</div>
-                    <div class="underline underline-offset-4 font-semibold">{{ fetched?.role || "" }}</div>
+                    <div class="underline underline-offset-4 font-semibold">{{ (fetched?.role || "").split("_").join(" ") }}</div>
                 </div>
                 <div class="flex gap-6 text-tosca">
                     <div>KELAS</div>

@@ -31,7 +31,7 @@ class ProfileController {
                 throw { name: 'Invalid input.' };
             }
 
-            if (!['siswa', 'guru', 'admin'].includes(sanitizedRole)) {
+            if (!['siswa', 'guru', 'admin', 'kepala_sekolah', 'wakil_kepala_sekolah'].includes(sanitizedRole)) {
                 throw { name: 'Invalid input.' };
             }
 
@@ -210,7 +210,7 @@ class ProfileController {
             }
 
             if (role) {
-                if (!['siswa', 'guru', 'admin'].includes(role.toLowerCase())) {
+                if (!['siswa', 'guru', 'admin', 'kepala_sekolah', 'wakil_kepala_sekolah'].includes(role.toLowerCase())) {
                     throw { name: 'Modified payload.' };
                 }
                 updates.role = validator.escape(role.trim().toUpperCase() || "");

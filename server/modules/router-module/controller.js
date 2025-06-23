@@ -1,8 +1,10 @@
 class RouterController {
   static async getRouter(req, res, next) {
     try {
+      const adminRoles = ['ADMIN', 'KEPALA_SEKOLAH', 'WAKIL_KEPALA_SEKOLAH'];
+
       const routesByRole = {
-        ADMIN: [
+        ADMIN_GROUP: [
           { path: '/kelas', name: 'Kelas' },
           { path: '/siswa', name: 'Siswa' },
           { path: '/guru', name: 'Guru' },
@@ -27,7 +29,16 @@ class RouterController {
       };
 
       const { role } = req.user;
-      if (!role || !routesByRole[role]) {
+
+      if (!role) throw { name: 'Modified payload.' };
+
+      let roleRoutes = [];
+
+      if (adminRoles.includes(role)) {
+        roleRoutes = routesByRole.ADMIN_GROUP;
+      } else if (routesByRole[role]) {
+        roleRoutes = routesByRole[role];
+      } else {
         throw { name: 'Modified payload.' };
       }
 
@@ -37,7 +48,7 @@ class RouterController {
           { path: '/login', name: 'Login' },
           { path: '/profil', name: 'Profil' },
         ],
-        roleRoutes: routesByRole[role],
+        roleRoutes,
       });
     } catch (error) {
       next(error);

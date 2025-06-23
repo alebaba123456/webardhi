@@ -57,8 +57,6 @@ class AuthenticationController {
                     UserId: user.id
                 }
             })
-            console.log(existingSession);
-            
 
             if (existingSession && JSON.stringify(fingerPrint) !== existingSession?.fingerPrint) {
                 const sessionPayload = {
@@ -109,8 +107,6 @@ class AuthenticationController {
             }
 
         } catch (error) {
-            console.log(error);
-            
             next(error);
         }
     }
@@ -152,9 +148,8 @@ class AuthenticationController {
                     session : payload.session
                 }
             })
-            res.status(200).json({
-                message: 'Logout successful.'
-            });
+            
+            res.redirect('http://localhost:5173/login')
         } catch (error) {
             next(error)
         }
